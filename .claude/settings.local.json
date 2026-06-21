@@ -35,7 +35,12 @@
       "Bash(git init *)",
       "Bash(git add *)",
       "Bash(git -c user.email=yichenli510@gmail.com -c user.name=yichen commit -q -m '黃金避險決策系統：資料/模型/回測/前端介面 *)",
-      "Bash(xargs du -ch)"
+      "Bash(xargs du -ch)",
+      "Bash(xargs ls -la)",
+      "Bash(sort -k5 -rn)",
+      "Bash(awk '{printf \"  %8.1f KB  %s\\\\n\", $5/1024, $9}')",
+      "Bash(git rm *)",
+      "Bash(git -c user.email=yichenli510@gmail.com -c user.name=yichen commit -q -m '修正 .gitignore：排除字型與大資料快取（行內註解失效問題） *)"
     ]
   }
 }
