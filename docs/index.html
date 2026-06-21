@@ -735,7 +735,7 @@ class Component extends DCLogic {
 
     return {
       nav:nav, pageKicker:tt[0], pageTitle:tt[1], pageSubtitle:tt[2], beginnerHelp:helps[st.page],
-      updatedStr:'資料截至 '+(pred.data_as_of||pred.current.date)+(pred.generated_at?(' · 產生 '+pred.generated_at):''),
+      updatedStr:'資料截至 '+(pred.data_as_of||pred.current.date),
       isDashboard:st.page==='dashboard', isSim:st.page==='simulator', isPrin:st.page==='principles', isBacktest:st.page==='backtest', isModel:st.page==='model',
       /* dashboard */
       priceStr:this.fmtP(S0), deltaStr:this.pct(deltaPct), deltaColor:delta>=0?'#1E8C66':'#C0473E',
