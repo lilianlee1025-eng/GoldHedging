@@ -24,6 +24,7 @@
   input[type=range]{-webkit-appearance:none;appearance:none;height:4px;border-radius:2px;background:#E4E7E5;outline:none;}
   input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;border-radius:50%;background:#C8A951;cursor:pointer;border:2px solid #FFFFFF;}
   input[type=number]:focus{outline:none;border-color:#C8A951 !important;}
+  @keyframes dcspin{to{transform:rotate(360deg);}}
 
   /* ===== 手機 / 窄螢幕響應式修正（≤860px）=====
      原設計為桌機固定版面；窄螢幕時讓側邊欄變頂部、所有多欄格線改成單欄堆疊。
@@ -40,13 +41,22 @@
     aside nav button{ width:auto !important; flex:1 1 auto !important; }
     /* 主內容縮小留白、不超出畫面 */
     main{ padding:16px 14px 48px !important; width:100% !important; min-width:0 !important; }
-    /* 把所有多欄格線（4欄/3欄/1fr 280px 等）統一改成單欄 */
-    div[style*="grid-template-columns"]{ grid-template-columns:1fr !important; }
+    /* 把所有多欄格線（4欄/3欄/1fr 280px 等）統一改成單欄；資料表(.dctable)除外 */
+    div[style*="grid-template-columns"]:not(.dctable){ grid-template-columns:1fr !important; }
+    /* 資料表改成保留欄位、可橫向滑動（避免擠成一條）*/
+    .dctable{ min-width:460px; }
     /* sticky 參數面板取消固定（值含 sticky，不受冒號空格影響）*/
     div[style*="sticky"]{ position:static !important; top:auto !important; }
   }
 </style>
 </helmet>
+
+<sc-if value="{{ isLoading }}" hint-placeholder-val="{{ true }}">
+  <div style="position:fixed;inset:0;z-index:50;background:#F2F3F2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;">
+    <div style="width:42px;height:42px;border:3px solid #E4E7E5;border-top-color:#C8A951;border-radius:50%;animation:dcspin .8s linear infinite;"></div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#7A847E;letter-spacing:0.08em;">載入黃金避險資料中…</div>
+  </div>
+</sc-if>
 
 <div style="display:flex;min-height:100vh;background:#F2F3F2;font-family:-apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif;color:#26302B;-webkit-font-smoothing:antialiased;">
 
@@ -356,7 +366,8 @@
           </div>
         </div>
         <div style="margin-top:10px;">{{ scChart }}</div>
-        <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:0;font-family:'JetBrains Mono',monospace;margin-top:8px;">
+        <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:8px;">
+        <div class="dctable" style="display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:0;font-family:'JetBrains Mono',monospace;">
           <div style="font-size:10.5px;color:#7A847E;padding:8px 6px;text-transform:uppercase;">策略</div>
           <div style="font-size:10.5px;color:#7A847E;padding:8px 6px;text-align:right;">總報酬</div>
           <div style="font-size:10.5px;color:#7A847E;padding:8px 6px;text-align:right;">最大回撤</div>
@@ -365,6 +376,7 @@
             <div style="font-size:12.5px;padding:11px 6px;border-top:1px solid #F0F2F6;text-align:right;color:{{ ss.retColor }};">{{ ss.retStr }}</div>
             <div style="font-size:12.5px;padding:11px 6px;border-top:1px solid #F0F2F6;text-align:right;color:#C0473E;">{{ ss.mddStr }}</div>
           </sc-for>
+        </div>
         </div>
         <div style="margin-top:16px;padding:14px;background:#F2F3F2;border-radius:8px;font-size:12.5px;color:#26302B;line-height:1.7;">{{ scConc }}</div>
         <div style="font-size:11px;color:#9AA39D;margin-top:10px;line-height:1.6;font-family:'JetBrains Mono',monospace;">假設：{{ scAssume }}</div>
@@ -434,7 +446,8 @@
         <div style="background:#fff;border:1px solid #E4E7E5;border-radius:10px;padding:22px 24px;">
           <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">模型表現比較</div>
           <div style="font-size:12px;color:#7A847E;margin-bottom:16px;">多因子 LSTM vs 單因子 vs Naive 基準</div>
-          <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:0;font-family:'JetBrains Mono',monospace;">
+          <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+          <div class="dctable" style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:0;font-family:'JetBrains Mono',monospace;">
             <div style="font-size:10.5px;color:#7A847E;padding:8px 6px;text-transform:uppercase;">模型</div>
             <div style="font-size:10.5px;color:#7A847E;padding:8px 6px;text-align:right;">RMSE</div>
             <div style="font-size:10.5px;color:#7A847E;padding:8px 6px;text-align:right;">下跌準確率</div>
@@ -445,6 +458,7 @@
               <div style="font-size:12.5px;padding:11px 6px;border-top:1px solid #F0F2F6;background:{{ m.bg }};text-align:right;color:{{ m.daccColor }};font-weight:{{ m.weight }};">{{ m.dacc }}</div>
               <div style="font-size:12.5px;color:#26302B;padding:11px 6px;border-top:1px solid #F0F2F6;background:{{ m.bg }};text-align:right;">{{ m.auc }}</div>
             </sc-for>
+          </div>
           </div>
           <div style="margin-top:18px;padding:14px;background:#F2F3F2;border-radius:8px;font-size:12.5px;color:#26302B;line-height:1.6;">多因子 LSTM 的<b>下跌方向準確率達 60.0%</b>，明顯優於單因子 (43.5%) 與隨機基準，是避險訊號的主要依據；RMSE 亦小幅勝過 Naive。</div>
         </div>
@@ -461,6 +475,7 @@ class Component extends DCLogic {
     super(props);
     this.state = {
       page: 'dashboard',
+      loaded: false,        // 資料是否載入完成（控制載入動畫）
       unit: 'gld',          // 計價單位：gld(美元/股) / spot(美元/盎司) / twd(台幣/公克)
       tf: 'D',              // 時間單位：D日 / W周 / M月 / Q季
       ctype: 'line',        // 圖表類型：line 折線 / candle K棒
@@ -476,7 +491,8 @@ class Component extends DCLogic {
     Promise.all([
       fetch('./predictions.json'+t).then(r=>r.json()),
       fetch('./backtest.json'+t).then(r=>r.json())
-    ]).then(([p,b])=>{ const u=(p.units&&p.units.default)||'gld'; this.setState({ pred:p, bt:b, unit:u }); }).catch(()=>{});
+    ]).then(([p,b])=>{ const u=(p.units&&p.units.default)||'gld'; this.setState({ pred:p, bt:b, unit:u, loaded:true }); })
+      .catch(()=>{ this.setState({ loaded:true }); });   // 失敗也解除動畫（用內建範例資料）
   }
 
   /* ---------- math ---------- */
@@ -841,6 +857,7 @@ class Component extends DCLogic {
     ];
 
     return {
+      isLoading:!st.loaded,
       navDecide:navDecide, navLearn:navLearn, pageKicker:tt[0], pageTitle:tt[1], pageSubtitle:tt[2], beginnerHelp:helps[st.page],
       updatedStr:'資料截至 '+(pred.data_as_of||pred.current.date),
       isDashboard:st.page==='dashboard', isSim:st.page==='simulator', isPrin:st.page==='principles', isBacktest:st.page==='backtest', isModel:st.page==='model',
