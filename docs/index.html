@@ -344,6 +344,32 @@
         <div style="margin-top:10px;">{{ equityChart }}</div>
       </div>
 
+      <!-- 期貨 vs 期權 對決 -->
+      <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;margin-bottom:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+          <div style="font-size:14px;font-weight:600;color:#26302B;">期貨 vs 期權 對決 · 四種做法累積損益</div>
+          <div style="display:flex;gap:14px;font-size:11.5px;font-family:'JetBrains Mono',monospace;color:#7A847E;flex-wrap:wrap;">
+            <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:2px;background:#3A443E;display:inline-block;"></span>不避險</span>
+            <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:2px;background:#1E8C66;display:inline-block;"></span>保護性賣權</span>
+            <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:2px;background:#C8A951;display:inline-block;"></span>Collar</span>
+            <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:2px;background:#C0473E;display:inline-block;"></span>期貨避險</span>
+          </div>
+        </div>
+        <div style="margin-top:10px;">{{ scChart }}</div>
+        <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:0;font-family:'JetBrains Mono',monospace;margin-top:8px;">
+          <div style="font-size:10.5px;color:#7A847E;padding:8px 6px;text-transform:uppercase;">策略</div>
+          <div style="font-size:10.5px;color:#7A847E;padding:8px 6px;text-align:right;">總報酬</div>
+          <div style="font-size:10.5px;color:#7A847E;padding:8px 6px;text-align:right;">最大回撤</div>
+          <sc-for list="{{ scStats }}" as="ss" hint-placeholder-count="4">
+            <div style="font-size:12.5px;padding:11px 6px;border-top:1px solid #F0F2F6;display:flex;align-items:center;gap:8px;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;"><span style="width:9px;height:9px;border-radius:2px;background:{{ ss.color }};flex:none;"></span>{{ ss.name }}</div>
+            <div style="font-size:12.5px;padding:11px 6px;border-top:1px solid #F0F2F6;text-align:right;color:{{ ss.retColor }};">{{ ss.retStr }}</div>
+            <div style="font-size:12.5px;padding:11px 6px;border-top:1px solid #F0F2F6;text-align:right;color:#C0473E;">{{ ss.mddStr }}</div>
+          </sc-for>
+        </div>
+        <div style="margin-top:16px;padding:14px;background:#F2F3F2;border-radius:8px;font-size:12.5px;color:#26302B;line-height:1.7;">{{ scConc }}</div>
+        <div style="font-size:11px;color:#9AA39D;margin-top:10px;line-height:1.6;font-family:'JetBrains Mono',monospace;">假設：{{ scAssume }}</div>
+      </div>
+
       <div style="font-size:13px;font-weight:600;color:#26302B;margin:24px 0 6px;">不同情境下的避險效果</div>
       <div style="font-size:12px;color:#7A847E;line-height:1.6;margin-bottom:14px;max-width:760px;">下列為真實歷史事件、以實際資料試算。模型偏保守——只在「下跌機率超過門檻」時才避險，因此會出現三種情況：<b style="color:#1E8C66;">下跌時抗跌</b>、<b style="color:#C0473E;">上漲時少賺（避險成本）</b>、以及<b style="color:#26302B;">模型未觸發避險</b>（如 2022/2023，差異為 0，屬正常，非錯誤）。此處完整呈現，未只挑對避險有利的事件。</div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
@@ -763,6 +789,26 @@ class Component extends DCLogic {
       yticks:[emin,100,emax].filter((v,i,a)=>a.indexOf(v)===i), yfmt:v=>v.toFixed(0),
       series:[ {pts:U.map((v,i)=>[i,v]),stroke:'#C0473E',width:1.8}, {pts:Hh.map((v,i)=>[i,v]),stroke:'#1E8C66',width:1.8} ],
       xticks:eTickIdx.map(ix=>({x:ix,label:ec.dates[ix].slice(0,7)})) });
+    // 期貨 vs 期權 對決
+    const scd=bt.strategy_compare; let scChart=null, scStats=[], scConc='', scAssume='';
+    if(scd && scd.curves){
+      const C=scd.curves, scn=C.nohedge.length;
+      const allv=[].concat(C.nohedge,C.futures,C.put,C.collar);
+      const vmin=Math.min.apply(null,allv), vmax=Math.max.apply(null,allv);
+      const mk=a=>a.map((v,i)=>[i,v]);
+      const sti=[0,Math.floor(scn*0.25),Math.floor(scn*0.5),Math.floor(scn*0.75),scn-1];
+      scChart=this.chartEl({ w:920,h:300,pad:{l:50,r:16,t:16,b:26},
+        xmin:0,xmax:scn-1,ymin:Math.min(vmin,1)*0.98,ymax:vmax*1.02,
+        yticks:[1,(1+vmax)/2,vmax], yfmt:v=>((v-1)*100).toFixed(0)+'%',
+        series:[ {pts:mk(C.nohedge),stroke:'#3A443E',width:1.6}, {pts:mk(C.put),stroke:'#1E8C66',width:1.8},
+                 {pts:mk(C.collar),stroke:'#C8A951',width:1.6}, {pts:mk(C.futures),stroke:'#C0473E',width:1.6} ],
+        xticks:sti.map(ix=>({x:ix,label:scd.dates[ix]})) });
+      const cols={nohedge:'#3A443E',futures:'#C0473E',put:'#1E8C66',collar:'#C8A951'};
+      scStats=scd.stats.map(s=>({ name:s.name, retStr:this.pct(s.ret), mddStr:s.mdd.toFixed(1)+'%',
+        color:cols[s.key]||'#26302B', retColor:s.ret>=0?'#1E8C66':'#C0473E' }));
+      scConc=scd.conclusion; scAssume=scd.assumptions;
+    }
+
     const bm=bt.metrics;
     const maxAbs=Math.max.apply(null,bt.scenarios.map(s=>Math.max(Math.abs(s.unhedged_return),Math.abs(s.hedged_return))));
     const scenarios=bt.scenarios.map(s=>{
@@ -821,6 +867,7 @@ class Component extends DCLogic {
       btRetHStr:this.pct(bm.total_return_hedged), btRetUStr:this.pct(bm.total_return_unhedged),
       btDdHStr:bm.max_drawdown_hedged.toFixed(1)+'%', btDdUStr:bm.max_drawdown_unhedged.toFixed(1)+'%',
       btCostStr:bm.hedge_cost_ratio.toFixed(1)+'%', equityChart:equityChart, scenarios:scenarios,
+      scChart:scChart, scStats:scStats, scConc:scConc, scAssume:scAssume,
       /* model */
       metricsRows:metricsRows, factors:factors
     };

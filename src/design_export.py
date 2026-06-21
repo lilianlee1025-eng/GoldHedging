@@ -195,6 +195,94 @@ def _event_scenarios(threshold: float) -> list:
     return out
 
 
+def _strategy_comparison(threshold: float) -> dict:
+    """期貨 vs 期權 對決：用真實金價＋Black–Scholes，月度回測四種避險做法。
+
+    做法（依訊號避險）：當模型下跌機率 > 門檻，當月就啟動避險：
+      - 不避險：完全持有黃金。
+      - 期貨避險：完全鎖價（當月放棄漲跌，報酬≈0）——零成本但封頂。
+      - 保護性賣權：買 5% 價外 Put（付權利金），跌有地板、漲仍保留。
+      - Collar：買 Put + 賣 5% 價外 Call，用賣 Call 補貼保費，但漲有上限。
+    波動率取近 3 個月實現波動，無風險利率 3%，每月調倉。
+    """
+    import math
+    if not os.path.exists(config.WF_SIGNALS_CSV):
+        return None
+    import numpy as np
+
+    def ncdf(x):
+        return 0.5 * (1 + math.erf(x / math.sqrt(2)))
+
+    def bs_put(S, K, T, r, v):
+        if T <= 0 or v <= 0:
+            return max(K - S, 0)
+        d1 = (math.log(S / K) + (r + v * v / 2) * T) / (v * math.sqrt(T)); d2 = d1 - v * math.sqrt(T)
+        return K * math.exp(-r * T) * ncdf(-d2) - S * ncdf(-d1)
+
+    def bs_call(S, K, T, r, v):
+        if T <= 0 or v <= 0:
+            return max(S - K, 0)
+        d1 = (math.log(S / K) + (r + v * v / 2) * T) / (v * math.sqrt(T)); d2 = d1 - v * math.sqrt(T)
+        return S * ncdf(d1) - K * math.exp(-r * T) * ncdf(d2)
+
+    sig = pd.read_csv(config.WF_SIGNALS_CSV, parse_dates=["Date"]).set_index("Date")
+    rv = sig["price"].pct_change().rolling(63).std() * math.sqrt(252)   # 近約3月實現波動
+    me = sig["price"].resample("ME").last()
+    rate, T = 0.03, 1.0 / 12.0
+    keys = ["nohedge", "futures", "put", "collar"]
+    eq = {k: [1.0] for k in keys}
+    dates = []
+    prev = me.index[0]
+    for cur in me.index[1:]:
+        S0 = float(sig["price"].asof(prev)); S1 = float(sig["price"].asof(cur))
+        if not (S0 > 0 and S1 > 0):
+            prev = cur; continue
+        p = float(sig["prob_down"].asof(prev)); on = p > threshold
+        v = float(rv.asof(prev)); v = min(max(v, 0.08), 0.6) if v == v else 0.15
+        g = S1 / S0 - 1.0
+        rets = {"nohedge": g, "futures": (0.0 if on else g)}
+        if on:
+            Kp = 0.95 * S0; prem = bs_put(S0, Kp, T, rate, v)
+            rets["put"] = g + max(Kp - S1, 0) / S0 - prem / S0
+            Kc = 1.05 * S0; net = prem - bs_call(S0, Kc, T, rate, v)
+            rets["collar"] = g + max(Kp - S1, 0) / S0 - max(S1 - Kc, 0) / S0 - net / S0
+        else:
+            rets["put"] = g; rets["collar"] = g
+        for k in keys:
+            eq[k].append(eq[k][-1] * (1 + rets[k]))
+        dates.append(cur.strftime("%Y-%m")); prev = cur
+
+    def mdd(a):
+        a = np.array(a); pk = np.maximum.accumulate(a)
+        return float((a / pk - 1).min())
+
+    names = {"nohedge": "不避險", "futures": "期貨避險", "put": "保護性賣權", "collar": "Collar"}
+    stats = [{"key": k, "name": names[k],
+              "ret": round((eq[k][-1] - 1) * 100, 1),
+              "mdd": round(mdd(eq[k]) * 100, 1)} for k in keys]
+
+    # 資料驅動的結論
+    sd = {s["key"]: s for s in stats}
+    conclusion = (
+        f"黃金長期走多下，期貨避險（雙向鎖死）報酬只剩 {sd['futures']['ret']:.0f}%"
+        f"（vs 不避險 {sd['nohedge']['ret']:.0f}%），雖回撤最小但幾乎放棄所有上漲；"
+        f"保護性賣權保留上漲、僅付保費，報酬 {sd['put']['ret']:.0f}% 同時把回撤從 "
+        f"{sd['nohedge']['mdd']:.0f}% 收斂到 {sd['put']['mdd']:.0f}%，兼顧報酬與保護；"
+        f"Collar 因賣出上檔，報酬 {sd['collar']['ret']:.0f}% 居中。"
+        "結論：怕突發大跌又想長抱黃金 → 期權（保護性賣權）較合適；"
+        "只求鎖定、不在乎錯過上漲 → 期貨。"
+    )
+    return {
+        "period": f"{dates[0]} ~ {dates[-1]}" if dates else "",
+        "n_months": len(dates),
+        "dates": dates,
+        "curves": {k: [round(x, 4) for x in eq[k][1:]] for k in keys},
+        "stats": stats,
+        "assumptions": "月度調倉；訊號觸發時避險；Put 履約 95%、Call 履約 105%；波動率取近 3 月實現波動；無風險利率 3%。",
+        "conclusion": conclusion,
+    }
+
+
 def _pick_scenarios(scenarios_by_year: list) -> list:
     """從逐年表現挑出『大跌 / 盤整 / 大漲』三個代表情境（依真實資料）。"""
     if not scenarios_by_year:
@@ -258,6 +346,8 @@ def build_backtest(our_bt: dict) -> dict:
         # 優先用具名歷史事件（對比較有故事性）；抓不到訊號時退回逐年挑選
         "scenarios": (_event_scenarios(threshold)
                       or _pick_scenarios(our_bt.get("scenarios_by_year", []))),
+        # 期貨 vs 期權 對決（月度 Black–Scholes 回測）
+        "strategy_compare": _strategy_comparison(threshold),
     }
 
 
