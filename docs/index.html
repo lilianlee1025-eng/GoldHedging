@@ -382,6 +382,43 @@
         <div style="font-size:11px;color:#9AA39D;margin-top:10px;line-height:1.6;font-family:'JetBrains Mono',monospace;">假設：{{ scAssume }}</div>
       </div>
 
+      <!-- #2 訊號避險 vs 無腦避險 + 敏感度 -->
+      <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:16px;margin-bottom:16px;align-items:start;">
+        <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;">
+          <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">模型訊號有沒有用？依訊號 vs 無腦每月避險</div>
+          <div style="font-size:12px;color:#7A847E;margin-bottom:14px;">同樣的避險工具，比較「聽模型訊號才避」與「每月都避」。</div>
+          <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+          <div class="dctable" style="display:grid;grid-template-columns:1.7fr 1fr 1fr;gap:0;font-family:'JetBrains Mono',monospace;">
+            <div style="font-size:10.5px;color:#7A847E;padding:8px 6px;text-transform:uppercase;">策略</div>
+            <div style="font-size:10.5px;color:#7A847E;padding:8px 6px;text-align:right;">總報酬</div>
+            <div style="font-size:10.5px;color:#7A847E;padding:8px 6px;text-align:right;">最大回撤</div>
+            <sc-for list="{{ svaRows }}" as="r" hint-placeholder-count="5">
+              <div style="font-size:12.5px;padding:10px 6px;border-top:1px solid #F0F2F6;display:flex;align-items:center;gap:8px;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;"><span style="font-size:9.5px;color:#fff;background:{{ r.tagColor }};padding:1px 6px;border-radius:3px;flex:none;font-family:'JetBrains Mono',monospace;">{{ r.tag }}</span>{{ r.name }}</div>
+              <div style="font-size:12.5px;padding:10px 6px;border-top:1px solid #F0F2F6;text-align:right;color:{{ r.retColor }};">{{ r.retStr }}</div>
+              <div style="font-size:12.5px;padding:10px 6px;border-top:1px solid #F0F2F6;text-align:right;color:#C0473E;">{{ r.mddStr }}</div>
+            </sc-for>
+          </div>
+          </div>
+          <div style="margin-top:14px;padding:14px;background:#E2F0EA;border-radius:8px;font-size:12.5px;color:#1A6B4F;line-height:1.7;">✓ {{ svaNote }}</div>
+        </div>
+
+        <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;">
+          <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">敏感度分析</div>
+          <div style="font-size:12px;color:#7A847E;margin-bottom:14px;">保護性賣權在不同「下跌機率門檻」下的表現（門檻越高→避越少）。</div>
+          <div class="dctable" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;font-family:'JetBrains Mono',monospace;">
+            <div style="font-size:10.5px;color:#7A847E;padding:8px 6px;text-transform:uppercase;">門檻</div>
+            <div style="font-size:10.5px;color:#7A847E;padding:8px 6px;text-align:right;">總報酬</div>
+            <div style="font-size:10.5px;color:#7A847E;padding:8px 6px;text-align:right;">最大回撤</div>
+            <sc-for list="{{ sensRows }}" as="r" hint-placeholder-count="3">
+              <div style="font-size:12.5px;padding:11px 6px;border-top:1px solid #F0F2F6;color:#26302B;">{{ r.thStr }}</div>
+              <div style="font-size:12.5px;padding:11px 6px;border-top:1px solid #F0F2F6;text-align:right;color:#1E8C66;">{{ r.retStr }}</div>
+              <div style="font-size:12.5px;padding:11px 6px;border-top:1px solid #F0F2F6;text-align:right;color:#C0473E;">{{ r.mddStr }}</div>
+            </sc-for>
+          </div>
+          <div style="margin-top:14px;font-size:11.5px;color:#7A847E;line-height:1.6;">門檻越高代表越少出手避險→越接近不避險（報酬高、保護少）；越低則避越勤（成本高）。結論方向穩定，不因單一門檻而翻盤。</div>
+        </div>
+      </div>
+
       <div style="font-size:13px;font-weight:600;color:#26302B;margin:24px 0 6px;">不同情境下的避險效果</div>
       <div style="font-size:12px;color:#7A847E;line-height:1.6;margin-bottom:14px;max-width:760px;">下列為真實歷史事件、以實際資料試算。模型偏保守——只在「下跌機率超過門檻」時才避險，因此會出現三種情況：<b style="color:#1E8C66;">下跌時抗跌</b>、<b style="color:#C0473E;">上漲時少賺（避險成本）</b>、以及<b style="color:#26302B;">模型未觸發避險</b>（如 2022/2023，差異為 0，屬正常，非錯誤）。此處完整呈現，未只挑對避險有利的事件。</div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
@@ -824,6 +861,17 @@ class Component extends DCLogic {
         color:cols[s.key]||'#26302B', retColor:s.ret>=0?'#1E8C66':'#C0473E' }));
       scConc=scd.conclusion; scAssume=scd.assumptions;
     }
+    // #2 訊號 vs 無腦避險、敏感度
+    let svaRows=[], sensRows=[], svaNote='';
+    if(scd && scd.signal_vs_always){
+      const gc={base:'#3A443E',signal:'#1E8C66',always:'#C0473E'};
+      const gl={base:'基準',signal:'依訊號',always:'無腦每月'};
+      svaRows=scd.signal_vs_always.map(s=>({ name:s.name, retStr:this.pct(s.ret), mddStr:s.mdd.toFixed(1)+'%',
+        retColor:s.ret>=0?'#1E8C66':'#C0473E', tag:gl[s.group]||'', tagColor:gc[s.group]||'#7A847E' }));
+      svaNote=scd.signal_value_note||'';
+      sensRows=(scd.sensitivity||[]).map(s=>({ thStr:s.threshold+'%', retStr:this.pct(s.ret), mddStr:s.mdd.toFixed(1)+'%',
+        cur:s.threshold===Math.round((bt.meta.hedge_threshold||0.5)*100) }));
+    }
 
     const bm=bt.metrics;
     const maxAbs=Math.max.apply(null,bt.scenarios.map(s=>Math.max(Math.abs(s.unhedged_return),Math.abs(s.hedged_return))));
@@ -885,6 +933,7 @@ class Component extends DCLogic {
       btDdHStr:bm.max_drawdown_hedged.toFixed(1)+'%', btDdUStr:bm.max_drawdown_unhedged.toFixed(1)+'%',
       btCostStr:bm.hedge_cost_ratio.toFixed(1)+'%', equityChart:equityChart, scenarios:scenarios,
       scChart:scChart, scStats:scStats, scConc:scConc, scAssume:scAssume,
+      svaRows:svaRows, svaNote:svaNote, sensRows:sensRows,
       /* model */
       metricsRows:metricsRows, factors:factors
     };
