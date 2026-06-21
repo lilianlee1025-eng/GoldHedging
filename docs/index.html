@@ -122,6 +122,7 @@
           <div style="font-size:11px;color:#7A847E;font-family:'JetBrains Mono',monospace;letter-spacing:0.06em;text-transform:uppercase;">建議避險方向</div>
           <div style="font-size:21px;font-weight:600;margin-top:12px;color:#26302B;">{{ recName }}</div>
           <div style="display:inline-block;font-size:11.5px;margin-top:10px;color:#26302B;background:#C8A951;padding:3px 9px;border-radius:4px;font-weight:600;">{{ recStrength }}</div>
+          <div style="font-size:11.5px;color:#7A847E;margin-top:9px;line-height:1.5;">{{ recLevelNote }}</div>
         </div>
       </div>
 
@@ -692,6 +693,10 @@ class Component extends DCLogic {
     }
     const futureRows=Fu.map((d,i)=>{ const prev=i===0?S0:Fu[i-1].price; const dd=d.price-prev; return {date:this.dlabel(d.date),priceStr:this.fmtP(d.price),deltaStr:this.pct(dd/prev*100),color:dd>=0?'#1E8C66':'#C0473E'}; });
     const recObj=this.rec(pred.decline_prob);
+    // 把下跌機率對應到四級區間的白話說明
+    const dp=pred.decline_prob;
+    const recRange = dp>=0.6?'> 60%':(dp>=0.5?'50–60%':(dp>=0.35?'35–50%':'< 35%'));
+    const recLevelNote = '下跌機率 '+(dp*100).toFixed(0)+'%，落在「'+recObj.strength+'」（'+recRange+'）區間';
     const dirDown = pred.direction==='down';
     /* 依真實資料產生敘述（取代原本寫死的「走弱」文字）*/
     const fut5Pct = Fu.length ? (Fu[Fu.length-1].price - S0)/S0*100 : 0;
@@ -772,7 +777,7 @@ class Component extends DCLogic {
       dataAsOf:pred.data_as_of||pred.current.date, generatedAt:pred.generated_at||'',
       dirText:dirDown?'下跌':'上漲', dirArrow:dirDown?'↓':'↑', dirColor:dirDown?'#C0473E':'#1E8C66',
       declinePctStr:(pred.decline_prob*100).toFixed(0)+'%', threshStr:(bt.meta.hedge_threshold*100).toFixed(0)+'%',
-      recName:recObj.name, recStrength:recObj.strength, dashChart:dashChart, futureRows:futureRows, histLen:chartLen,
+      recName:recObj.name, recStrength:recObj.strength, recLevelNote:recLevelNote, dashChart:dashChart, futureRows:futureRows, histLen:chartLen,
       dirSubtitle:dirSubtitle, futLead:futLead, futTail:futTail,
       /* simulator */
       sim:sim, h:h, unrealStr:this.ms(unreal), unrealColor:unreal>=0?'#1E8C66':'#C0473E',
