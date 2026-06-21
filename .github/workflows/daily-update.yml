@@ -1,0 +1,44 @@
+# 每天在 GitHub 雲端自動更新資料並推回（線上網站隨即重建）
+# 不需要你的電腦開機；公開倉庫的 Actions 免費。
+name: Daily data update
+
+on:
+  schedule:
+    - cron: "17 9 * * *"     # 每天 09:17 UTC（台灣時間約 17:17）執行
+  workflow_dispatch:          # 也可在 GitHub 網頁手動按一下執行
+
+permissions:
+  contents: write             # 允許把更新後的 docs/ 推回倉庫
+
+concurrency:
+  group: daily-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: 安裝套件
+        run: pip install -r requirements.txt
+
+      - name: 重抓資料、重算預測、更新 docs/
+        run: python daily_update.py
+
+      - name: 有變動就 commit 並 push
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/ outputs/ || true
+          if git diff --cached --quiet; then
+            echo "沒有變動，略過。"
+          else
+            git commit -m "每日自動更新資料 ($(date -u +%Y-%m-%d))"
+            git push
+          fi
