@@ -60,7 +60,19 @@
     </div>
 
     <nav style="display:flex;flex-direction:column;gap:3px;margin-top:18px;flex:1;">
-      <sc-for list="{{ nav }}" as="it" hint-placeholder-count="5">
+      <div style="font-size:10px;color:#A98F3E;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em;text-transform:uppercase;padding:0 12px 6px;font-weight:600;">真實數據分析</div>
+      <sc-for list="{{ navReal }}" as="it" hint-placeholder-count="3">
+        <button onClick="{{ it.onClick }}" style="display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:none;cursor:pointer;padding:10px 12px;border-radius:7px;font-family:inherit;background:{{ it.bg }};color:{{ it.fg }};transition:background .15s;">
+          <span style="width:3px;height:30px;border-radius:2px;background:{{ it.bar }};flex:none;"></span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:{{ it.num }};flex:none;">{{ it.idx }}</span>
+          <span style="flex:1;min-width:0;">
+            <span style="display:block;font-size:13.5px;font-weight:500;line-height:1.25;">{{ it.label }}</span>
+            <span style="display:block;font-size:10.5px;color:#7A847E;margin-top:2px;">{{ it.sub }}</span>
+          </span>
+        </button>
+      </sc-for>
+      <div style="font-size:10px;color:#A98F3E;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em;text-transform:uppercase;padding:16px 12px 6px;font-weight:600;">試算與原理</div>
+      <sc-for list="{{ navTool }}" as="it" hint-placeholder-count="2">
         <button onClick="{{ it.onClick }}" style="display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:none;cursor:pointer;padding:10px 12px;border-radius:7px;font-family:inherit;background:{{ it.bg }};color:{{ it.fg }};transition:background .15s;">
           <span style="width:3px;height:30px;border-radius:2px;background:{{ it.bar }};flex:none;"></span>
           <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:{{ it.num }};flex:none;">{{ it.idx }}</span>
@@ -622,16 +634,21 @@ class Component extends DCLogic {
   renderVals(){
     const st=this.state, pred=st.pred, bt=st.bt;
     const setPage=p=>this.setState({page:p});
-    const navItems=[
+    // 兩區分組：真實數據分析 vs 試算與原理
+    const realItems=[
       {key:'dashboard',label:'總覽 Dashboard',sub:'金價與預測訊號'},
-      {key:'simulator',label:'避險策略模擬器',sub:'四種策略損益比較'},
-      {key:'principles',label:'期貨 vs 期權 原理',sub:'互動損益圖解'},
       {key:'backtest',label:'回測結果',sub:'有避險 vs 無避險'},
       {key:'model',label:'模型說明',sub:'LSTM 架構與因子'}
     ];
-    const nav=navItems.map((it,i)=>({ idx:'0'+(i+1), label:it.label, sub:it.sub, onClick:()=>setPage(it.key),
+    const toolItems=[
+      {key:'simulator',label:'避險策略模擬器',sub:'依你的部位試算'},
+      {key:'principles',label:'期貨 vs 期權 原理',sub:'互動損益圖解'}
+    ];
+    const mkNav=(items,start)=>items.map((it,i)=>({ idx:'0'+(start+i), label:it.label, sub:it.sub, onClick:()=>setPage(it.key),
       bg: st.page===it.key?'#F2EEDF':'transparent', fg: st.page===it.key?'#26302B':'#7A847E',
       bar: st.page===it.key?'#C8A951':'transparent', num: st.page===it.key?'#C8A951':'#7A847E' }));
+    const navReal=mkNav(realItems,1);
+    const navTool=mkNav(toolItems,realItems.length+1);
 
     const titles={ dashboard:['即時看板','黃金避險總覽','LSTM 預測訊號、下跌機率與建議避險方向一覽。'],
       simulator:['決策核心','避險策略模擬器','輸入部位參數，並排比較四種避險策略的損益結構與成本。'],
@@ -767,7 +784,7 @@ class Component extends DCLogic {
     ];
 
     return {
-      nav:nav, pageKicker:tt[0], pageTitle:tt[1], pageSubtitle:tt[2], beginnerHelp:helps[st.page],
+      navReal:navReal, navTool:navTool, pageKicker:tt[0], pageTitle:tt[1], pageSubtitle:tt[2], beginnerHelp:helps[st.page],
       updatedStr:'資料截至 '+(pred.data_as_of||pred.current.date),
       isDashboard:st.page==='dashboard', isSim:st.page==='simulator', isPrin:st.page==='principles', isBacktest:st.page==='backtest', isModel:st.page==='model',
       /* dashboard */
