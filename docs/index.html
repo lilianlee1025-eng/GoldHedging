@@ -88,6 +88,9 @@
       </div>
     </header>
 
+    <!-- 每頁標題下方一行白話導引（新手老手皆宜，不過度解釋）-->
+    <div style="background:#FBF7EC;border:1px solid #EADfBE;border-left:3px solid #C8A951;border-radius:10px;padding:12px 16px;margin-bottom:18px;font-size:13px;color:#5A5238;line-height:1.65;">{{ beginnerHelp }}</div>
+
     <!-- ============ DASHBOARD ============ -->
     <sc-if value="{{ isDashboard }}" hint-placeholder-val="{{ true }}">
     <div>
@@ -607,6 +610,14 @@ class Component extends DCLogic {
       backtest:['歷史驗證','回測結果','以 walk-forward 回測比較有避險與無避險的累積損益與回撤。'],
       model:['方法論','模型說明','LSTM 架構、輸入因子與相對基準線的表現比較。'] };
     const tt=titles[st.page];
+    // 每頁一行白話導引（新手老手皆宜，點到為止）
+    const helps={
+      dashboard:'怎麼看：上排四個數字＝現在金價、模型猜的方向、未來下跌機率、建議避險方式；下圖是金價與模型預測，可切單位與日/周/月/季。',
+      simulator:'用法：左邊填你手上的黃金部位，右邊會算出四種避險方式各自的損益與最壞損失，並標出建議的一個。',
+      principles:'重點：期貨＝把價格鎖死（跌不賠、漲也不賺）；保護性賣權＝買保險（跌有底、漲還能賺，但先付權利金）。拖滑桿看曲線變化。',
+      backtest:'重點：把策略套回真實歷史。綠線（有避險）在大跌時較抗跌，代價是大漲時少賺一點——看回撤差距就懂避險值不值得。',
+      model:'說明：模型用過去 60 天的 6 種數據預測未來。下方表格比三種模型，多因子方向準確率最高，所以最可信。'
+    };
 
     /* dashboard */
     const H=pred.history, Mn=pred.model, Fu=pred.future, n=H.length;
@@ -723,7 +734,7 @@ class Component extends DCLogic {
     ];
 
     return {
-      nav:nav, pageKicker:tt[0], pageTitle:tt[1], pageSubtitle:tt[2],
+      nav:nav, pageKicker:tt[0], pageTitle:tt[1], pageSubtitle:tt[2], beginnerHelp:helps[st.page],
       updatedStr:'資料截至 '+(pred.data_as_of||pred.current.date)+(pred.generated_at?(' · 產生 '+pred.generated_at):''),
       isDashboard:st.page==='dashboard', isSim:st.page==='simulator', isPrin:st.page==='principles', isBacktest:st.page==='backtest', isModel:st.page==='model',
       /* dashboard */
