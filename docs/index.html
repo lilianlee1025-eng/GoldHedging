@@ -3,6 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 不要快取這個頁面，更新後一打開就是最新版（免清快取）-->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <script src="./support.js"></script>
 </head>
 <body>
@@ -392,9 +396,11 @@ class Component extends DCLogic {
     };
   }
   componentDidMount(){
+    // 加上時間戳查詢字串，強制每次都抓最新 JSON（不吃快取）
+    const t='?t='+Date.now();
     Promise.all([
-      fetch('./predictions.json').then(r=>r.json()),
-      fetch('./backtest.json').then(r=>r.json())
+      fetch('./predictions.json'+t).then(r=>r.json()),
+      fetch('./backtest.json'+t).then(r=>r.json())
     ]).then(([p,b])=>{ const u=(p.units&&p.units.default)||'gld'; this.setState({ pred:p, bt:b, unit:u }); }).catch(()=>{});
   }
 
