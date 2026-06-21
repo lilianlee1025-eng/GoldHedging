@@ -21,7 +21,7 @@ import pandas as pd
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import config
 
-FRONTEND_DIR = os.path.join(config.BASE_DIR, "frontend")
+FRONTEND_DIR = os.path.join(config.BASE_DIR, "docs")   # GitHub Pages 從 /docs 部署
 HISTORY_WINDOW = 90      # 儀表板價格圖顯示最近 N 個交易日
 EQUITY_POINTS = 260      # 回測淨值曲線降採樣點數（避免 SVG 過重）
 
