@@ -1,0 +1,10 @@
+# GitHub Actions（每日更新）專用的精簡依賴
+# - 用 tensorflow-cpu（雲端無 GPU，較小較快）
+# - pandas 釘在 <2.3（避免 pandas-datareader 不相容）
+# - 不裝 matplotlib（每日更新流程不畫圖）
+yfinance>=0.2
+pandas-datareader>=0.10
+pandas>=2.0,<2.3
+numpy>=1.24
+scikit-learn>=1.3
+tensorflow-cpu>=2.16
