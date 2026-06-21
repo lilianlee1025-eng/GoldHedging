@@ -16,7 +16,6 @@ import os
 import sys
 import pandas as pd
 import yfinance as yf
-import pandas_datareader.data as web
 
 # 讓 `python src/data_collection.py` 直接執行時也能 import 到根目錄的 config
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -58,13 +57,21 @@ def _download_yf(ticker: str, name: str) -> pd.Series:
 
 
 def _download_fred(series_id: str, name: str) -> pd.Series:
-    """從 FRED 抓單一序列，回傳以日期為索引的 Series。"""
-    df = web.DataReader(series_id, "fred", config.START_DATE, config.END_DATE)
-    s = df[series_id].copy()
-    s.name = name
-    s.index = pd.to_datetime(s.index)
+    """從 FRED 抓單一序列，回傳以日期為索引的 Series。
+
+    直接用 FRED 官方的 CSV 下載網址（免 API key），而非 pandas-datareader——
+    後者與較新版 pandas 有相容性問題，在雲端 CI 容易壞。
+    """
+    end = config.END_DATE or pd.Timestamp.today().strftime("%Y-%m-%d")
+    url = (f"https://fred.stlouisfed.org/graph/fredgraph.csv?"
+           f"id={series_id}&cosd={config.START_DATE}&coed={end}")
+    df = pd.read_csv(url)
+    df.columns = ["Date", series_id]                 # 第一欄日期、第二欄數值
+    s = pd.to_numeric(df[series_id], errors="coerce")  # FRED 用 '.' 表示缺值 → NaN
+    s.index = pd.to_datetime(df["Date"])
     s.index.name = "Date"
-    return s
+    s.name = name
+    return s.dropna()
 
 
 # ---------------------------------------------------------------------------
