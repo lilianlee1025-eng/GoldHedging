@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  ::-webkit-scrollbar{width:10px;height:10px;}
+  ::-webkit-scrollbar-thumb{background:#c3ccd8;border-radius:5px;}
+  ::-webkit-scrollbar-track{background:transparent;}
+  input[type=range]{-webkit-appearance:none;appearance:none;height:4px;border-radius:2px;background:#E4E7E5;outline:none;}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;border-radius:50%;background:#C8A951;cursor:pointer;border:2px solid #FFFFFF;}
+  input[type=number]:focus{outline:none;border-color:#C8A951 !important;}
+</style>
+</helmet>
+
+<div style="display:flex;min-height:100vh;background:#F2F3F2;font-family:-apple-system,'Helvetica Neue',Helvetica,Arial,sans-serif;color:#26302B;-webkit-font-smoothing:antialiased;">
+
+  <aside style="width:250px;flex:none;background:#FFFFFF;border-right:1px solid #E4E7E5;color:#26302B;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;padding:24px 16px;">
+    <div style="display:flex;align-items:center;gap:11px;padding:4px 8px 22px 8px;border-bottom:1px solid #E4E7E5;">
+      <div style="width:11px;height:11px;border-radius:50%;background:#C8A951;flex:none;box-shadow:0 0 0 4px rgba(200,169,81,0.14);"></div>
+      <div>
+        <div style="font-size:14.5px;font-weight:600;letter-spacing:0.04em;line-height:1.2;">黃金避險決策系統</div>
+        <div style="font-size:10px;color:#7A847E;font-family:'JetBrains Mono',monospace;letter-spacing:0.08em;margin-top:3px;">GOLD HEDGE TERMINAL</div>
+      </div>
+    </div>
+
+    <nav style="display:flex;flex-direction:column;gap:3px;margin-top:18px;flex:1;">
+      <sc-for list="{{ nav }}" as="it" hint-placeholder-count="5">
+        <button onClick="{{ it.onClick }}" style="display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:none;cursor:pointer;padding:10px 12px;border-radius:7px;font-family:inherit;background:{{ it.bg }};color:{{ it.fg }};transition:background .15s;">
+          <span style="width:3px;height:30px;border-radius:2px;background:{{ it.bar }};flex:none;"></span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:{{ it.num }};flex:none;">{{ it.idx }}</span>
+          <span style="flex:1;min-width:0;">
+            <span style="display:block;font-size:13.5px;font-weight:500;line-height:1.25;">{{ it.label }}</span>
+            <span style="display:block;font-size:10.5px;color:#7A847E;margin-top:2px;">{{ it.sub }}</span>
+          </span>
+        </button>
+      </sc-for>
+    </nav>
+  </aside>
+
+  <main style="flex:1;min-width:0;padding:30px 38px 60px;">
+    <header style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:26px;gap:24px;flex-wrap:wrap;">
+      <div>
+        <div style="font-size:11px;color:#7A847E;font-family:'JetBrains Mono',monospace;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:7px;">{{ pageKicker }}</div>
+        <h1 style="margin:0;font-size:25px;font-weight:600;letter-spacing:-0.01em;color:#26302B;">{{ pageTitle }}</h1>
+        <p style="margin:7px 0 0;font-size:13.5px;color:#7A847E;max-width:640px;line-height:1.5;">{{ pageSubtitle }}</p>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;flex:none;">
+        <div style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #E4E7E5;border-radius:20px;padding:7px 14px;">
+          <span style="width:7px;height:7px;border-radius:50%;background:#1E8C66;"></span>
+          <span style="font-size:11.5px;font-family:'JetBrains Mono',monospace;color:#7A847E;">{{ updatedStr }}</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ============ DASHBOARD ============ -->
+    <sc-if value="{{ isDashboard }}" hint-placeholder-val="{{ true }}">
+    <div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;">
+        <span style="font-size:11px;color:#7A847E;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.08em;">計價單位</span>
+        <div style="display:flex;gap:6px;">
+          <sc-for list="{{ unitBtns }}" as="ub" hint-placeholder-count="3">
+            <button onClick="{{ ub.onClick }}" style="cursor:pointer;border:1px solid {{ ub.border }};background:{{ ub.bg }};color:{{ ub.fg }};font-weight:{{ ub.weight }};font-size:12px;padding:6px 13px;border-radius:7px;font-family:inherit;transition:all .15s;">{{ ub.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:18px;">
+        <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:18px 20px;">
+          <div style="font-size:11px;color:#7A847E;font-family:'JetBrains Mono',monospace;letter-spacing:0.06em;text-transform:uppercase;">目前金價 · {{ unitLabel }}</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:30px;font-weight:600;color:#26302B;margin-top:12px;letter-spacing:-0.01em;">{{ priceStr }}</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:13px;margin-top:8px;color:{{ deltaColor }};">{{ deltaStr }} 較前日</div>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:18px 20px;">
+          <div style="font-size:11px;color:#7A847E;font-family:'JetBrains Mono',monospace;letter-spacing:0.06em;text-transform:uppercase;">預測漲跌方向 · 5日</div>
+          <div style="font-size:28px;font-weight:600;margin-top:12px;color:{{ dirColor }};display:flex;align-items:baseline;gap:8px;"><span style="font-family:'JetBrains Mono',monospace;">{{ dirArrow }}</span><span>{{ dirText }}</span></div>
+          <div style="font-size:12.5px;margin-top:9px;color:#7A847E;">{{ dirSubtitle }}</div>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:18px 20px;border:1px solid rgba(200,169,81,0.32);">
+          <div style="font-size:11px;color:#7A847E;font-family:'JetBrains Mono',monospace;letter-spacing:0.06em;text-transform:uppercase;">未來下跌機率</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:30px;font-weight:600;color:#C8A951;margin-top:12px;">{{ declinePctStr }}</div>
+          <div style="font-size:12.5px;margin-top:9px;color:#7A847E;">避險觸發門檻 {{ threshStr }}</div>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:18px 20px;">
+          <div style="font-size:11px;color:#7A847E;font-family:'JetBrains Mono',monospace;letter-spacing:0.06em;text-transform:uppercase;">建議避險方向</div>
+          <div style="font-size:21px;font-weight:600;margin-top:12px;color:#26302B;">{{ recName }}</div>
+          <div style="display:inline-block;font-size:11.5px;margin-top:10px;color:#26302B;background:#C8A951;padding:3px 9px;border-radius:4px;font-weight:600;">{{ recStrength }}</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 280px;gap:16px;">
+        <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:10px;">
+            <div style="font-size:14px;font-weight:600;color:#26302B;">GLD 價格 · 近 {{ histLen }} {{ tfUnit }}</div>
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+              <div style="display:flex;gap:4px;">
+                <sc-for list="{{ tfBtns }}" as="t" hint-placeholder-count="4">
+                  <button onClick="{{ t.onClick }}" style="cursor:pointer;border:1px solid {{ t.border }};background:{{ t.bg }};color:{{ t.fg }};font-size:12px;padding:5px 11px;border-radius:6px;font-family:'JetBrains Mono',monospace;">{{ t.label }}</button>
+                </sc-for>
+              </div>
+              <div style="display:flex;gap:4px;">
+                <sc-for list="{{ ctypeBtns }}" as="c" hint-placeholder-count="2">
+                  <button onClick="{{ c.onClick }}" style="cursor:pointer;border:1px solid {{ c.border }};background:{{ c.bg }};color:{{ c.fg }};font-size:12px;padding:5px 11px;border-radius:6px;font-family:inherit;">{{ c.label }}</button>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;gap:16px;font-size:11.5px;font-family:'JetBrains Mono',monospace;color:#7A847E;margin-bottom:4px;">
+            <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:2px;background:#3A443E;display:inline-block;"></span>價格</span>
+            <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:2px;background:#9AA39D;display:inline-block;"></span>模型擬合</span>
+            <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:0;border-top:2px dashed #C8A951;display:inline-block;"></span>未來預測</span>
+            <span style="color:#AAB1AC;">（模型擬合/預測僅日線折線顯示）</span>
+          </div>
+          <div style="margin-top:4px;">{{ dashChart }}</div>
+        </div>
+
+        <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;display:flex;flex-direction:column;">
+          <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">未來 5 日預測</div>
+          <div style="font-size:11.5px;color:#7A847E;margin-bottom:14px;font-family:'JetBrains Mono',monospace;">LSTM horizon = 5</div>
+          <div style="display:flex;flex-direction:column;gap:2px;">
+            <sc-for list="{{ futureRows }}" as="fr" hint-placeholder-count="5">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #E4E7E5;">
+                <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#7A847E;">{{ fr.date }}</span>
+                <span style="display:flex;align-items:center;gap:9px;">
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#26302B;">{{ fr.priceStr }}</span>
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:{{ fr.color }};width:54px;text-align:right;">{{ fr.deltaStr }}</span>
+                </span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="margin-top:auto;padding-top:16px;font-size:12px;color:#7A847E;line-height:1.6;">{{ futLead }}<span style="color:#C8A951;font-family:'JetBrains Mono',monospace;">{{ declinePctStr }}</span>{{ futTail }}</div>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ============ SIMULATOR ============ -->
+    <sc-if value="{{ isSim }}" hint-placeholder-val="{{ false }}">
+    <div>
+      <div style="display:grid;grid-template-columns:300px 1fr;gap:16px;align-items:start;">
+        <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:22px;position:sticky;top:20px;">
+          <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:16px;">部位設定</div>
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <label style="display:block;"><span style="display:block;font-size:11.5px;color:#7A847E;margin-bottom:6px;font-family:'JetBrains Mono',monospace;">持有量 (盎司)</span><input type="number" value="{{ sim.ounces }}" onChange="{{ h.ounces }}" style="width:100%;background:#F2F3F2;border:1px solid #E4E7E5;color:#26302B;padding:9px 11px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:14px;"></label>
+            <label style="display:block;"><span style="display:block;font-size:11.5px;color:#7A847E;margin-bottom:6px;font-family:'JetBrains Mono',monospace;">進場成本 ($/oz)</span><input type="number" value="{{ sim.entry }}" onChange="{{ h.entry }}" style="width:100%;background:#F2F3F2;border:1px solid #E4E7E5;color:#26302B;padding:9px 11px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:14px;"></label>
+            <label style="display:block;"><span style="display:block;font-size:11.5px;color:#7A847E;margin-bottom:6px;font-family:'JetBrains Mono',monospace;">黃金現貨 ($/oz)</span><input type="number" value="{{ sim.spot }}" onChange="{{ h.spot }}" style="width:100%;background:#F2F3F2;border:1px solid #E4E7E5;color:#26302B;padding:9px 11px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:14px;"></label>
+            <label style="display:block;"><span style="display:block;font-size:11.5px;color:#7A847E;margin-bottom:6px;font-family:'JetBrains Mono',monospace;">避險期間 (月)</span><input type="number" value="{{ sim.months }}" onChange="{{ h.months }}" style="width:100%;background:#F2F3F2;border:1px solid #E4E7E5;color:#26302B;padding:9px 11px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:14px;"></label>
+            <div style="display:flex;gap:12px;">
+              <label style="display:block;flex:1;"><span style="display:block;font-size:11.5px;color:#7A847E;margin-bottom:6px;font-family:'JetBrains Mono',monospace;">波動率 (%)</span><input type="number" value="{{ sim.vol }}" onChange="{{ h.vol }}" style="width:100%;background:#F2F3F2;border:1px solid #E4E7E5;color:#26302B;padding:9px 11px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:14px;"></label>
+              <label style="display:block;flex:1;"><span style="display:block;font-size:11.5px;color:#7A847E;margin-bottom:6px;font-family:'JetBrains Mono',monospace;">利率 (%)</span><input type="number" value="{{ sim.rate }}" onChange="{{ h.rate }}" style="width:100%;background:#F2F3F2;border:1px solid #E4E7E5;color:#26302B;padding:9px 11px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:14px;"></label>
+            </div>
+          </div>
+
+          <div style="margin-top:18px;padding-top:16px;border-top:1px solid #E4E7E5;">
+            <div style="display:flex;justify-content:space-between;font-size:12px;color:#7A847E;margin-bottom:8px;"><span>未實現損益 (對成本)</span></div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:600;color:{{ unrealColor }};">{{ unrealStr }}</div>
+          </div>
+
+          <div style="margin-top:16px;background:{{ recBannerBg }};border:1px solid {{ recBannerBorder }};border-radius:8px;padding:14px;">
+            <div style="font-size:11px;color:#7A847E;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;">下跌機率 {{ declinePctStr }} · 建議</div>
+            <div style="font-size:15px;font-weight:600;color:#26302B;margin-top:7px;">{{ recBannerText }}</div>
+            <div style="font-size:12px;color:#4A544E;margin-top:6px;line-height:1.5;">{{ recBannerNote }}</div>
+          </div>
+        </div>
+
+        <div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <sc-for list="{{ strategies }}" as="st" hint-placeholder-count="4">
+              <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:18px 20px;border:1px solid {{ st.border }};position:relative;">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                  <div>
+                    <div style="font-size:15px;font-weight:600;color:#26302B;">{{ st.name }}</div>
+                    <div style="font-size:12px;color:#7A847E;margin-top:4px;line-height:1.45;max-width:240px;">{{ st.desc }}</div>
+                  </div>
+                  <sc-if value="{{ st.recommended }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px;color:#26302B;background:#C8A951;padding:3px 9px;border-radius:4px;font-weight:600;flex:none;">建議</span></sc-if>
+                </div>
+                <div style="margin-top:14px;">{{ st.chart }}</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 18px;margin-top:14px;padding-top:14px;border-top:1px solid #E4E7E5;">
+                  <div><div style="font-size:10.5px;color:#7A847E;font-family:'JetBrains Mono',monospace;text-transform:uppercase;">避險成本</div><div style="font-family:'JetBrains Mono',monospace;font-size:14px;margin-top:4px;color:{{ st.costColor }};">{{ st.costStr }}</div></div>
+                  <div><div style="font-size:10.5px;color:#7A847E;font-family:'JetBrains Mono',monospace;text-transform:uppercase;">最大損失</div><div style="font-family:'JetBrains Mono',monospace;font-size:14px;margin-top:4px;color:{{ st.lossColor }};">{{ st.maxLossStr }}</div></div>
+                  <div><div style="font-size:10.5px;color:#7A847E;font-family:'JetBrains Mono',monospace;text-transform:uppercase;">最大獲利</div><div style="font-family:'JetBrains Mono',monospace;font-size:14px;margin-top:4px;color:{{ st.gainColor }};">{{ st.maxGainStr }}</div></div>
+                  <div><div style="font-size:10.5px;color:#7A847E;font-family:'JetBrains Mono',monospace;text-transform:uppercase;">損益兩平</div><div style="font-family:'JetBrains Mono',monospace;font-size:14px;margin-top:4px;color:#4A544E;">{{ st.beStr }}</div></div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="font-size:11.5px;color:#7A847E;margin-top:14px;font-family:'JetBrains Mono',monospace;line-height:1.6;">{{ strikesNote }}　·　損益圖情境範圍 ±20% · 權利金以 Black–Scholes 計算</div>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ============ PRINCIPLES ============ -->
+    <sc-if value="{{ isPrin }}" hint-placeholder-val="{{ false }}">
+    <div>
+      <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:22px 24px;margin-bottom:16px;">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
+          <div><div style="font-size:13px;font-weight:600;color:#C8A951;margin-bottom:8px;">期貨避險</div><div style="font-size:12.5px;color:#4A544E;line-height:1.6;">放空等量期貨鎖定價格。損益曲線<b style="color:#26302B;">接近水平線</b>——下跌受保護，但上漲的利潤也一併放棄，且幾乎零權利金成本。</div></div>
+          <div><div style="font-size:13px;font-weight:600;color:#C8A951;margin-bottom:8px;">保護性賣權 (Put)</div><div style="font-size:12.5px;color:#4A544E;line-height:1.6;">支付權利金買進保險。損益曲線像一支<b style="color:#26302B;">曲棍球桿</b>——跌破履約價有地板，上漲仍保留獲利，代價是先付出權利金。</div></div>
+          <div><div style="font-size:13px;font-weight:600;color:#C8A951;margin-bottom:8px;">關鍵差異</div><div style="font-size:12.5px;color:#4A544E;line-height:1.6;">期貨是<b style="color:#26302B;">義務</b>（雙向鎖定），選擇權是<b style="color:#26302B;">權利</b>（單向保障、保留上檔）。拖動下方參數，即時觀察兩者曲線差異。</div></div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:260px 1fr;gap:16px;align-items:start;">
+        <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:22px;position:sticky;top:20px;">
+          <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:18px;">互動參數</div>
+          <div style="margin-bottom:20px;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:9px;"><span style="font-size:12px;color:#7A847E;">Put 履約價</span><span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#C8A951;">{{ prinKStr }}</span></div>
+            <input type="range" min="1900" max="2300" step="10" value="{{ prin.K }}" onInput="{{ ph.K }}" style="width:100%;">
+          </div>
+          <div style="margin-bottom:20px;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:9px;"><span style="font-size:12px;color:#7A847E;">權利金 ($/oz)</span><span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#C8A951;">{{ prinPremStr }}</span></div>
+            <input type="range" min="5" max="150" step="1" value="{{ prin.prem }}" onInput="{{ ph.prem }}" style="width:100%;">
+          </div>
+          <div style="padding-top:16px;border-top:1px solid #E4E7E5;font-size:12px;color:#7A847E;line-height:1.7;">
+            部位假設：100 盎司，現貨 $2,100/oz。<br>期貨鎖定價 = 現貨。
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;">
+            <div style="font-size:14px;font-weight:600;color:#26302B;">期貨避險 · Payoff</div>
+            <div style="font-size:12px;color:#7A847E;margin-top:4px;">水平線：上下檔皆鎖定，損益兩平 {{ beFutStr }}</div>
+            <div style="margin-top:12px;">{{ futChart }}</div>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;">
+            <div style="font-size:14px;font-weight:600;color:#26302B;">保護性賣權 · Payoff</div>
+            <div style="font-size:12px;color:#7A847E;margin-top:4px;">曲棍球桿：地板在履約價，損益兩平 {{ bePutStr }}</div>
+            <div style="margin-top:12px;">{{ putChart }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ============ BACKTEST ============ -->
+    <sc-if value="{{ isBacktest }}" hint-placeholder-val="{{ false }}">
+    <div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:18px;">
+        <div style="background:#E2F0EA;border-radius:10px;padding:18px 20px;">
+          <div style="font-size:11px;color:#1E8C66;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;">總報酬 · 有避險</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:27px;font-weight:600;color:#1E8C66;margin-top:12px;">{{ btRetHStr }}</div>
+        </div>
+        <div style="background:#F4E4E2;border-radius:10px;padding:18px 20px;">
+          <div style="font-size:11px;color:#C0473E;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;">總報酬 · 無避險</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:27px;font-weight:600;color:#C0473E;margin-top:12px;">{{ btRetUStr }}</div>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:18px 20px;">
+          <div style="font-size:11px;color:#7A847E;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;">最大回撤 · 避險 / 不避險</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:600;margin-top:13px;"><span style="color:#1E8C66;">{{ btDdHStr }}</span> <span style="color:#7A847E;">/</span> <span style="color:#C0473E;">{{ btDdUStr }}</span></div>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:18px 20px;">
+          <div style="font-size:11px;color:#7A847E;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;">避險成本佔比</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:27px;font-weight:600;color:#C8A951;margin-top:12px;">{{ btCostStr }}</div>
+        </div>
+      </div>
+
+      <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;margin-bottom:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+          <div style="font-size:14px;font-weight:600;color:#26302B;">累積損益曲線 · 有避險 vs 無避險</div>
+          <div style="display:flex;gap:16px;font-size:11.5px;font-family:'JetBrains Mono',monospace;color:#7A847E;">
+            <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:2px;background:#1E8C66;display:inline-block;"></span>有避險</span>
+            <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:2px;background:#C0473E;display:inline-block;"></span>無避險</span>
+          </div>
+        </div>
+        <div style="margin-top:10px;">{{ equityChart }}</div>
+      </div>
+
+      <div style="font-size:13px;font-weight:600;color:#26302B;margin:24px 0 12px;">不同情境下的避險效果</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+        <sc-for list="{{ scenarios }}" as="sc" hint-placeholder-count="3">
+          <div style="background:#fff;border:1px solid #E4E7E5;border-radius:10px;padding:18px 20px;">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;">
+              <span style="font-size:16px;font-weight:600;color:#26302B;">{{ sc.name }}</span>
+              <span style="font-size:11px;color:#7A847E;font-family:'JetBrains Mono',monospace;">{{ sc.period }}</span>
+            </div>
+            <div style="margin-top:16px;display:flex;flex-direction:column;gap:13px;">
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:5px;"><span style="color:#7A847E;">無避險</span><span style="font-family:'JetBrains Mono',monospace;color:{{ sc.uColor }};">{{ sc.uStr }}</span></div>
+                <div style="height:7px;background:#F2F3F2;border-radius:4px;overflow:hidden;"><div style="height:100%;width:{{ sc.uBarW }};background:{{ sc.uColor }};border-radius:4px;"></div></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:5px;"><span style="color:#7A847E;">有避險</span><span style="font-family:'JetBrains Mono',monospace;color:{{ sc.hColor }};">{{ sc.hStr }}</span></div>
+                <div style="height:7px;background:#F2F3F2;border-radius:4px;overflow:hidden;"><div style="height:100%;width:{{ sc.hBarW }};background:{{ sc.hColor }};border-radius:4px;"></div></div>
+              </div>
+            </div>
+            <div style="margin-top:14px;padding-top:12px;border-top:1px solid #EDF0F4;font-size:11.5px;color:#7A847E;font-family:'JetBrains Mono',monospace;">避險成本 {{ sc.costStr }}　·　{{ sc.verdict }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ============ MODEL ============ -->
+    <sc-if value="{{ isModel }}" hint-placeholder-val="{{ false }}">
+    <div>
+      <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:24px 26px;margin-bottom:16px;">
+        <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:18px;">LSTM 模型架構</div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          <div style="background:#F2F3F2;border:1px solid #E4E7E5;border-radius:8px;padding:14px 18px;text-align:center;flex:none;"><div style="font-size:12px;color:#26302B;font-weight:600;">輸入序列</div><div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#7A847E;margin-top:5px;">60 × 6 因子</div></div>
+          <span style="color:#AAB1AC;font-family:'JetBrains Mono',monospace;">→</span>
+          <div style="background:#F2F3F2;border:1px solid #E4E7E5;border-radius:8px;padding:14px 18px;text-align:center;flex:none;"><div style="font-size:12px;color:#26302B;font-weight:600;">LSTM 層 ×2</div><div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#7A847E;margin-top:5px;">hidden = 64</div></div>
+          <span style="color:#AAB1AC;font-family:'JetBrains Mono',monospace;">→</span>
+          <div style="background:#F2F3F2;border:1px solid #E4E7E5;border-radius:8px;padding:14px 18px;text-align:center;flex:none;"><div style="font-size:12px;color:#26302B;font-weight:600;">Dropout + Dense</div><div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#7A847E;margin-top:5px;">FC → 32</div></div>
+          <span style="color:#AAB1AC;font-family:'JetBrains Mono',monospace;">→</span>
+          <div style="background:rgba(200,169,81,0.12);border:1px solid #C8A951;border-radius:8px;padding:14px 18px;text-align:center;flex:none;"><div style="font-size:12px;color:#C8A951;font-weight:600;">輸出</div><div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#A98F3E;margin-top:5px;">未來 5 日價格 + 下跌機率</div></div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;">
+        <div style="background:#fff;border:1px solid #E4E7E5;border-radius:10px;padding:22px 24px;">
+          <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">輸入因子</div>
+          <div style="font-size:12px;color:#7A847E;margin-bottom:16px;">多因子模型納入總經與風險指標</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <sc-for list="{{ factors }}" as="f" hint-placeholder-count="6">
+              <div style="display:flex;align-items:center;gap:14px;padding:11px 0;border-bottom:1px solid #F0F2F6;">
+                <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#26302B;background:#F2F3F2;padding:4px 9px;border-radius:5px;flex:none;width:64px;text-align:center;">{{ f.code }}</span>
+                <span style="flex:1;font-size:13px;color:#26302B;">{{ f.name }}</span>
+                <span style="font-size:11.5px;color:#7A847E;font-family:'JetBrains Mono',monospace;">{{ f.role }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="background:#fff;border:1px solid #E4E7E5;border-radius:10px;padding:22px 24px;">
+          <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">模型表現比較</div>
+          <div style="font-size:12px;color:#7A847E;margin-bottom:16px;">多因子 LSTM vs 單因子 vs Naive 基準</div>
+          <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:0;font-family:'JetBrains Mono',monospace;">
+            <div style="font-size:10.5px;color:#7A847E;padding:8px 6px;text-transform:uppercase;">模型</div>
+            <div style="font-size:10.5px;color:#7A847E;padding:8px 6px;text-align:right;">RMSE</div>
+            <div style="font-size:10.5px;color:#7A847E;padding:8px 6px;text-align:right;">下跌準確率</div>
+            <div style="font-size:10.5px;color:#7A847E;padding:8px 6px;text-align:right;">AUC</div>
+            <sc-for list="{{ metricsRows }}" as="m" hint-placeholder-count="3">
+              <div style="font-size:12.5px;color:#26302B;padding:11px 6px;border-top:1px solid #F0F2F6;background:{{ m.bg }};font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-weight:{{ m.weight }};">{{ m.name }}</div>
+              <div style="font-size:12.5px;color:#26302B;padding:11px 6px;border-top:1px solid #F0F2F6;background:{{ m.bg }};text-align:right;">{{ m.rmse }}</div>
+              <div style="font-size:12.5px;padding:11px 6px;border-top:1px solid #F0F2F6;background:{{ m.bg }};text-align:right;color:{{ m.daccColor }};font-weight:{{ m.weight }};">{{ m.dacc }}</div>
+              <div style="font-size:12.5px;color:#26302B;padding:11px 6px;border-top:1px solid #F0F2F6;background:{{ m.bg }};text-align:right;">{{ m.auc }}</div>
+            </sc-for>
+          </div>
+          <div style="margin-top:18px;padding:14px;background:#F2F3F2;border-radius:8px;font-size:12.5px;color:#26302B;line-height:1.6;">多因子 LSTM 的<b>下跌方向準確率達 60.0%</b>，明顯優於單因子 (43.5%) 與隨機基準，是避險訊號的主要依據；RMSE 亦小幅勝過 Naive。</div>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:860}}">
+class Component extends DCLogic {
+  constructor(props){
+    super(props);
+    this.state = {
+      page: 'dashboard',
+      unit: 'gld',          // 計價單位：gld(美元/股) / spot(美元/盎司) / twd(台幣/公克)
+      tf: 'D',              // 時間單位：D日 / W周 / M月 / Q季
+      ctype: 'line',        // 圖表類型：line 折線 / candle K棒
+      pred: this.fallbackPred(),
+      bt: this.fallbackBt(),
+      sim: { ounces:100, entry:1850, spot:2100, months:3, vol:18, rate:4.2 },
+      prin: { K:2030, prem:60, spot:2100 }
+    };
+  }
+  componentDidMount(){
+    Promise.all([
+      fetch('./predictions.json').then(r=>r.json()),
+      fetch('./backtest.json').then(r=>r.json())
+    ]).then(([p,b])=>{ const u=(p.units&&p.units.default)||'gld'; this.setState({ pred:p, bt:b, unit:u }); }).catch(()=>{});
+  }
+
+  /* ---------- math ---------- */
+  erf(x){ const t=1/(1+0.3275911*Math.abs(x)); const y=1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-0.284496736)*t+0.254829592)*t*Math.exp(-x*x); return x>=0?y:-y; }
+  ncdf(x){ return 0.5*(1+this.erf(x/Math.SQRT2)); }
+  bsPut(S,K,T,r,v){ if(T<=0||v<=0) return Math.max(K-S,0); const d1=(Math.log(S/K)+(r+v*v/2)*T)/(v*Math.sqrt(T)); const d2=d1-v*Math.sqrt(T); return K*Math.exp(-r*T)*this.ncdf(-d2)-S*this.ncdf(-d1); }
+  bsCall(S,K,T,r,v){ if(T<=0||v<=0) return Math.max(S-K,0); const d1=(Math.log(S/K)+(r+v*v/2)*T)/(v*Math.sqrt(T)); const d2=d1-v*Math.sqrt(T); return S*this.ncdf(d1)-K*Math.exp(-r*T)*this.ncdf(d2); }
+
+  /* ---------- format ---------- */
+  m(v){ return '$'+Math.round(v).toLocaleString('en-US'); }
+  ms(v){ return (v>=0?'+':'-')+'$'+Math.round(Math.abs(v)).toLocaleString('en-US'); }
+  pct(v,d){ return (v>=0?'+':'')+v.toFixed(d===undefined?1:d)+'%'; }
+
+  /* ---------- 計價單位換算 ---------- */
+  unitDefs(){
+    const u=this.state.pred&&this.state.pred.units;
+    if(u&&u.options&&u.options.length) return u;
+    // fallback（JSON 沒帶 units 時的約略係數）
+    return {default:'gld',options:[
+      {key:'gld',label:'GLD 美元/股',symbol:'$',factor:1,decimals:2},
+      {key:'spot',label:'現貨 美元/盎司',symbol:'$',factor:10.78,decimals:0},
+      {key:'twd',label:'台幣/公克',symbol:'NT$',factor:10.976,decimals:0}
+    ]};
+  }
+  curUnit(){ const u=this.unitDefs(); return u.options.find(o=>o.key===this.state.unit)||u.options[0]; }
+  // 把 GLD 每股價換成目前單位的數值
+  convP(gld){ return gld*this.curUnit().factor; }
+  // 絕對價格字串（含幣別符號與千分位）
+  fmtP(gld){ const o=this.curUnit(); const v=gld*o.factor; return o.symbol+v.toLocaleString('en-US',{minimumFractionDigits:o.decimals,maximumFractionDigits:o.decimals}); }
+  // 圖表座標軸用的短字串
+  fmtPShort(gld){ const o=this.curUnit(); const v=gld*o.factor; const a=Math.abs(v); return o.symbol+(a>=1000?(a/1000).toFixed(1)+'k':v.toFixed(o.decimals)); }
+
+  /* ---------- generic SVG chart ---------- */
+  chartEl(spec){
+    const ce=React.createElement;
+    const w=spec.w||940, h=spec.h||300, pad=spec.pad||{l:48,r:14,t:14,b:26};
+    const L=pad.l, R=w-pad.r, T=pad.t, B=h-pad.b;
+    const xmin=spec.xmin, xmax=spec.xmax, ymin=spec.ymin, ymax=spec.ymax;
+    const sx=x=> L+(x-xmin)/((xmax-xmin)||1)*(R-L);
+    const sy=y=> B-(y-ymin)/((ymax-ymin)||1)*(B-T);
+    const kids=[]; let k=0; const K=()=>'k'+(k++);
+    const MONO='JetBrains Mono, monospace';
+    (spec.yticks||[]).forEach(t=>{ const y=sy(t); kids.push(ce('line',{key:K(),x1:L,y1:y,x2:R,y2:y,stroke:'#E4E7E5',strokeWidth:1})); kids.push(ce('text',{key:K(),x:L-7,y:y+3.5,textAnchor:'end',fontSize:10,fontFamily:MONO,fill:'#7A847E'}, spec.yfmt?spec.yfmt(t):t)); });
+    if(spec.zeroLine){ const y=sy(0); kids.push(ce('line',{key:K(),x1:L,y1:y,x2:R,y2:y,stroke:'#C9CFCB',strokeWidth:1.2})); }
+    (spec.series||[]).forEach(s=>{
+      if(s.area==='signed' && s.pts.length){
+        const y0=sy(0);
+        let d='M '+sx(s.pts[0][0]).toFixed(1)+' '+y0.toFixed(1)+' ';
+        s.pts.forEach(p=> d+='L '+sx(p[0]).toFixed(1)+' '+sy(p[1]).toFixed(1)+' ');
+        d+='L '+sx(s.pts[s.pts.length-1][0]).toFixed(1)+' '+y0.toFixed(1)+' Z';
+        const cp='cp'+k, cn='cn'+k; k++;
+        kids.push(ce('clipPath',{key:K(),id:cp},ce('rect',{x:L,y:T,width:R-L,height:Math.max(0,y0-T)})));
+        kids.push(ce('clipPath',{key:K(),id:cn},ce('rect',{x:L,y:y0,width:R-L,height:Math.max(0,B-y0)})));
+        kids.push(ce('path',{key:K(),d:d,fill:'#1E8C66',fillOpacity:0.16,clipPath:'url(#'+cp+')'}));
+        kids.push(ce('path',{key:K(),d:d,fill:'#C0473E',fillOpacity:0.16,clipPath:'url(#'+cn+')'}));
+      }
+    });
+    // K 棒（蠟燭圖）
+    if(spec.candles && spec.candles.length){
+      const bw=Math.max(1.6,(R-L)/((xmax-xmin)||1)*0.62);
+      spec.candles.forEach(cd=>{
+        const up=cd.c>=cd.o, col=up?'#1E8C66':'#C0473E';
+        const x=sx(cd.x);
+        kids.push(ce('line',{key:K(),x1:x,y1:sy(cd.h),x2:x,y2:sy(cd.l),stroke:col,strokeWidth:1}));
+        const yT=sy(Math.max(cd.o,cd.c)), yB=sy(Math.min(cd.o,cd.c));
+        kids.push(ce('rect',{key:K(),x:x-bw/2,y:yT,width:bw,height:Math.max(1,yB-yT),fill:col}));
+      });
+    }
+    (spec.series||[]).forEach(s=>{
+      if(!s.pts.length) return;
+      let d='M '+sx(s.pts[0][0]).toFixed(1)+' '+sy(s.pts[0][1]).toFixed(1)+' ';
+      for(let i=1;i<s.pts.length;i++) d+='L '+sx(s.pts[i][0]).toFixed(1)+' '+sy(s.pts[i][1]).toFixed(1)+' ';
+      kids.push(ce('path',{key:K(),d:d,fill:'none',stroke:s.stroke,strokeWidth:s.width||1.6,strokeDasharray:s.dash||'none',strokeLinejoin:'round',strokeLinecap:'round'}));
+    });
+    (spec.markers||[]).forEach(mk=>{ const x=sx(mk.x); kids.push(ce('line',{key:K(),x1:x,y1:T,x2:x,y2:B,stroke:mk.color,strokeWidth:1,strokeDasharray:'3 3'})); if(mk.label) kids.push(ce('text',{key:K(),x:x+4,y:T+11,fontSize:9.5,fontFamily:MONO,fill:mk.color},mk.label)); });
+    (spec.endDots||[]).forEach(dd=> kids.push(ce('circle',{key:K(),cx:sx(dd.x),cy:sy(dd.y),r:3.2,fill:dd.color})));
+    (spec.xticks||[]).forEach(t=>{ const x=sx(t.x); kids.push(ce('text',{key:K(),x:x,y:B+16,textAnchor:'middle',fontSize:10,fontFamily:MONO,fill:'#7A847E'},t.label)); });
+    return ce('svg',{viewBox:'0 0 '+w+' '+h,style:{width:'100%',height:'auto',display:'block'},preserveAspectRatio:'xMidYMid meet'},kids);
+  }
+
+  /* ---------- fallback data ---------- */
+  fallbackPred(){
+    const feat=["GLD","DGS10","CPI","DXY","SP500","VIX"];
+    let s=7; const r=()=>{s=(s*1103515245+12345)&0x7fffffff;return s/0x7fffffff;}; const g=()=>(r()+r()+r()+r()-2)/2;
+    const hist=[],mod=[]; let p=198,d=new Date('2025-12-10');
+    for(let i=0;i<90;i++){ while(d.getDay()%6===0)d.setDate(d.getDate()+1); p+=0.18+g()*1.9; if(i>60&&i<70)p-=0.9; const ds=d.toISOString().slice(0,10); hist.push({date:ds,price:Math.round(p*100)/100}); mod.push({date:ds,price:Math.round((p+g()*0.8)*100)/100}); d.setDate(d.getDate()+1); }
+    const S0=hist[hist.length-1].price; const fut=[]; let fp=S0;
+    for(let i=0;i<5;i++){ while(d.getDay()%6===0)d.setDate(d.getDate()+1); fp+=-0.7+g()*0.6; fut.push({date:d.toISOString().slice(0,10),price:Math.round(fp*100)/100}); d.setDate(d.getDate()+1); }
+    return {meta:{target:'GLD',lookback:60,horizon:5,features:feat,generated_from:'2010 ~ 2026'},current:{date:hist[hist.length-1].date,price:S0},decline_prob:0.62,direction:'down',suggested_hedge:'protective_put',metrics:{naive:{rmse:9.5998,mae:6.0644},lstm_single:{rmse:9.8504,mae:6.3168,decline_acc:0.4345,auc:0.4829},lstm_multi:{rmse:9.5726,mae:6.0385,decline_acc:0.5998,auc:0.5065,base_rate_acc:0.5912}},history:hist,model:mod,future:fut};
+  }
+  fallbackBt(){
+    let s=11; const r=()=>{s=(s*1103515245+12345)&0x7fffffff;return s/0x7fffffff;}; const g=()=>(r()+r()+r()+r()-2)/2;
+    const dates=[],hedged=[],unhedged=[]; let u=100,h=100,d=new Date('2014-02-05');
+    for(let i=0;i<160;i++){ let ret=g()*0.012+0.0006; if(i>80&&i<100)ret=g()*0.014-0.010; if(i>130&&i<150)ret=g()*0.012+0.010; u*=1+ret; const hr=ret<0?ret*0.45-0.00018:ret-0.00035; h*=1+hr; dates.push(d.toISOString().slice(0,10)); unhedged.push(Math.round(u*100)/100); hedged.push(Math.round(h*100)/100); d.setDate(d.getDate()+8); }
+    const dd=a=>{let pk=a[0],m=0;for(const v of a){pk=Math.max(pk,v);m=Math.min(m,(v-pk)/pk);}return Math.round(m*10000)/100;};
+    return {meta:{method:'walk-forward',hedge_threshold:0.5,period:'2014 ~ 2026',n_days:3104},equity_curve:{dates,hedged,unhedged},metrics:{total_return_hedged:Math.round((h-100)*100)/100,total_return_unhedged:Math.round((u-100)*100)/100,max_drawdown_hedged:dd(hedged),max_drawdown_unhedged:dd(unhedged),hedge_cost_ratio:1.8,hedged_trigger_days:412},scenarios:[{name:'大跌',period:'2020-02~03',unhedged_return:-23.4,hedged_return:-7.1,hedge_cost:2.6},{name:'盤整',period:'2021~2022',unhedged_return:-2.1,hedged_return:-3.4,hedge_cost:2.9},{name:'大漲',period:'2024-03~10',unhedged_return:31.8,hedged_return:25.6,hedge_cost:1.4}]};
+  }
+
+  num(v,fb){ const n=parseFloat(v); return isNaN(n)?fb:n; }
+  dlabel(ds){ return ds.slice(5).replace('-','/'); }
+
+  /* ---------- recommendation ---------- */
+  rec(p){
+    if(p>=0.6) return {key:'put',name:'保護性賣權',strength:'中高度避險',note:'下跌機率偏高，建議買進 Put 鎖住下檔，同時保留黃金續漲的上檔空間。'};
+    if(p>=0.5) return {key:'collar',name:'Collar 上下限',strength:'中度避險',note:'機率略過門檻，可用 Collar 以低成本建立保護，代價是放棄部分上檔。'};
+    if(p>=0.35) return {key:'futures',name:'期貨部分避險',strength:'輕度避險',note:'機率中性偏低，可放空部分期貨降低波動，保留多數部位。'};
+    return {key:'none',name:'維持不避險',strength:'暫不避險',note:'下跌機率低於門檻，避險成本不划算，建議持有觀望。'};
+  }
+
+  /* ---------- strategies ---------- */
+  buildStrategies(){
+    const sim=this.state.sim;
+    const Q=this.num(sim.ounces,100), spot=this.num(sim.spot,2100);
+    const T=this.num(sim.months,3)/12, vol=this.num(sim.vol,18)/100, r=this.num(sim.rate,4.2)/100;
+    const Kp=Math.round(spot*0.95/5)*5;
+    const premP=this.bsPut(spot,Kp,T,r,vol);
+    const Kpc=Math.round(spot*0.93/5)*5, Kcc=Math.round(spot*1.07/5)*5;
+    const premPc=this.bsPut(spot,Kpc,T,r,vol), premCc=this.bsCall(spot,Kcc,T,r,vol);
+    const F=spot;
+    const defs=[
+      {key:'none',name:'不避險',desc:'完全持有，承受全部漲跌波動。',fn:P=>Q*(P-spot),cost:0},
+      {key:'futures',name:'期貨避險',desc:'放空等量期貨，雙向鎖定價格。',fn:P=>Q*(P-spot)+Q*(F-P)-Q*spot*0.001,cost:0},
+      {key:'put',name:'保護性賣權',desc:'買進 Put（履約 '+this.m(Kp)+'），跌有地板、漲仍獲利。',fn:P=>Q*(P-spot)+Q*Math.max(Kp-P,0)-premP*Q,cost:premP*Q},
+      {key:'collar',name:'Collar 上下限',desc:'買 Put（'+this.m(Kpc)+'）+ 賣 Call（'+this.m(Kcc)+'），低成本但封頂。',fn:P=>Q*(P-spot)+Q*Math.max(Kpc-P,0)-Q*Math.max(P-Kcc,0)-(premPc-premCc)*Q,cost:(premPc-premCc)*Q}
+    ];
+    const grid=[]; for(let i=0;i<=120;i++) grid.push(spot*0.8+spot*0.4*i/120);
+    const computed=defs.map(def=>{
+      const pts=grid.map(P=>[P,def.fn(P)]);
+      return {def, pts};
+    });
+    let gMin=Infinity,gMax=-Infinity;
+    computed.forEach(c=>c.pts.forEach(p=>{ if(p[1]<gMin)gMin=p[1]; if(p[1]>gMax)gMax=p[1]; }));
+    const span=(gMax-gMin)||1; const ymin=gMin-span*0.08, ymax=gMax+span*0.08;
+    const recKey=this.rec(this.state.pred.decline_prob).key;
+    const eps=Q*spot*0.0015;
+    return computed.map(c=>{
+      const pts=c.pts, pnl=pts.map(p=>p[1]);
+      const leftSlope=pnl[1]-pnl[0], rightSlope=pnl[pnl.length-1]-pnl[pnl.length-2];
+      const minV=Math.min.apply(null,pnl), maxV=Math.max.apply(null,pnl);
+      const lossUncapped=leftSlope<-eps, gainUncapped=rightSlope>eps;
+      const bes=[]; for(let i=1;i<pnl.length;i++){ if((pnl[i-1]<=0&&pnl[i]>0)||(pnl[i-1]>=0&&pnl[i]<0)){ const t=Math.abs(pnl[i-1])/(Math.abs(pnl[i-1])+Math.abs(pnl[i])); bes.push(pts[i-1][0]+t*(pts[i][0]-pts[i-1][0])); } }
+      const rec=c.def.key===recKey;
+      const chart=this.chartEl({
+        w:360,h:200,pad:{l:42,r:12,t:12,b:24},
+        xmin:spot*0.8,xmax:spot*1.2,ymin:ymin,ymax:ymax,
+        yticks:[ymin,0,ymax],
+        yfmt:v=>{ const a=Math.abs(v); const s=v>0?'+':v<0?'-':''; return s+(a>=1000?(a/1000).toFixed(0)+'k':Math.round(a)); },
+        zeroLine:true,
+        series:[{pts:pts,stroke:'#26302B',width:1.8,area:'signed'}],
+        markers:[{x:spot,color:'#C8A951',label:'現價'}],
+        xticks:[{x:spot*0.85,label:'-15%'},{x:spot,label:this.m(spot)},{x:spot*1.15,label:'+15%'}]
+      });
+      const costColor = c.def.cost<=0 ? '#1E8C66' : '#4A544E';
+      return {
+        name:c.def.name, desc:c.def.desc, chart:chart, recommended:rec,
+        border: rec?'rgba(200,169,81,0.6)':'#E4E7E5',
+        costStr: c.def.cost<=0 ? (c.def.cost<-1?'收 '+this.m(-c.def.cost):'≈ $0') : this.m(c.def.cost),
+        costColor: costColor,
+        maxLossStr: lossUncapped?'無上限 ↓':this.ms(minV),
+        lossColor:'#C0473E',
+        maxGainStr: gainUncapped?'無上限 ↑':this.ms(maxV),
+        gainColor:'#1E8C66',
+        beStr: bes.length? bes.map(b=>this.m(b)).join(' / ') : '—'
+      };
+    });
+  }
+
+  /* ---------- principles charts ---------- */
+  prinCharts(){
+    const Q=100, spot=this.state.prin.spot, K=this.num(this.state.prin.K,2030), prem=this.num(this.state.prin.prem,60);
+    const grid=[]; for(let i=0;i<=120;i++) grid.push(spot*0.8+spot*0.4*i/120);
+    const futFn=P=>Q*(P-spot)+Q*(spot-P);
+    const putFn=P=>Q*(P-spot)+Q*Math.max(K-P,0)-prem*Q;
+    const futPts=grid.map(P=>[P,futFn(P)]), putPts=grid.map(P=>[P,putFn(P)]);
+    let gMin=Infinity,gMax=-Infinity; [futPts,putPts].forEach(a=>a.forEach(p=>{gMin=Math.min(gMin,p[1]);gMax=Math.max(gMax,p[1]);}));
+    const span=(gMax-gMin)||1; const ymin=gMin-span*0.1, ymax=gMax+span*0.1;
+    const yf=v=>{ const a=Math.abs(v); const s=v>0?'+':v<0?'-':''; return s+(a>=1000?(a/1000).toFixed(0)+'k':Math.round(a)); };
+    const base={w:380,h:230,pad:{l:46,r:12,t:14,b:26},xmin:spot*0.8,xmax:spot*1.2,ymin:ymin,ymax:ymax,yticks:[ymin,0,ymax],yfmt:yf,zeroLine:true,xticks:[{x:spot*0.85,label:'-15%'},{x:spot,label:'$2,100'},{x:spot*1.15,label:'+15%'}]};
+    const futChart=this.chartEl(Object.assign({},base,{series:[{pts:futPts,stroke:'#26302B',width:2,area:'signed'}],markers:[{x:spot,color:'#C8A951',label:'現價'}]}));
+    const putChart=this.chartEl(Object.assign({},base,{series:[{pts:putPts,stroke:'#26302B',width:2,area:'signed'}],markers:[{x:spot,color:'#C8A951',label:'現價'},{x:K,color:'#9AA39D',label:'履約'}]}));
+    const futBe=spot;
+    const putBe=spot+prem;
+    return {futChart,putChart,futBe,putBe};
+  }
+
+  renderVals(){
+    const st=this.state, pred=st.pred, bt=st.bt;
+    const setPage=p=>this.setState({page:p});
+    const navItems=[
+      {key:'dashboard',label:'總覽 Dashboard',sub:'金價與預測訊號'},
+      {key:'simulator',label:'避險策略模擬器',sub:'四種策略損益比較'},
+      {key:'principles',label:'期貨 vs 期權 原理',sub:'互動損益圖解'},
+      {key:'backtest',label:'回測結果',sub:'有避險 vs 無避險'},
+      {key:'model',label:'模型說明',sub:'LSTM 架構與因子'}
+    ];
+    const nav=navItems.map((it,i)=>({ idx:'0'+(i+1), label:it.label, sub:it.sub, onClick:()=>setPage(it.key),
+      bg: st.page===it.key?'#F2EEDF':'transparent', fg: st.page===it.key?'#26302B':'#7A847E',
+      bar: st.page===it.key?'#C8A951':'transparent', num: st.page===it.key?'#C8A951':'#7A847E' }));
+
+    const titles={ dashboard:['即時看板','黃金避險總覽','LSTM 預測訊號、下跌機率與建議避險方向一覽。'],
+      simulator:['決策核心','避險策略模擬器','輸入部位參數，並排比較四種避險策略的損益結構與成本。'],
+      principles:['原理圖解','期貨 vs 期權','拖動參數，即時觀察兩種避險工具的損益曲線差異。'],
+      backtest:['歷史驗證','回測結果','以 walk-forward 回測比較有避險與無避險的累積損益與回撤。'],
+      model:['方法論','模型說明','LSTM 架構、輸入因子與相對基準線的表現比較。'] };
+    const tt=titles[st.page];
+
+    /* dashboard */
+    const H=pred.history, Mn=pred.model, Fu=pred.future, n=H.length;
+    const S0=H[n-1].price, prevP=H[n-2]?H[n-2].price:S0, delta=S0-prevP, deltaPct=delta/prevP*100;
+
+    /* 圖表：依時間單位(日/周/月/季)與類型(折線/K棒)切換 */
+    const tfMap={D:'daily',W:'weekly',M:'monthly',Q:'quarterly'};
+    const tfName={D:'日',W:'周',M:'月',Q:'季'};
+    const cd=(pred.candles&&pred.candles[tfMap[st.tf]])||[];
+    const isDailyLine = st.tf==='D' && st.ctype==='line';
+    let dashChart, chartLen;
+    if(cd.length){
+      // K 棒資料存在 → 用它畫；日線+折線時額外疊上模型擬合與未來預測
+      const cm=cd.length, overlay=isDailyLine;
+      const closes=cd.map((d,i)=>[i,d.c]);
+      const lows=cd.map(d=>d.l), highs=cd.map(d=>d.h);
+      let vmin=Math.min.apply(null,lows), vmax=Math.max.apply(null,highs);
+      let xmaxC=cm-1;
+      let futPts=null, modPts=null;
+      if(overlay){
+        modPts=Mn.map((d,i)=>[cm-n+i,d.price]);     // 模型擬合對齊歷史尾段
+        futPts=[[cm-1,S0]].concat(Fu.map((d,i)=>[cm+i,d.price]));
+        const fp=Fu.map(d=>d.price);
+        vmin=Math.min(vmin,Math.min.apply(null,fp)); vmax=Math.max(vmax,Math.max.apply(null,fp));
+        xmaxC=cm-1+Fu.length;
+      }
+      const vspan=(vmax-vmin)||1;
+      const tickIdx=[0,Math.floor(cm*0.33),Math.floor(cm*0.66),cm-1,xmaxC].filter((v,i,a)=>a.indexOf(v)===i);
+      const xticks=tickIdx.map(ix=>({x:ix,label:this.dlabel(ix<cm?cd[ix].date:Fu[ix-cm].date)}));
+      const series=[];
+      if(st.ctype==='line') series.push({pts:closes,stroke:'#3A443E',width:1.7});
+      if(overlay){ series.push({pts:modPts,stroke:'#9AA39D',width:1.3}); series.push({pts:futPts,stroke:'#C8A951',width:2.4,dash:'6 5'}); }
+      dashChart=this.chartEl({ w:920,h:300,pad:{l:46,r:16,t:16,b:26},
+        xmin:0,xmax:xmaxC,ymin:vmin-vspan*0.08,ymax:vmax+vspan*0.08,
+        yticks:[vmin,(vmin+vmax)/2,vmax], yfmt:v=>this.fmtPShort(v),
+        candles: st.ctype==='candle' ? cd.map((d,i)=>({x:i,o:d.o,h:d.h,l:d.l,c:d.c})) : null,
+        series:series,
+        markers: overlay?[{x:cm-1,color:'rgba(200,169,81,0.45)',label:'今日'}]:[],
+        endDots: overlay?[{x:xmaxC,y:Fu[Fu.length-1].price,color:'#C8A951'}]:[],
+        xticks:xticks });
+      chartLen=cm;
+    } else {
+      chartLen=0; dashChart=this.chartEl({w:920,h:300,xmin:0,xmax:1,ymin:0,ymax:1});
+    }
+    const futureRows=Fu.map((d,i)=>{ const prev=i===0?S0:Fu[i-1].price; const dd=d.price-prev; return {date:this.dlabel(d.date),priceStr:this.fmtP(d.price),deltaStr:this.pct(dd/prev*100),color:dd>=0?'#1E8C66':'#C0473E'}; });
+    const recObj=this.rec(pred.decline_prob);
+    const dirDown = pred.direction==='down';
+    /* 依真實資料產生敘述（取代原本寫死的「走弱」文字）*/
+    const fut5Pct = Fu.length ? (Fu[Fu.length-1].price - S0)/S0*100 : 0;
+    const trendWord = fut5Pct>0.3?'走升':(fut5Pct<-0.3?'走弱':'大致持平');
+    const dirSubtitle = '模型預期 5 日後'+trendWord+'（'+this.pct(fut5Pct)+'）';
+    const declineHigh = pred.decline_prob >= ((bt.meta&&bt.meta.hedge_threshold)||0.5);
+    const futLead = '未來 5 日預測'+trendWord+'，下跌機率 ';
+    const futTail = declineHigh ? '，已超過門檻，建議啟動避險。' : '，仍低於門檻，可暫不避險。';
+    /* 計價單位切換按鈕 */
+    const setUnit=u=>this.setState({unit:u});
+    const curUk=this.curUnit().key;
+    const unitBtns=this.unitDefs().options.map(o=>({ key:o.key, label:o.label, onClick:()=>setUnit(o.key),
+      bg:o.key===curUk?'#C8A951':'#FFFFFF', fg:o.key===curUk?'#26302B':'#7A847E',
+      border:o.key===curUk?'#C8A951':'#E4E7E5', weight:o.key===curUk?'600':'400' }));
+    /* 時間單位(日/周/月/季) 與 圖表類型(折線/K棒) 切換 */
+    const setTf=t=>this.setState({tf:t});
+    const setCtype=t=>this.setState({ctype:t});
+    const tfBtns=[['D','日'],['W','周'],['M','月'],['Q','季']].map(a=>({ key:a[0], label:a[1], onClick:()=>setTf(a[0]),
+      bg:st.tf===a[0]?'#3A443E':'#FFFFFF', fg:st.tf===a[0]?'#FFFFFF':'#7A847E', border:st.tf===a[0]?'#3A443E':'#E4E7E5' }));
+    const ctypeBtns=[['line','折線'],['candle','K棒']].map(a=>({ key:a[0], label:a[1], onClick:()=>setCtype(a[0]),
+      bg:st.ctype===a[0]?'#3A443E':'#FFFFFF', fg:st.ctype===a[0]?'#FFFFFF':'#7A847E', border:st.ctype===a[0]?'#3A443E':'#E4E7E5' }));
+
+    /* simulator */
+    const sim=st.sim;
+    const mkH=key=>e=>{ const v=e.target.value; this.setState(s=>({sim:Object.assign({},s.sim,{[key]:v})})); };
+    const h={ ounces:mkH('ounces'),entry:mkH('entry'),spot:mkH('spot'),months:mkH('months'),vol:mkH('vol'),rate:mkH('rate') };
+    const unreal=this.num(sim.ounces,0)*(this.num(sim.spot,0)-this.num(sim.entry,0));
+    const strategies=this.buildStrategies();
+    const recBan = (pred.decline_prob>=0.5);
+
+    /* principles */
+    const mkPH=key=>e=>{ const v=e.target.value; this.setState(s=>({prin:Object.assign({},s.prin,{[key]:v})})); };
+    const ph={ K:mkPH('K'), prem:mkPH('prem') };
+    const pc=this.prinCharts();
+
+    /* backtest */
+    const ec=bt.equity_curve, U=ec.unhedged, Hh=ec.hedged, en=U.length;
+    const emin=Math.min(Math.min.apply(null,U),Math.min.apply(null,Hh)), emax=Math.max(Math.max.apply(null,U),Math.max.apply(null,Hh)), espan=(emax-emin)||1;
+    const eTickIdx=[0,Math.floor(en*0.25),Math.floor(en*0.5),Math.floor(en*0.75),en-1];
+    const equityChart=this.chartEl({ w:920,h:300,pad:{l:46,r:16,t:16,b:26},
+      xmin:0,xmax:en-1,ymin:emin-espan*0.06,ymax:emax+espan*0.06,
+      yticks:[emin,100,emax].filter((v,i,a)=>a.indexOf(v)===i), yfmt:v=>v.toFixed(0),
+      series:[ {pts:U.map((v,i)=>[i,v]),stroke:'#C0473E',width:1.8}, {pts:Hh.map((v,i)=>[i,v]),stroke:'#1E8C66',width:1.8} ],
+      xticks:eTickIdx.map(ix=>({x:ix,label:ec.dates[ix].slice(0,7)})) });
+    const bm=bt.metrics;
+    const maxAbs=Math.max.apply(null,bt.scenarios.map(s=>Math.max(Math.abs(s.unhedged_return),Math.abs(s.hedged_return))));
+    const scenarios=bt.scenarios.map(s=>{ const verdict = s.hedged_return>s.unhedged_return?'避險勝出':'避險小輸但更穩'; return {
+      name:s.name, period:s.period,
+      uStr:this.pct(s.unhedged_return), uColor:s.unhedged_return>=0?'#1E8C66':'#C0473E', uBarW:(Math.abs(s.unhedged_return)/maxAbs*100).toFixed(0)+'%',
+      hStr:this.pct(s.hedged_return), hColor:s.hedged_return>=0?'#1E8C66':'#C0473E', hBarW:(Math.abs(s.hedged_return)/maxAbs*100).toFixed(0)+'%',
+      costStr:s.hedge_cost.toFixed(1)+'%', verdict:verdict }; });
+
+    /* model */
+    const M=pred.metrics;
+    const f3=v=>v.toFixed(3), f1=v=>(v*100).toFixed(1)+'%';
+    const metricsRows=[
+      {name:'Naive 基準',rmse:f3(M.naive.rmse),dacc:'—',auc:'—',bg:'transparent',weight:'400',daccColor:'#7A847E'},
+      {name:'LSTM 單因子',rmse:f3(M.lstm_single.rmse),dacc:f1(M.lstm_single.decline_acc),auc:f3(M.lstm_single.auc),bg:'transparent',weight:'400',daccColor:'#C0473E'},
+      {name:'LSTM 多因子',rmse:f3(M.lstm_multi.rmse),dacc:f1(M.lstm_multi.decline_acc),auc:f3(M.lstm_multi.auc),bg:'rgba(200,169,81,0.10)',weight:'600',daccColor:'#1E8C66'}
+    ];
+    const factors=[
+      {code:'GLD',name:'黃金 ETF 價格（目標 / 自迴歸）',role:'目標'},
+      {code:'DGS10',name:'美國 10 年期公債殖利率',role:'利率'},
+      {code:'CPI',name:'消費者物價指數（通膨）',role:'通膨'},
+      {code:'DXY',name:'美元指數',role:'匯率'},
+      {code:'SP500',name:'標普 500 指數',role:'股市'},
+      {code:'VIX',name:'波動率指數（恐慌指標）',role:'風險'}
+    ];
+
+    return {
+      nav:nav, pageKicker:tt[0], pageTitle:tt[1], pageSubtitle:tt[2],
+      updatedStr:'資料截至 '+(pred.data_as_of||pred.current.date)+(pred.generated_at?(' · 產生 '+pred.generated_at):''),
+      isDashboard:st.page==='dashboard', isSim:st.page==='simulator', isPrin:st.page==='principles', isBacktest:st.page==='backtest', isModel:st.page==='model',
+      /* dashboard */
+      priceStr:this.fmtP(S0), deltaStr:this.pct(deltaPct), deltaColor:delta>=0?'#1E8C66':'#C0473E',
+      unitBtns:unitBtns, unitLabel:this.curUnit().label,
+      tfBtns:tfBtns, ctypeBtns:ctypeBtns, tfUnit:tfName[st.tf],
+      dataAsOf:pred.data_as_of||pred.current.date, generatedAt:pred.generated_at||'',
+      dirText:dirDown?'下跌':'上漲', dirArrow:dirDown?'↓':'↑', dirColor:dirDown?'#C0473E':'#1E8C66',
+      declinePctStr:(pred.decline_prob*100).toFixed(0)+'%', threshStr:(bt.meta.hedge_threshold*100).toFixed(0)+'%',
+      recName:recObj.name, recStrength:recObj.strength, dashChart:dashChart, futureRows:futureRows, histLen:chartLen,
+      dirSubtitle:dirSubtitle, futLead:futLead, futTail:futTail,
+      /* simulator */
+      sim:sim, h:h, unrealStr:this.ms(unreal), unrealColor:unreal>=0?'#1E8C66':'#C0473E',
+      strategies:strategies,
+      recBannerText:recObj.name+'（'+recObj.strength+'）', recBannerNote:recObj.note,
+      recBannerBg: recBan?'#E2F0EA':'#E4E7E5', recBannerBorder: recBan?'rgba(30,140,102,0.4)':'#E4E7E5',
+      strikesNote:'Put 履約價設於現價 95%，Collar 為 93% / 107%',
+      /* principles */
+      prin:st.prin, ph:ph, futChart:pc.futChart, putChart:pc.putChart,
+      prinKStr:'$'+this.num(st.prin.K,2030).toLocaleString('en-US'), prinPremStr:'$'+this.num(st.prin.prem,60),
+      beFutStr:'$'+pc.futBe.toFixed(0), bePutStr:'$'+pc.putBe.toFixed(0),
+      /* backtest */
+      btRetHStr:this.pct(bm.total_return_hedged), btRetUStr:this.pct(bm.total_return_unhedged),
+      btDdHStr:bm.max_drawdown_hedged.toFixed(1)+'%', btDdUStr:bm.max_drawdown_unhedged.toFixed(1)+'%',
+      btCostStr:bm.hedge_cost_ratio.toFixed(1)+'%', equityChart:equityChart, scenarios:scenarios,
+      /* model */
+      metricsRows:metricsRows, factors:factors
+    };
+  }
+}
+</script>
+</body>
+</html>

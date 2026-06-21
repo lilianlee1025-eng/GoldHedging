@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>黃金避險專題 — Demo 檢視器</title>
+<!-- 純展示用：讀取 ../outputs/predictions.json 與 backtest.json 並畫圖。
+     正式前端請自行串接，這頁只是用來驗證 JSON 內容是否正確。 -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<!-- time 軸需要日期 adapter -->
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+<style>
+  body { font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
+         margin: 0; background: #0f1115; color: #e6e6e6; }
+  header { padding: 20px 28px; background: #161a22; border-bottom: 1px solid #262b36; }
+  h1 { margin: 0; font-size: 20px; }
+  .sub { color: #8a93a2; font-size: 13px; margin-top: 4px; }
+  main { padding: 24px; max-width: 1100px; margin: 0 auto; }
+  .card { background: #161a22; border: 1px solid #262b36; border-radius: 12px;
+          padding: 18px 20px; margin-bottom: 22px; }
+  .card h2 { font-size: 15px; margin: 0 0 12px; color: #d7b15a; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { padding: 7px 10px; text-align: right; border-bottom: 1px solid #262b36; }
+  th:first-child, td:first-child { text-align: left; }
+  .future { display: flex; gap: 28px; flex-wrap: wrap; font-size: 14px; }
+  .future b { color: #d7b15a; font-size: 18px; }
+  .err { color: #ff6b6b; }
+  canvas { max-height: 340px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>黃金避險專題 — 模型輸出 Demo 檢視器</h1>
+  <div class="sub">讀取 outputs/predictions.json 與 outputs/backtest.json（僅供驗證資料用）</div>
+</header>
+<main>
+  <div id="status" class="card">載入中…</div>
+
+  <div class="card"><h2>未來預測</h2><div id="future" class="future"></div></div>
+
+  <div class="card"><h2>避險建議</h2><div id="reco" class="future"></div></div>
+
+  <div class="card"><h2>總經因子儀表板</h2><table id="factors"></table></div>
+
+  <div class="card"><h2>模型誤差比較（RMSE / MAE / AUC）</h2>
+    <table id="metrics"></table></div>
+
+  <div class="card"><h2>歷史金價 vs 測試期模型預測</h2><canvas id="priceChart"></canvas></div>
+
+  <div class="card"><h2>未來下跌機率（測試期）</h2><canvas id="probChart"></canvas></div>
+
+  <div class="card"><h2>回測：避險 vs 不避險 累積淨值</h2><canvas id="equityChart"></canvas></div>
+
+  <div class="card"><h2>回測績效</h2><table id="btstats"></table>
+    <div id="btsummary" class="sub" style="margin-top:12px"></div></div>
+</main>
+
+<script>
+const fmtPct = x => (x*100).toFixed(2) + "%";
+
+async function load(path) {
+  const r = await fetch(path);
+  if (!r.ok) throw new Error(path + " 讀取失敗 (" + r.status + ")");
+  return r.json();
+}
+
+function downsample(arr, n) {
+  // 圖表降採樣，避免點太多卡頓
+  if (arr.length <= n) return arr;
+  const step = Math.ceil(arr.length / n);
+  return arr.filter((_, i) => i % step === 0);
+}
+
+(async () => {
+  try {
+    const pred = await load("../outputs/predictions.json");
+    const bt = await load("../outputs/backtest.json");
+    document.getElementById("status").textContent =
+      "資料區間：" + pred.meta.generated_from + "｜特徵：" + pred.meta.features.join(", ");
+
+    // 未來預測
+    const f = pred.future;
+    document.getElementById("future").innerHTML = `
+      <div>目前 (${f.current_date})<br><b>${f.current_price}</b></div>
+      <div>預測 (${f.future_date})<br><b>${f.predicted_price}</b></div>
+      <div>預測報酬<br><b>${fmtPct(f.predicted_return)}</b></div>
+      <div>下跌機率<br><b>${fmtPct(f.prob_down)}</b></div>`;
+
+    // 避險建議
+    if (pred.recommendation) {
+      const r = pred.recommendation;
+      document.getElementById("reco").innerHTML = `
+        <div>訊號<br><b>${r.signal_label}</b></div>
+        <div>下跌機率<br><b>${fmtPct(r.prob_down)}</b></div>
+        <div>建議避險比例<br><b>${fmtPct(r.recommended_hedge_ratio)}</b></div>
+        <div>黃金曝險<br><b>${fmtPct(r.exposure_ratio)}</b></div>`;
+    }
+
+    // 因子儀表板
+    if (pred.factors) {
+      let fh = "<tr><th>因子</th><th>最新值</th><th>近一年變化</th><th>與金價相關</th></tr>";
+      for (const x of pred.factors) {
+        const sign = x.change_1y >= 0 ? "+" : "";
+        fh += `<tr><td>${x.name}</td><td>${x.latest}</td>`
+            + `<td>${sign}${fmtPct(x.change_1y)}</td>`
+            + `<td>${x.corr_with_gold}</td></tr>`;
+      }
+      document.getElementById("factors").innerHTML = fh;
+    }
+
+    // 誤差表
+    let mh = "<tr><th>模型</th><th>RMSE</th><th>MAE</th><th>AUC</th><th>下跌正確率</th></tr>";
+    for (const [k, v] of Object.entries(pred.metrics)) {
+      mh += `<tr><td>${k}</td><td>${v.rmse?.toFixed(3) ?? "-"}</td>`
+          + `<td>${v.mae?.toFixed(3) ?? "-"}</td>`
+          + `<td>${v.auc?.toFixed(3) ?? "-"}</td>`
+          + `<td>${v.decline_acc ? fmtPct(v.decline_acc) : "-"}</td></tr>`;
+    }
+    document.getElementById("metrics").innerHTML = mh;
+
+    // 價格圖（歷史 + 測試期預測）
+    const hist = downsample(pred.history, 800);
+    const test = pred.test_predictions;
+    new Chart(document.getElementById("priceChart"), {
+      type: "line",
+      data: { datasets: [
+        { label: "歷史金價", data: hist.map(d => ({x: d.date, y: d.price})),
+          borderColor: "#8a93a2", borderWidth: 1, pointRadius: 0 },
+        { label: "測試期實際", data: test.map(d => ({x: d.date, y: d.actual})),
+          borderColor: "#4cc9f0", borderWidth: 1.2, pointRadius: 0 },
+        { label: "模型預測", data: test.map(d => ({x: d.date, y: d.predicted})),
+          borderColor: "#d7b15a", borderWidth: 1.2, pointRadius: 0 },
+      ]},
+      options: { parsing: false, scales: { x: { type: "time" } },
+                 plugins: { legend: { labels: { color: "#e6e6e6" } } } }
+    });
+
+    // 下跌機率
+    new Chart(document.getElementById("probChart"), {
+      type: "line",
+      data: { datasets: [
+        { label: "下跌機率", data: test.map(d => ({x: d.date, y: d.prob_down})),
+          borderColor: "#f72585", borderWidth: 1, pointRadius: 0, fill: true,
+          backgroundColor: "rgba(247,37,133,0.15)" } ]},
+      options: { parsing: false, scales: { x: { type: "time" }, y: { min: 0, max: 1 } },
+                 plugins: { legend: { labels: { color: "#e6e6e6" } } } }
+    });
+
+    // 回測淨值
+    const ec = bt.equity_curve;
+    const idx = downsample(ec.dates.map((d, i) => i), 1500);
+    new Chart(document.getElementById("equityChart"), {
+      type: "line",
+      data: { labels: idx.map(i => ec.dates[i]), datasets: [
+        { label: "不避險", data: idx.map(i => ec.nohedge[i]),
+          borderColor: "#8a93a2", borderWidth: 1.2, pointRadius: 0 },
+        { label: "依訊號避險", data: idx.map(i => ec.hedge[i]),
+          borderColor: "#d7b15a", borderWidth: 1.4, pointRadius: 0 },
+      ]},
+      options: { plugins: { legend: { labels: { color: "#e6e6e6" } } },
+                 scales: { x: { ticks: { maxTicksLimit: 8, color: "#8a93a2" } } } }
+    });
+
+    // 回測績效表
+    const s = bt.stats;
+    const rows = [["總報酬","total_return",true],["年化報酬","annual_return",true],
+      ["年化波動","annual_vol",true],["Sharpe","sharpe",false],["最大回撤","max_drawdown",true]];
+    let bh = "<tr><th>指標</th><th>不避險</th><th>依訊號避險</th></tr>";
+    for (const [name,key,pct] of rows) {
+      const a = s.nohedge[key], b = s.hedge[key];
+      bh += `<tr><td>${name}</td><td>${pct?fmtPct(a):a.toFixed(3)}</td>`
+          + `<td>${pct?fmtPct(b):b.toFixed(3)}</td></tr>`;
+    }
+    document.getElementById("btstats").innerHTML = bh;
+
+    // 回測改善摘要
+    if (bt.summary) {
+      const u = bt.summary;
+      document.getElementById("btsummary").innerHTML =
+        `避險相對不避險：最大回撤改善 <b>${(u.drawdown_reduction*100).toFixed(2)}pp</b>、` +
+        `波動降低 <b>${(u.vol_reduction*100).toFixed(2)}pp</b>、` +
+        `Sharpe <b>${u.sharpe_delta>=0?"+":""}${u.sharpe_delta.toFixed(3)}</b>、` +
+        `總報酬讓出 <b>${(u.return_giveup*100).toFixed(2)}pp</b>。` +
+        `（回測末日建議：${u.latest_recommendation.signal_label}）`;
+    }
+
+  } catch (e) {
+    document.getElementById("status").innerHTML =
+      '<span class="err">' + e.message +
+      '<br>請在專案根目錄執行 <code>python -m http.server</code>，' +
+      '再開 http://localhost:8000/frontend_demo/ （直接用 file:// 開會被瀏覽器擋下 fetch）。</span>';
+  }
+})();
+</script>
+</body>
+</html>
