@@ -58,7 +58,12 @@
       "Bash(git -c user.email=yichenli510@gmail.com -c user.name=yichen commit -q -m '修正 CI：釘 pandas<2.3、改用精簡 CI 依賴（tensorflow-cpu） *)",
       "Bash(sed -i '/pandas-datareader/d' requirements.txt requirements-ci.txt)",
       "Bash(grep -v \"^#\\\\|^$\" requirements.txt)",
-      "Bash(git -c user.email=yichenli510@gmail.com -c user.name=yichen commit -q -m '改用 FRED 官方 CSV 直抓，移除脆弱的 pandas-datareader 相依 *)"
+      "Bash(git -c user.email=yichenli510@gmail.com -c user.name=yichen commit -q -m '改用 FRED 官方 CSV 直抓，移除脆弱的 pandas-datareader 相依 *)",
+      "Bash(git fetch *)",
+      "Bash(git pull *)",
+      "Bash(chmod +x publish.sh)",
+      "Bash(bash publish.sh \"新增一鍵發布腳本 publish.sh\")",
+      "Bash(git config *)"
     ]
   }
 }
