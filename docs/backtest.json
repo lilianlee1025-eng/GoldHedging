@@ -802,29 +802,48 @@
     "max_drawdown_hedged": -23.8,
     "max_drawdown_unhedged": -24.5,
     "hedge_cost_ratio": 7.0,
-    "hedged_trigger_days": 0
+    "hedged_trigger_days": 1973
   },
   "scenarios": [
     {
-      "name": "大跌",
-      "period": "2015",
-      "unhedged_return": -9.8,
-      "hedged_return": -8.8,
+      "name": "2020 新冠股災",
+      "period": "2020-02~2020-03",
+      "kind": "大跌",
+      "unhedged_return": -4.0,
+      "hedged_return": -3.3,
       "hedge_cost": 0.0
     },
     {
-      "name": "盤整",
-      "period": "2022",
-      "unhedged_return": 1.6,
-      "hedged_return": 1.6,
+      "name": "2020 疫後黃金狂飆",
+      "period": "2020-03~2020-08",
+      "kind": "大漲",
+      "unhedged_return": 30.4,
+      "hedged_return": 26.3,
+      "hedge_cost": 4.1
+    },
+    {
+      "name": "2022 Fed 升息回落",
+      "period": "2022-03~2022-11",
+      "kind": "盤跌",
+      "unhedged_return": -18.3,
+      "hedged_return": -18.3,
       "hedge_cost": 0.0
     },
     {
-      "name": "大漲",
-      "period": "2025",
-      "unhedged_return": 62.3,
-      "hedged_return": 57.9,
-      "hedge_cost": 4.4
+      "name": "2023 矽谷銀行危機",
+      "period": "2023-03~2023-05",
+      "kind": "避險買盤",
+      "unhedged_return": 11.2,
+      "hedged_return": 11.2,
+      "hedge_cost": 0.0
+    },
+    {
+      "name": "2025 黃金大行情",
+      "period": "2025-01~2025-10",
+      "kind": "大漲",
+      "unhedged_return": 53.7,
+      "hedged_return": 49.6,
+      "hedge_cost": 4.1
     }
   ]
 }

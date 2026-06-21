@@ -160,6 +160,41 @@ def build_predictions(our_pred: dict) -> dict:
     }
 
 
+# 具名的歷史事件區間（落在回測訊號範圍 2014~ 內），用真實資料逐一試算避險效果。
+HISTORICAL_EVENTS = [
+    ("2020 新冠股災",     "大跌", "2020-02-20", "2020-03-20"),
+    ("2020 疫後黃金狂飆", "大漲", "2020-03-23", "2020-08-06"),
+    ("2022 Fed 升息回落", "盤跌", "2022-03-08", "2022-11-03"),
+    ("2023 矽谷銀行危機", "避險買盤", "2023-03-08", "2023-05-04"),
+    ("2025 黃金大行情",   "大漲", "2025-01-02", "2025-10-20"),
+]
+
+
+def _event_scenarios(threshold: float) -> list:
+    """用 walk-forward 訊號，對每個歷史事件區間計算『有避險 vs 無避險』報酬。"""
+    if not os.path.exists(config.WF_SIGNALS_CSV):
+        return []
+    import numpy as np
+    sig = pd.read_csv(config.WF_SIGNALS_CSV, parse_dates=["Date"]).set_index("Date")
+    out = []
+    for name, kind, start, end in HISTORICAL_EVENTS:
+        w = sig.loc[start:end]
+        if len(w) < 5:
+            continue   # 區間落在訊號範圍外就略過
+        h = np.clip((w["prob_down"] - threshold) / (1.0 - threshold), 0.0, 1.0)
+        u = float(np.prod(1.0 + w["ret_1d"]) - 1.0) * 100          # 無避險報酬 %
+        hd = float(np.prod(1.0 + w["ret_1d"] * (1.0 - h)) - 1.0) * 100  # 有避險報酬 %
+        out.append({
+            "name": name,
+            "period": f"{start[:7]}~{end[:7]}",
+            "kind": kind,
+            "unhedged_return": round(u, 1),
+            "hedged_return": round(hd, 1),
+            "hedge_cost": round(max(0.0, u - hd), 1),   # 放棄的上檔（抗跌時為 0）
+        })
+    return out
+
+
 def _pick_scenarios(scenarios_by_year: list) -> list:
     """從逐年表現挑出『大跌 / 盤整 / 大漲』三個代表情境（依真實資料）。"""
     if not scenarios_by_year:
@@ -220,7 +255,9 @@ def build_backtest(our_bt: dict) -> dict:
             "hedge_cost_ratio": round(cost_ratio, 1),
             "hedged_trigger_days": trigger_days,
         },
-        "scenarios": _pick_scenarios(our_bt.get("scenarios_by_year", [])),
+        # 優先用具名歷史事件（對比較有故事性）；抓不到訊號時退回逐年挑選
+        "scenarios": (_event_scenarios(threshold)
+                      or _pick_scenarios(our_bt.get("scenarios_by_year", []))),
     }
 
 

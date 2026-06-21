@@ -348,10 +348,11 @@
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
         <sc-for list="{{ scenarios }}" as="sc" hint-placeholder-count="3">
           <div style="background:#fff;border:1px solid #E4E7E5;border-radius:10px;padding:18px 20px;">
-            <div style="display:flex;justify-content:space-between;align-items:baseline;">
-              <span style="font-size:16px;font-weight:600;color:#26302B;">{{ sc.name }}</span>
-              <span style="font-size:11px;color:#7A847E;font-family:'JetBrains Mono',monospace;">{{ sc.period }}</span>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;">
+              <span style="font-size:15.5px;font-weight:600;color:#26302B;">{{ sc.name }}</span>
+              <span style="font-size:11px;color:#7A847E;font-family:'JetBrains Mono',monospace;flex:none;">{{ sc.period }}</span>
             </div>
+            <span style="display:inline-block;font-size:10.5px;color:#A98F3E;background:rgba(200,169,81,0.14);padding:2px 8px;border-radius:4px;margin-top:6px;">{{ sc.kind }}</span>
             <div style="margin-top:16px;display:flex;flex-direction:column;gap:13px;">
               <div>
                 <div style="display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:5px;"><span style="color:#7A847E;">無避險</span><span style="font-family:'JetBrains Mono',monospace;color:{{ sc.uColor }};">{{ sc.uStr }}</span></div>
@@ -763,8 +764,14 @@ class Component extends DCLogic {
       xticks:eTickIdx.map(ix=>({x:ix,label:ec.dates[ix].slice(0,7)})) });
     const bm=bt.metrics;
     const maxAbs=Math.max.apply(null,bt.scenarios.map(s=>Math.max(Math.abs(s.unhedged_return),Math.abs(s.hedged_return))));
-    const scenarios=bt.scenarios.map(s=>{ const verdict = s.hedged_return>s.unhedged_return?'避險勝出':'避險小輸但更穩'; return {
-      name:s.name, period:s.period,
+    const scenarios=bt.scenarios.map(s=>{
+      const diff=s.hedged_return-s.unhedged_return;     // 有避險 - 無避險
+      let verdict;
+      if(Math.abs(diff)<0.3) verdict='模型此役幾乎未避險，兩者接近';
+      else if(diff>0) verdict='下跌時避險抗跌，少賠 '+Math.abs(diff).toFixed(1)+'pp';
+      else verdict='上漲時避險少賺 '+Math.abs(diff).toFixed(1)+'pp（避險的代價）';
+      return {
+      name:s.name, period:s.period, kind:s.kind||'',
       uStr:this.pct(s.unhedged_return), uColor:s.unhedged_return>=0?'#1E8C66':'#C0473E', uBarW:(Math.abs(s.unhedged_return)/maxAbs*100).toFixed(0)+'%',
       hStr:this.pct(s.hedged_return), hColor:s.hedged_return>=0?'#1E8C66':'#C0473E', hBarW:(Math.abs(s.hedged_return)/maxAbs*100).toFixed(0)+'%',
       costStr:s.hedge_cost.toFixed(1)+'%', verdict:verdict }; });
