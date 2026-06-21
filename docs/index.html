@@ -238,6 +238,34 @@
         </div>
       </div>
 
+      <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:22px 24px;margin-bottom:16px;">
+        <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">避險力道怎麼決定？</div>
+        <div style="font-size:12.5px;color:#7A847E;margin-bottom:16px;line-height:1.6;">系統依模型算出的「未來下跌機率」決定要不要避險、避多重。機率越高，保護做越重。觸發門檻 = <b style="color:#26302B;">50%</b>（超過才開始建議避險）。</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;align-items:center;gap:14px;padding:11px 14px;background:#F2F3F2;border-radius:8px;">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#26302B;background:#fff;border:1px solid #E4E7E5;padding:4px 10px;border-radius:5px;flex:none;width:80px;text-align:center;">&lt; 35%</span>
+            <span style="font-size:13px;font-weight:600;color:#1E8C66;flex:none;width:78px;">不避險</span>
+            <span style="font-size:12.5px;color:#4A544E;line-height:1.5;">跌的風險低，不值得花保險成本，維持持有。</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;padding:11px 14px;background:#F2F3F2;border-radius:8px;">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#26302B;background:#fff;border:1px solid #E4E7E5;padding:4px 10px;border-radius:5px;flex:none;width:80px;text-align:center;">35–50%</span>
+            <span style="font-size:13px;font-weight:600;color:#26302B;flex:none;width:78px;">輕度避險</span>
+            <span style="font-size:12.5px;color:#4A544E;line-height:1.5;">有點不安，放空部分期貨做一點點保護，多數部位照留。</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;padding:11px 14px;background:rgba(200,169,81,0.12);border:1px solid rgba(200,169,81,0.4);border-radius:8px;">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#26302B;background:#fff;border:1px solid #E4E7E5;padding:4px 10px;border-radius:5px;flex:none;width:80px;text-align:center;">50–60%</span>
+            <span style="font-size:13px;font-weight:600;color:#A98F3E;flex:none;width:78px;">中度避險</span>
+            <span style="font-size:12.5px;color:#4A544E;line-height:1.5;">蠻可能跌。用 Collar 做中等保護——擋住部分下跌，同時保留一些上漲空間。</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;padding:11px 14px;background:#F2F3F2;border-radius:8px;">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#26302B;background:#fff;border:1px solid #E4E7E5;padding:4px 10px;border-radius:5px;flex:none;width:80px;text-align:center;">&gt; 60%</span>
+            <span style="font-size:13px;font-weight:600;color:#C0473E;flex:none;width:78px;">中高度避險</span>
+            <span style="font-size:12.5px;color:#4A544E;line-height:1.5;">很可能跌。買進保護性賣權鎖住下檔，保護做重一點。</span>
+          </div>
+        </div>
+        <div style="font-size:11.5px;color:#7A847E;margin-top:14px;line-height:1.6;">比喻：降雨機率 30% 不帶傘、55% 帶折傘、80% 帶大傘——避險力道也是跟著「下跌機率」由輕到重。</div>
+      </div>
+
       <div style="display:grid;grid-template-columns:260px 1fr;gap:16px;align-items:start;">
         <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:22px;position:sticky;top:20px;">
           <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:18px;">互動參數</div>
