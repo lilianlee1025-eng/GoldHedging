@@ -20,6 +20,23 @@
   input[type=range]{-webkit-appearance:none;appearance:none;height:4px;border-radius:2px;background:#E4E7E5;outline:none;}
   input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;border-radius:50%;background:#C8A951;cursor:pointer;border:2px solid #FFFFFF;}
   input[type=number]:focus{outline:none;border-color:#C8A951 !important;}
+
+  /* ===== 手機 / 窄螢幕響應式修正（≤860px）=====
+     原設計為桌機固定版面；窄螢幕時讓側邊欄變頂部、所有多欄格線改成單欄堆疊。 */
+  @media (max-width:860px){
+    /* 外層由「左右並排」改為「上下堆疊」（唯一含 min-height:100vh 的容器）*/
+    div[style*="min-height:100vh"]{ flex-direction:column !important; }
+    /* 側邊欄變成頂部橫條，不再固定寬度與高度 */
+    aside{ width:100% !important; height:auto !important; position:static !important; border-right:none !important; border-bottom:1px solid #E4E7E5 !important; padding:14px 14px !important; }
+    aside nav{ flex-direction:row !important; flex-wrap:wrap !important; gap:6px !important; margin-top:12px !important; }
+    aside nav button{ width:auto !important; flex:1 1 auto !important; }
+    /* 主內容縮小留白 */
+    main{ padding:16px 14px 48px !important; }
+    /* 把所有多欄格線（4欄/3欄/1fr 280px 等）統一改成單欄 */
+    main div[style*="grid-template-columns"]{ grid-template-columns:1fr !important; }
+    /* 模擬器 / 原理頁的 sticky 參數面板取消固定，正常排版 */
+    div[style*="position:sticky"]{ position:static !important; }
+  }
 </style>
 </helmet>
 
