@@ -387,14 +387,17 @@
 
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;">
         <div style="background:#fff;border:1px solid #E4E7E5;border-radius:10px;padding:22px 24px;">
-          <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">輸入因子</div>
-          <div style="font-size:12px;color:#7A847E;margin-bottom:16px;">多因子模型納入總經與風險指標</div>
+          <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">輸入因子與資料來源</div>
+          <div style="font-size:12px;color:#7A847E;margin-bottom:16px;">六個因子皆取自免費公開來源（Yahoo Finance / FRED），2010 年至今每日對齊。</div>
           <div style="display:flex;flex-direction:column;gap:10px;">
             <sc-for list="{{ factors }}" as="f" hint-placeholder-count="6">
               <div style="display:flex;align-items:center;gap:14px;padding:11px 0;border-bottom:1px solid #F0F2F6;">
                 <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#26302B;background:#F2F3F2;padding:4px 9px;border-radius:5px;flex:none;width:64px;text-align:center;">{{ f.code }}</span>
-                <span style="flex:1;font-size:13px;color:#26302B;">{{ f.name }}</span>
-                <span style="font-size:11.5px;color:#7A847E;font-family:'JetBrains Mono',monospace;">{{ f.role }}</span>
+                <span style="flex:1;min-width:0;">
+                  <span style="display:block;font-size:13px;color:#26302B;">{{ f.name }}</span>
+                  <span style="display:block;font-size:11px;color:#9AA39D;font-family:'JetBrains Mono',monospace;margin-top:3px;">{{ f.src }}</span>
+                </span>
+                <span style="font-size:11.5px;color:#7A847E;font-family:'JetBrains Mono',monospace;flex:none;">{{ f.role }}</span>
               </div>
             </sc-for>
           </div>
@@ -775,12 +778,12 @@ class Component extends DCLogic {
       {name:'LSTM 多因子',rmse:f3(M.lstm_multi.rmse),dacc:f1(M.lstm_multi.decline_acc),auc:f3(M.lstm_multi.auc),bg:'rgba(200,169,81,0.10)',weight:'600',daccColor:'#1E8C66'}
     ];
     const factors=[
-      {code:'GLD',name:'黃金 ETF 價格（目標 / 自迴歸）',role:'目標'},
-      {code:'DGS10',name:'美國 10 年期公債殖利率',role:'利率'},
-      {code:'CPI',name:'消費者物價指數（通膨）',role:'通膨'},
-      {code:'DXY',name:'美元指數',role:'匯率'},
-      {code:'SP500',name:'標普 500 指數',role:'股市'},
-      {code:'VIX',name:'波動率指數（恐慌指標）',role:'風險'}
+      {code:'GLD',name:'黃金 ETF 價格（目標 / 自迴歸）',role:'目標',src:'Yahoo Finance · 每日'},
+      {code:'DGS10',name:'美國 10 年期公債殖利率',role:'利率',src:'FRED · 每日'},
+      {code:'CPI',name:'消費者物價指數（通膨）',role:'通膨',src:'FRED · 每月（延後公布日生效）'},
+      {code:'DXY',name:'美元指數',role:'匯率',src:'Yahoo Finance · 每日'},
+      {code:'SP500',name:'標普 500 指數',role:'股市',src:'Yahoo Finance · 每日'},
+      {code:'VIX',name:'波動率指數（恐慌指標）',role:'風險',src:'Yahoo Finance · 每日'}
     ];
 
     return {
