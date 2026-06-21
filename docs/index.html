@@ -344,7 +344,8 @@
         <div style="margin-top:10px;">{{ equityChart }}</div>
       </div>
 
-      <div style="font-size:13px;font-weight:600;color:#26302B;margin:24px 0 12px;">不同情境下的避險效果</div>
+      <div style="font-size:13px;font-weight:600;color:#26302B;margin:24px 0 6px;">不同情境下的避險效果</div>
+      <div style="font-size:12px;color:#7A847E;line-height:1.6;margin-bottom:14px;max-width:760px;">下列為真實歷史事件、以實際資料試算。模型偏保守——只在「下跌機率超過門檻」時才避險，因此會出現三種情況：<b style="color:#1E8C66;">下跌時抗跌</b>、<b style="color:#C0473E;">上漲時少賺（避險成本）</b>、以及<b style="color:#26302B;">模型未觸發避險</b>（如 2022/2023，差異為 0，屬正常，非錯誤）。此處完整呈現，未只挑對避險有利的事件。</div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
         <sc-for list="{{ scenarios }}" as="sc" hint-placeholder-count="3">
           <div style="background:#fff;border:1px solid #E4E7E5;border-radius:10px;padding:18px 20px;">
