@@ -246,21 +246,48 @@
             <span onClick="{{ h.reset }}" title="清除記憶，回到目前市價" style="font-size:11px;color:#7A847E;cursor:pointer;text-decoration:underline;">重設</span>
           </div>
           <div style="display:flex;flex-direction:column;gap:14px;">
-            <div>
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-                <span style="font-size:11.5px;color:#7A847E;font-family:'JetBrains Mono',monospace;">持有量</span>
-                <span style="display:flex;gap:3px;">
-                  <sc-for list="{{ qtyBtns }}" as="q" hint-placeholder-count="4">
-                    <span onClick="{{ q.onClick }}" style="font-size:10px;padding:2px 6px;border-radius:4px;cursor:pointer;background:{{ q.bg }};color:{{ q.fg }};border:1px solid {{ q.border }};">{{ q.label }}</span>
-                  </sc-for>
-                </span>
-              </div>
-              <input type="number" value="{{ sim.ounces }}" onChange="{{ h.ounces }}" style="width:100%;background:#F2F3F2;border:1px solid #E4E7E5;color:#26302B;padding:9px 11px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:14px;">
-              <sc-if value="{{ hasQtyNote }}" hint-placeholder-val="{{ false }}">
-                <div style="font-size:10.5px;color:#9AA39D;margin-top:5px;font-family:'JetBrains Mono',monospace;">{{ qtyNote }}</div>
-              </sc-if>
+            <!-- 多筆部位：金條/存摺/ETF 各自的數量、單位、成本 -->
+            <div style="display:flex;justify-content:space-between;align-items:baseline;">
+              <span style="font-size:11.5px;color:#7A847E;font-family:'JetBrains Mono',monospace;">持有部位（{{ posCountStr }}）</span>
+              <span onClick="{{ addPos }}" style="font-size:11px;color:#C8A951;cursor:pointer;font-weight:600;">＋ 新增</span>
             </div>
-            <label style="display:block;"><span style="display:block;font-size:11.5px;color:#7A847E;margin-bottom:6px;font-family:'JetBrains Mono',monospace;">進場成本 ($/oz)</span><input type="number" value="{{ sim.entry }}" onChange="{{ h.entry }}" style="width:100%;background:#F2F3F2;border:1px solid #E4E7E5;color:#26302B;padding:9px 11px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:14px;"></label>
+
+            <sc-for list="{{ posRows }}" as="p" hint-placeholder-count="2">
+              <div style="border:1px solid #E4E7E5;border-radius:8px;padding:11px;background:#FCFCFB;">
+                <div style="display:flex;gap:6px;align-items:center;">
+                  <input type="text" value="{{ p.label }}" onChange="{{ p.onLabel }}" placeholder="名稱" style="flex:1;min-width:0;background:#fff;border:1px solid #E4E7E5;color:#26302B;padding:6px 8px;border-radius:5px;font-size:12px;">
+                  <span onClick="{{ p.onDel }}" title="刪除這筆" style="font-size:14px;color:#C0473E;cursor:pointer;padding:0 4px;flex:none;">×</span>
+                </div>
+
+                <div style="display:flex;gap:3px;flex-wrap:wrap;margin-top:7px;">
+                  <sc-for list="{{ p.kindBtns }}" as="k" hint-placeholder-count="5">
+                    <span onClick="{{ k.onClick }}" style="font-size:10px;padding:2px 6px;border-radius:4px;cursor:pointer;background:{{ k.bg }};color:{{ k.fg }};border:1px solid {{ k.border }};">{{ k.label }}</span>
+                  </sc-for>
+                </div>
+
+                <div style="display:flex;gap:6px;margin-top:7px;">
+                  <input type="number" value="{{ p.qty }}" onChange="{{ p.onQty }}" placeholder="數量" style="flex:1;min-width:0;background:#fff;border:1px solid #E4E7E5;color:#26302B;padding:6px 8px;border-radius:5px;font-family:'JetBrains Mono',monospace;font-size:12.5px;">
+                  <input type="number" value="{{ p.cost }}" onChange="{{ p.onCost }}" placeholder="成本$/oz" style="flex:1;min-width:0;background:#fff;border:1px solid #E4E7E5;color:#26302B;padding:6px 8px;border-radius:5px;font-family:'JetBrains Mono',monospace;font-size:12.5px;">
+                </div>
+
+                <div style="display:flex;gap:3px;flex-wrap:wrap;margin-top:6px;">
+                  <sc-for list="{{ p.unitBtns }}" as="u" hint-placeholder-count="4">
+                    <span onClick="{{ u.onClick }}" style="font-size:10px;padding:2px 6px;border-radius:4px;cursor:pointer;background:{{ u.bg }};color:{{ u.fg }};border:1px solid {{ u.border }};">{{ u.label }}</span>
+                  </sc-for>
+                </div>
+
+                <div style="display:flex;justify-content:space-between;margin-top:8px;padding-top:7px;border-top:1px solid #EEF0EE;font-family:'JetBrains Mono',monospace;font-size:10.5px;">
+                  <span style="color:#9AA39D;">{{ p.ozStr }}　{{ p.valStr }}</span>
+                  <span style="color:{{ p.plColor }};">{{ p.plStr }}</span>
+                </div>
+              </div>
+            </sc-for>
+
+            <div style="display:flex;justify-content:space-between;font-size:11.5px;font-family:'JetBrains Mono',monospace;padding:8px 2px 0;border-top:1px dashed #E4E7E5;">
+              <span style="color:#7A847E;">合計 {{ ozTotalStr }}</span>
+              <span style="color:#7A847E;">均價 {{ avgCostStr }}</span>
+            </div>
+
             <label style="display:block;"><span style="display:block;font-size:11.5px;color:#7A847E;margin-bottom:6px;font-family:'JetBrains Mono',monospace;">黃金現貨 ($/oz)</span><input type="number" value="{{ sim.spot }}" onChange="{{ h.spot }}" style="width:100%;background:#F2F3F2;border:1px solid #E4E7E5;color:#26302B;padding:9px 11px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:14px;"></label>
             <label style="display:block;"><span style="display:block;font-size:11.5px;color:#7A847E;margin-bottom:6px;font-family:'JetBrains Mono',monospace;">避險期間 (月)</span><input type="number" value="{{ sim.months }}" onChange="{{ h.months }}" style="width:100%;background:#F2F3F2;border:1px solid #E4E7E5;color:#26302B;padding:9px 11px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:14px;"></label>
             <div style="display:flex;gap:12px;">
@@ -283,6 +310,9 @@
           <div style="margin-top:18px;padding-top:16px;border-top:1px solid #E4E7E5;">
             <div style="display:flex;justify-content:space-between;font-size:12px;color:#7A847E;margin-bottom:8px;"><span>未實現損益 (對成本)</span></div>
             <div style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:600;color:{{ unrealColor }};">{{ unrealStr }}</div>
+            <sc-if value="{{ hasUncosted }}" hint-placeholder-val="{{ false }}">
+              <div style="font-size:10.5px;color:#B08A2E;margin-top:7px;line-height:1.5;">{{ uncostedNote }}</div>
+            </sc-if>
             <div style="font-size:10.5px;color:#9AA39D;margin-top:10px;line-height:1.5;">{{ savedNote }}</div>
           </div>
 
@@ -624,6 +654,22 @@ const PROFILES={
 /* 持有量的計價單位。台灣人買金條多用台錢、黃金存摺用公克，
    但所有計算內部一律換成金衡盎司(oz)。1 台錢 = 3.75 公克。*/
 const GRAMS_PER_OZ=31.1035, GRAMS_PER_TQIAN=3.75;
+/* 部位種類。台灣人常同時持有多種形式，各自的計量單位也不同。*/
+const POS_KINDS=[
+  {key:'bar',      label:'金條/金塊', unit:'tqian'},
+  {key:'passbook', label:'黃金存摺',  unit:'g'},
+  {key:'etf',      label:'黃金ETF',   unit:'gld'},
+  {key:'coin',     label:'金幣',      unit:'oz'},
+  {key:'other',    label:'其他',      unit:'oz'}
+];
+const newPosId=()=>{
+  try{ return crypto.randomUUID(); }catch(e){
+    // 舊瀏覽器沒有 randomUUID，退回手工組一個合法的 v4 uuid
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{
+      const r=Math.random()*16|0; return (c==='x'?r:(r&0x3|0x8)).toString(16);
+    });
+  }
+};
 const QTY_UNITS=[
   {key:'oz',    label:'盎司'},
   {key:'g',     label:'公克'},
@@ -651,7 +697,13 @@ class Component extends DCLogic {
       touched: sv.touched || {},
       restored: !!(sv.sim || sv.prin),  // 這次是不是從舊設定還原的
       profile: sv.profile || 'balanced',   // 風險偏好
-      qtyUnit: sv.qtyUnit || 'oz',         // 持有量的單位
+      qtyUnit: sv.qtyUnit || 'oz',         // 新增部位時的預設單位
+      // 多筆部位。舊版只有單一 sim.ounces，這裡自動轉成第一筆，不會遺失資料。
+      positions: (sv.positions && sv.positions.length) ? sv.positions
+                 : [{ id:newPosId(), label:'我的黃金', kind:'bar',
+                      qty:(sv.sim&&sv.sim.ounces)||100,
+                      unit:sv.qtyUnit||'oz',
+                      cost:(sv.sim&&sv.sim.entry)||null }]
       /* ---- 會員登入 ---- */
       user: null,              // 登入中的使用者（null = 未登入）
       authOpen: false,         // 登入面板是否展開
@@ -679,7 +731,8 @@ class Component extends DCLogic {
   collectPrefs(){
     const st=this.state;
     return { sim:st.sim, prin:st.prin, unit:st.unit, tf:st.tf, ctype:st.ctype,
-             touched:st.touched, profile:st.profile, qtyUnit:st.qtyUnit };
+             touched:st.touched, profile:st.profile, qtyUnit:st.qtyUnit,
+             positions:st.positions };
   }
 
   // 把一份設定套進畫面與本機儲存
@@ -693,6 +746,7 @@ class Component extends DCLogic {
     if(pf.ctype)nx.ctype=pf.ctype;
     if(pf.profile)nx.profile=pf.profile;
     if(pf.qtyUnit)nx.qtyUnit=pf.qtyUnit;
+    if(pf.positions&&pf.positions.length)nx.positions=pf.positions;
     nx.touched=pf.touched||{};
     this._applying=true;      // 這是「從雲端拉下來的」，不要再推回雲端
     this.savePrefs(nx);
@@ -701,26 +755,58 @@ class Component extends DCLogic {
   }
 
   // 登入後把雲端與本機比對：誰新用誰（last-write-wins）
+  // 資料分散在 profiles / positions / ui_prefs 三張表，一次全撈回來組裝。
   async pullPrefs(user){
     const sb=this.sb(); if(!sb||!user) return;
     this.setState({syncMsg:'同步中…'});
     try{
-      const {data,error}=await sb.from('user_prefs')
-        .select('prefs,updated_at').eq('user_id',user.id).maybeSingle();
-      if(error) throw error;
+      const [pr,po,ui]=await Promise.all([
+        sb.from('profiles').select('*').eq('user_id',user.id).maybeSingle(),
+        sb.from('positions').select('*').eq('user_id',user.id).order('created_at'),
+        sb.from('ui_prefs').select('*').eq('user_id',user.id).maybeSingle()
+      ]);
+      if(pr.error) throw pr.error;
+      if(po.error) throw po.error;
+      if(ui.error) throw ui.error;
+
       const localAt=this.loadPrefs().savedAt||0;
-      const cloudAt=data&&data.updated_at?Date.parse(data.updated_at):0;
-      if(data&&cloudAt>=localAt){
-        this.applyPrefs(data.prefs);
+      const stamps=[pr.data&&pr.data.updated_at, ui.data&&ui.data.updated_at]
+        .concat((po.data||[]).map(r=>r.updated_at))
+        .filter(Boolean).map(Date.parse);
+      const cloudAt=stamps.length?Math.max.apply(null,stamps):0;
+      const hasCloud=!!(pr.data||ui.data||(po.data&&po.data.length));
+
+      if(hasCloud && cloudAt>=localAt){
+        this.applyPrefs(this.rowsToPrefs(pr.data,po.data,ui.data));
         this.setState({syncMsg:'已載入雲端設定（'+new Date(cloudAt).toLocaleString()+'）'});
       }else{
-        // 本機比較新（或雲端還沒有資料）→ 推上去
         await this.pushPrefs(true);
-        this.setState({syncMsg:data?'本機設定較新，已上傳':'已建立雲端設定'});
+        this.setState({syncMsg:hasCloud?'本機設定較新，已上傳':'已建立雲端設定'});
       }
     }catch(e){
       this.setState({syncMsg:'同步失敗：'+(e.message||e)});
     }
+  }
+
+  // 三張表的列 → 前端用的設定物件
+  rowsToPrefs(prof,pos,ui){
+    const out={sim:Object.assign({},this.state.sim)};
+    if(prof){
+      out.profile=prof.risk_profile;
+      out.sim.months=Number(prof.hedge_months);
+      out.sim.vol=Number(prof.hedge_vol);
+      out.sim.rate=Number(prof.hedge_rate);
+    }
+    if(ui){
+      out.unit=ui.price_unit; out.tf=ui.timeframe;
+      out.ctype=ui.chart_type; out.qtyUnit=ui.qty_unit;
+    }
+    if(pos&&pos.length){
+      out.positions=pos.map(r=>({ id:r.id, label:r.label||'', kind:r.kind,
+        qty:Number(r.qty), unit:r.unit,
+        cost:r.cost_per_oz===null?null:Number(r.cost_per_oz) }));
+    }
+    return out;
   }
 
   // 寫回雲端。immediate=false 時做 1.2 秒 debounce，避免每打一個字就送一次
@@ -729,9 +815,37 @@ class Component extends DCLogic {
     if(!sb||!user) return Promise.resolve();
     const run=async()=>{
       try{
-        const {error}=await sb.from('user_prefs')
-          .upsert({user_id:user.id, prefs:this.collectPrefs()},{onConflict:'user_id'});
-        this.setState({syncMsg: error?('同步失敗：'+error.message):'已同步到雲端'});
+        const st=this.state, uid=user.id;
+        // 1:1 的兩張表直接 upsert
+        const r1=await sb.from('profiles').upsert({
+          user_id:uid, risk_profile:st.profile,
+          hedge_months:this.num(st.sim.months,3),
+          hedge_vol:this.num(st.sim.vol,18),
+          hedge_rate:this.num(st.sim.rate,4.2)
+        },{onConflict:'user_id'});
+        if(r1.error) throw r1.error;
+
+        const r2=await sb.from('ui_prefs').upsert({
+          user_id:uid, price_unit:st.unit, timeframe:st.tf,
+          chart_type:st.ctype, qty_unit:st.qtyUnit
+        },{onConflict:'user_id'});
+        if(r2.error) throw r2.error;
+
+        // 1:N 的部位：先 upsert 現有的，再刪掉雲端多出來的（使用者刪除的那些）
+        const rows=(st.positions||[])
+          .filter(p=>this.num(p.qty,0)>0)      // qty 有 CHECK (qty > 0)，0 會被資料庫擋下
+          .map(p=>({ id:p.id, user_id:uid, label:p.label||null, kind:p.kind,
+                     qty:this.num(p.qty,0), unit:p.unit,
+                     cost_per_oz:this.num(p.cost,0)>0?this.num(p.cost,0):null }));
+        if(rows.length){
+          const r3=await sb.from('positions').upsert(rows,{onConflict:'id'});
+          if(r3.error) throw r3.error;
+          const keep='('+rows.map(r=>r.id).join(',')+')';
+          await sb.from('positions').delete().eq('user_id',uid).not('id','in',keep);
+        }else{
+          await sb.from('positions').delete().eq('user_id',uid);
+        }
+        this.setState({syncMsg:'已同步到雲端'});
       }catch(e){ this.setState({syncMsg:'同步失敗：'+(e.message||e)}); }
     };
     clearTimeout(this._syncTimer);
@@ -922,17 +1036,35 @@ class Component extends DCLogic {
     return Math.max(0,Math.min(1,(p-T)/(1-T)));
   }
 
-  // 持有量換算成盎司（內部計算一律用盎司）
-  ozHeld(){
-    const q=this.num(this.state.sim.ounces,0), u=this.state.qtyUnit;
+  // 單一數量換算成盎司
+  toOz(q,u){
+    q=this.num(q,0);
     if(u==='g')     return q/GRAMS_PER_OZ;
     if(u==='tqian') return q*GRAMS_PER_TQIAN/GRAMS_PER_OZ;
     if(u==='gld'){
       const f=(this.state.pred.units&&this.state.pred.units.spot_oz_to_gld)||0.0909;
-      return q*f;                       // 1 股 GLD 約當 f 盎司黃金
+      return q*f;                        // 1 股 GLD 約當 f 盎司黃金
     }
     return q;                            // oz
   }
+
+  // 全部部位加總成盎司
+  ozHeld(){
+    return (this.state.positions||[]).reduce((a,p)=>a+this.toOz(p.qty,p.unit),0);
+  }
+
+  // 加權平均成本。沒填成本的部位不列入，否則平均會被拉成 0。
+  // 一併回傳 costedOz（有填成本的盎司數）——未實現損益只能用這個數字算，
+  // 用總盎司會把「沒填成本」的部位也當成有賺，金額會高估。
+  costBasis(){
+    let oz=0,cost=0;
+    (this.state.positions||[]).forEach(p=>{
+      const c=this.num(p.cost,0);
+      if(c>0){ const o=this.toOz(p.qty,p.unit); oz+=o; cost+=o*c; }
+    });
+    return { avg: oz>0?cost/oz:0, costedOz: oz };
+  }
+  avgCost(){ return this.costBasis().avg; }
 
   // 建議分級改成相對於使用者的風險門檻，而不是寫死 0.6/0.5/0.35。
   // 代入穩健(0.5)時，分界正好還原成原本的 0.6/0.5/0.35。
@@ -964,7 +1096,7 @@ class Component extends DCLogic {
   /* ---------- strategies ---------- */
   buildStrategies(){
     const sim=this.state.sim;
-    const Q=this.num(sim.ounces,100), spot=this.num(sim.spot,2100);
+    const Q=this.ozHeld(), spot=this.num(sim.spot,2100);   // Q = 全部部位加總（盎司）
     const T=this.num(sim.months,3)/12, vol=this.num(sim.vol,18)/100, r=this.num(sim.rate,4.2)/100;
     const Kp=Math.round(spot*0.95/5)*5;
     const premP=this.bsPut(spot,Kp,T,r,vol);
@@ -1204,8 +1336,9 @@ class Component extends DCLogic {
       const nsim=Object.assign({},SIM_DEFAULTS,{spot:Math.round(S),entry:Math.round(S)});
       const nt=Object.assign({},this.state.touched);
       ['ounces','entry','spot','months','vol','rate'].forEach(k=>{ delete nt[k]; });
-      this.savePrefs({sim:nsim,touched:nt});
-      this.setState({sim:nsim,touched:nt,restored:false});
+      const npos=[{id:newPosId(),label:'我的黃金',kind:'bar',qty:100,unit:'oz',cost:Math.round(S)}];
+      this.savePrefs({sim:nsim,touched:nt,positions:npos});
+      this.setState({sim:nsim,touched:nt,positions:npos,restored:false});
     };
     /* 風險偏好按鈕 */
     const setProfile=k=>{ this.savePrefs({profile:k}); this.setState({profile:k}); };
@@ -1232,17 +1365,66 @@ class Component extends DCLogic {
                bg:on?'#3A443E':'#FFFFFF', fg:on?'#FFFFFF':'#7A847E',
                border:on?'#3A443E':'#E4E7E5' };
     });
+    /* ---------- 多筆部位 ---------- */
+    const savePos=list=>{ this.savePrefs({positions:list}); this.setState({positions:list}); };
+    const editPos=(id,field)=>e=>{
+      const v=e.target.value;
+      savePos(this.state.positions.map(p=>p.id===id?Object.assign({},p,{[field]:v}):p));
+    };
+    const setPosKind=(id,k)=>{
+      const kd=POS_KINDS.filter(x=>x.key===k)[0];
+      savePos(this.state.positions.map(p=>p.id===id
+        ? Object.assign({},p,{kind:k, unit:(kd&&kd.unit)||p.unit}) : p));
+    };
+    const setPosUnit=(id,u)=>
+      savePos(this.state.positions.map(p=>p.id===id?Object.assign({},p,{unit:u}):p));
+    const addPos=()=>savePos(this.state.positions.concat([{
+      id:newPosId(), label:'新部位', kind:'bar', qty:1, unit:'tqian',
+      cost:Math.round(this.num(sim.spot,0))||null }]));
+    const delPos=id=>{
+      const left=this.state.positions.filter(p=>p.id!==id);
+      // 至少留一筆，全刪光畫面會變空的
+      savePos(left.length?left:[{id:newPosId(),label:'我的黃金',kind:'bar',qty:1,unit:'oz',cost:null}]);
+    };
+
+    const spotNow=this.num(sim.spot,0);
+    const posRows=(st.positions||[]).map(p=>{
+      const oz=this.toOz(p.qty,p.unit);
+      const c=this.num(p.cost,0);
+      const pl=c>0?oz*(spotNow-c):0;
+      return {
+        id:p.id, label:p.label, qty:p.qty, cost:p.cost,
+        onLabel:editPos(p.id,'label'), onQty:editPos(p.id,'qty'), onCost:editPos(p.id,'cost'),
+        onDel:()=>delPos(p.id),
+        kindBtns:POS_KINDS.map(k=>({ key:k.key, label:k.label, onClick:()=>setPosKind(p.id,k.key),
+          bg:k.key===p.kind?'#3A443E':'#FFFFFF', fg:k.key===p.kind?'#FFFFFF':'#7A847E',
+          border:k.key===p.kind?'#3A443E':'#E4E7E5' })),
+        unitBtns:QTY_UNITS.map(u=>({ key:u.key, label:u.label, onClick:()=>setPosUnit(p.id,u.key),
+          bg:u.key===p.unit?'#C8A951':'#FFFFFF', fg:u.key===p.unit?'#26302B':'#7A847E',
+          border:u.key===p.unit?'#C8A951':'#E4E7E5' })),
+        ozStr:oz.toLocaleString('en-US',{maximumFractionDigits:3})+' oz',
+        valStr:'$'+Math.round(oz*spotNow).toLocaleString('en-US'),
+        plStr:c>0?this.ms(pl):'—',
+        plColor:pl>=0?'#1E8C66':'#C0473E'
+      };
+    });
+
     const ozHeld=this.ozHeld();
-    const qtyNote=this.state.qtyUnit==='oz' ? ''
-      : '＝ '+ozHeld.toLocaleString('en-US',{maximumFractionDigits:2})+' 盎司';
+    const cb=this.costBasis();
+    const avgCost=cb.avg;
+    // 有部位沒填成本 → 損益只算得出一部分，要提醒使用者
+    const uncosted=ozHeld-cb.costedOz;
+    const ozTotalStr=ozHeld.toLocaleString('en-US',{maximumFractionDigits:3})+' 盎司';
+    const avgCostStr=avgCost>0?('$'+Math.round(avgCost).toLocaleString('en-US')):'未填成本';
+    const qtyNote='';
 
     /* 下跌情境曝險 */
     const dropRows=this.dropScenarios(pred.decline_prob);
     const posValue=ozHeld*this.num(sim.spot,0);
     const hedgePct=(this.hedgeRatio(pred.decline_prob)*100).toFixed(0)+'%';
 
-    // 未實現損益要用換算後的盎司數，否則填公克時金額會差 31 倍
-    const unreal=ozHeld*(this.num(sim.spot,0)-this.num(sim.entry,0));
+    // 未實現損益 = 有填成本的盎司 ×（現價 − 加權平均成本）
+    const unreal=avgCost>0?cb.costedOz*(spotNow-avgCost):0;
     const strategies=this.buildStrategies();
     const recBan = (pred.decline_prob>=0.5);
 
@@ -1367,6 +1549,13 @@ class Component extends DCLogic {
       profBtns:profBtns, profDesc:curProf.desc, profBacktest:profBacktest,
       profThreshStr:(curProf.threshold*100).toFixed(0)+'%',
       qtyBtns:qtyBtns, qtyNote:qtyNote, hasQtyNote:!!qtyNote,
+      posRows:posRows, addPos:addPos,
+      ozTotalStr:ozTotalStr, avgCostStr:avgCostStr,
+      hasUncosted: uncosted>0.0001,
+      uncostedNote: uncosted>0.0001
+        ? ('另有 '+uncosted.toLocaleString('en-US',{maximumFractionDigits:3})+' 盎司未填成本，未計入損益')
+        : '',
+      posCountStr:(st.positions||[]).length+' 筆部位',
       dropRows:dropRows, hedgePctStr:hedgePct,
       posValueStr:'$'+Math.round(posValue).toLocaleString('en-US'),
       recBannerText:recObj.name+'（'+recObj.strength+'）', recBannerNote:recObj.note,
