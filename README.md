@@ -67,14 +67,27 @@ python main.py --refresh  # 重新從網路抓最新資料
 
 | 因子 | 代碼 | 來源 | 頻率 |
 |------|------|------|------|
-| 黃金價格 | GLD | yfinance | 每日 |
+| 黃金價格 | GC=F（美元/盎司） | yfinance | 每日 |
 | 10年期公債殖利率 | DGS10 | FRED | 每日 |
 | 通膨 (CPI) | CPIAUCSL | FRED | 每月 |
 | 美元指數 | DX-Y.NYB | yfinance | 每日 |
 | S&P 500 | ^GSPC | yfinance | 每日 |
 | 恐慌指數 (VIX) | ^VIX | yfinance | 每日 |
 
-時間範圍：2010-01-01 ~ 今天。對齊後只保留「所有因子都有值」的交易日。
+時間範圍：2005-01-01 ~ 今天（涵蓋 2008 金融海嘯）。對齊後只保留「所有因子都有值」的交易日。
+
+**為什麼金價用 `GC=F` 而不是 `GLD`？**
+GLD 是黃金 ETF，每年約 0.40% 管理費會侵蝕淨值——實測 `GC=F / GLD` 的倍數從 2010 年初的
+10.18 漂到 2026 年的 11.01，等於每年低估金價報酬約 0.5%、16 年累積約 8%。改用 `GC=F`
+直接以「美元/盎司」計價才是真正的金價。Yahoo 已下架現貨 `XAUUSD=X`（回 404），
+期貨連續月是目前可免費取得的最佳代理。
+
+⚠️ 已知限制：`GC=F` 用 COMEX 下午 1:30 (ET) 結算，而 DXY / SP500 / VIX 是下午 4:00 收盤，
+兩者相差 2.5 小時。這會讓日報酬的同步性略降（GC=F 與 GLD 的日報酬相關係數僅 0.90，
+落差主要來自此時點差異），是換用真實金價必須接受的取捨。
+
+⚠️ 另注意 `^XAU` 是費城「金銀礦業股指數」，**不是**金價，數值雖與金價接近但意義完全不同，
+切勿誤用。
 
 ## 5. 三個關鍵的「防作弊」設計（避免前視偏誤 / 資料洩漏）
 
@@ -151,7 +164,7 @@ python main.py --refresh  # 重新從網路抓最新資料
   資料更新時間。
 
 儀表板互動功能：
-- **計價單位切換**：GLD 美元/股 ｜ 現貨 美元/盎司 ｜ 台幣/公克（換算係數即時抓 `GC=F`、`TWD=X`）。
+- **計價單位切換**：美元/盎司（預設，即原生單位）｜ 台幣/公克 ｜ GLD 美元/股（換算係數即時抓 `TWD=X`、`GLD`）。
 - **時間單位切換**：日／周／月／季（由日線 OHLC resample）。
 - **圖表類型切換**：折線／K 棒（蠟燭圖）。模型擬合與未來預測僅在「日線＋折線」時疊加顯示。
 - 標頭顯示「資料截至 / 產生時間」。
@@ -192,11 +205,59 @@ crontab -e
 > 需要本機有網路；更新後重新整理瀏覽器即可看到新數字。若要連 walk-forward 回測
 > 也一起更新，改排 `python main.py`（較久）。
 
-## 11. 注意事項
+## 11. 會員登入（Supabase）
+
+登入後，部位設定會同步到雲端，換手機或電腦都看得到；沒登入時一切照舊，
+設定存在瀏覽器本機（localStorage）。**沒填金鑰時登入按鈕不會出現，網站完全正常運作。**
+
+### 設定步驟（約 10 分鐘，只需做一次）
+
+1. 到 https://supabase.com 註冊並建立一個免費專案（區域選 Singapore 或 Tokyo 較快）。
+2. 左側 **SQL Editor → New query**，把 `supabase_setup.sql` 整份貼上按 **Run**。
+   這會建立 `user_prefs` 表、開啟 Row Level Security 並設好四條存取政策。
+3. 左側 **Project Settings → API**，複製兩個值：
+   - `Project URL`
+   - `anon` `public` 金鑰 ← **要挑 anon，不要挑 `service_role`**
+4. 貼進 `docs/supabase-config.js` 的兩個變數，推上 GitHub Pages 即可。
+
+### 認證方式
+
+預設用 Email + 密碼。Supabase 新專案通常會開啟「Confirm email」，
+註冊後要先去信箱點確認連結才能登入。若想在展示時省掉這一步，
+可到 **Authentication → Sign In / Providers → Email** 把 *Confirm email* 關掉。
+
+### 安全性（重要）
+
+- `anon` 金鑰**本來就是設計成公開的**，出現在前端原始碼與 GitHub 上是正常的，不是漏洞。
+- 真正的防線是資料庫的 **Row Level Security**：政策規定 `auth.uid() = user_id`，
+  所以每個人只能讀寫自己那一列。**沒跑 `supabase_setup.sql` 就等於資料全公開**，
+  這是唯一絕對不能省的步驟。
+- `service_role` 金鑰會繞過所有規則，**絕對不可以**放進前端或推上 GitHub。
+- 跑完 SQL 後可以用這兩句驗證：
+  ```sql
+  select relrowsecurity from pg_class where relname = 'user_prefs';   -- 應為 true
+  select policyname, cmd from pg_policies where tablename = 'user_prefs';  -- 應有 4 條
+  ```
+
+### 同步邏輯
+
+- 本機 localStorage 一律照常寫入，是離線快取層；登入後才額外推到雲端（1.2 秒 debounce，
+  不會每打一個字就送一次請求）。
+- 登入當下比對雲端的 `updated_at` 與本機的 `savedAt`，**誰新用誰**（last-write-wins）。
+  面板上會顯示這次是「已載入雲端設定」還是「本機設定較新，已上傳」。
+- 登出前會先強制同步一次，避免最後幾筆修改遺失。
+
+### 免費方案的坑
+
+Supabase 免費專案**連續約一週沒有活動會自動暫停**，要到後台手動喚醒。
+若口試或展示前有一段時間沒動，記得**提前一天先打開網站確認還連得上**。
+
+## 12. 注意事項
 
 - 第一次執行會從網路抓資料，需要網路連線；之後會讀快取的 `data/dataset.csv`。
 - 完整 `main.py` 會做 walk-forward（每 60 天重訓一次，約 50 次），CPU 上約需 20~30 分鐘；
   趕時間用 `--quick`（步長加大、約 26 次重訓）。walk-forward 訊號會快取在
   `data/wf_signals.csv`，方便之後只調整避險門檻時快速重算。
-- GLD 是黃金 ETF，作為金價代理；其價格已用 `auto_adjust` 還原權值。
+- 金價用 `GC=F`（COMEX 黃金期貨連續月，美元/盎司）。注意 Yahoo 的連續月序列是把近月合約
+  接起來的，換月時會有小幅跳空；黃金正價差很小，對日報酬影響有限，但不是嚴格的還原連續價。
 - 本專案為學術 / 教學用途，不構成任何投資建議。

@@ -29,7 +29,7 @@ def plot_features(df: pd.DataFrame) -> str:
     cols = config.FEATURE_COLS
     fig, axes = plt.subplots(len(cols), 1, figsize=(12, 14), sharex=True)
     titles = {
-        "GLD": "黃金 ETF (GLD)",
+        "GOLD": "黃金期貨 (GC=F, 美元/盎司)",
         "DGS10": "10年期公債殖利率 (DGS10)",
         "CPI": "消費者物價指數 (CPI, 已延後公布日)",
         "DXY": "美元指數 (DXY)",
@@ -92,7 +92,7 @@ def main():
     # 印出與金價報酬最相關的因子，快速 sanity check
     rets = df.pct_change().dropna()
     print("\n各因子與『金價日報酬』的相關係數：")
-    print(rets.corr()["GLD"].sort_values(ascending=False))
+    print(rets.corr()[config.TARGET_COL].sort_values(ascending=False))
 
 
 if __name__ == "__main__":

@@ -36,14 +36,15 @@ def _downsample(seq, n):
 
 
 def _unit_factors() -> dict:
-    """計算三種金價單位的換算係數（以 GLD 每股價為基準乘上 factor）。
+    """計算三種金價單位的換算係數（以「美元/盎司」為基準乘上 factor）。
 
-    用 yfinance 抓即時的黃金期貨 (GC=F, 美元/盎司) 與美元台幣匯率 (TWD=X)，
-    算出真實係數；抓不到時退回約略值。
-        spot 美元/盎司 = GLD × (GC=F / GLD)
-        台幣/公克      = GLD × (GC=F / GLD) × 匯率 ÷ 31.1035
+    自從資料源改成 GC=F，基準價本身就是美元/盎司，spot 的 factor 直接是 1.0，
+    不必再像用 GLD 時那樣先乘一個會逐年漂移的 ETF 換算倍數。
+        台幣/公克   = $/oz × 匯率 ÷ 31.1035
+        GLD 美元/股 = $/oz ÷ (GC=F / GLD)      ← 給持有 GLD 的人對照用
+    匯率與 GLD 倍數用 yfinance 即時抓；抓不到時退回約略值。
     """
-    gld_to_spot, usd_twd = 10.78, 31.67   # 離線 fallback（約略）
+    usd_twd, spot_to_gld = 31.67, 1 / 11.0   # 離線 fallback（約略）
     try:
         import yfinance as yf
 
@@ -52,20 +53,20 @@ def _unit_factors() -> dict:
             return float(d["Close"].dropna().iloc[-1])
 
         gld, gcf, twd = _last("GLD"), _last("GC=F"), _last("TWD=X")
-        gld_to_spot, usd_twd = gcf / gld, twd
+        usd_twd, spot_to_gld = twd, gld / gcf
     except Exception:
         pass
 
     grams = 31.1035   # 1 金衡盎司 = 31.1035 公克
     return {
-        "default": "gld",
-        "gld_to_spot_oz": round(gld_to_spot, 4),
+        "default": "spot",
         "usd_twd": round(usd_twd, 3),
         "grams_per_oz": grams,
+        "spot_oz_to_gld": round(spot_to_gld, 6),
         "options": [
-            {"key": "gld",  "label": "GLD 美元/股",   "symbol": "$",   "factor": 1.0, "decimals": 2},
-            {"key": "spot", "label": "現貨 美元/盎司", "symbol": "$",   "factor": round(gld_to_spot, 4), "decimals": 0},
-            {"key": "twd",  "label": "台幣/公克",      "symbol": "NT$", "factor": round(gld_to_spot * usd_twd / grams, 4), "decimals": 0},
+            {"key": "spot", "label": "美元/盎司",   "symbol": "$",   "factor": 1.0, "decimals": 0},
+            {"key": "twd",  "label": "台幣/公克",   "symbol": "NT$", "factor": round(usd_twd / grams, 4), "decimals": 0},
+            {"key": "gld",  "label": "GLD 美元/股", "symbol": "$",   "factor": round(spot_to_gld, 6), "decimals": 2},
         ],
     }
 
@@ -73,7 +74,7 @@ def _unit_factors() -> dict:
 def _build_candles(our_pred: dict) -> dict:
     """產生日/周/月/季 K 棒(OHLC)資料。
 
-    重抓 GLD 的開高低收，再用 pandas resample 聚合成周/月/季：
+    重抓黃金期貨 (GC=F) 的開高低收，再用 pandas resample 聚合成周/月/季：
         open=區間第一筆, high=最高, low=最低, close=最後一筆。
     抓不到網路時，退回用收盤價做退化版 K 棒（開=收，僅供折線顯示）。
     """
@@ -82,7 +83,8 @@ def _build_candles(our_pred: dict) -> dict:
     daily = None
     try:
         import yfinance as yf
-        df = yf.download("GLD", period="10y", progress=False, auto_adjust=True)
+        df = yf.download(config.YF_TICKERS[config.TARGET_COL], period="10y",
+                         progress=False, auto_adjust=True)
         if isinstance(df.columns, pd.MultiIndex):
             df.columns = df.columns.get_level_values(0)
         daily = df[["Open", "High", "Low", "Close"]].dropna()
@@ -160,8 +162,10 @@ def build_predictions(our_pred: dict) -> dict:
     }
 
 
-# 具名的歷史事件區間（落在回測訊號範圍 2014~ 內），用真實資料逐一試算避險效果。
+# 具名的歷史事件區間（落在回測訊號範圍 2008-02~ 內），用真實資料逐一試算避險效果。
 HISTORICAL_EVENTS = [
+    ("2008 金融海嘯",     "大跌", "2008-09-01", "2008-11-20"),
+    ("2011 歐債後金價崩跌", "盤跌", "2011-09-06", "2011-12-29"),
     ("2020 新冠股災",     "大跌", "2020-02-20", "2020-03-20"),
     ("2020 疫後黃金狂飆", "大漲", "2020-03-23", "2020-08-06"),
     ("2022 Fed 升息回落", "盤跌", "2022-03-08", "2022-11-03"),

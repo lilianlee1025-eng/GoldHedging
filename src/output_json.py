@@ -117,7 +117,7 @@ def build_factor_dashboard(df: pd.DataFrame, lookback_year: int = 252) -> list:
     rets = df.pct_change()
     gold_ret = rets[config.TARGET_COL]
     name_map = {
-        "GLD": "黃金 (GLD)", "DGS10": "10年期殖利率 (DGS10)",
+        "GOLD": "黃金 ($/oz)", "DGS10": "10年期殖利率 (DGS10)",
         "CPI": "通膨 (CPI)", "DXY": "美元指數 (DXY)",
         "SP500": "S&P 500", "VIX": "恐慌指數 (VIX)",
     }
@@ -163,7 +163,9 @@ def save_predictions_json(df: pd.DataFrame, compare_res: dict,
 
     payload = {
         "meta": {
-            "target": "GLD",
+            "target": config.TARGET_COL,
+            "target_ticker": config.YF_TICKERS[config.TARGET_COL],
+            "price_unit": "USD/oz",
             "lookback": config.LOOKBACK,
             "horizon": config.HORIZON,
             "features": config.FEATURE_COLS,

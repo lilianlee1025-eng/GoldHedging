@@ -72,7 +72,7 @@ def prepare_data(df: pd.DataFrame,
                  scaler_type: str = "minmax"):
     """產生訓練 / 測試樣本，回傳一個包含所有東西的 dict。
 
-    feature_cols 可只給 ['GLD'] 來做「單因子 baseline」。
+    feature_cols 可只給 ['GOLD'] 來做「單因子 baseline」。
     """
     feature_cols = feature_cols or config.FEATURE_COLS
     lookback = lookback or config.LOOKBACK

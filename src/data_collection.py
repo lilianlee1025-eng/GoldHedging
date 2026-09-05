@@ -3,7 +3,7 @@
 資料蒐集與對齊模組
 ==================
 負責：
-1. 從 yfinance 抓黃金(GLD)、美元指數(DXY)、S&P500、VIX 的每日收盤價。
+1. 從 yfinance 抓黃金(GC=F)、美元指數(DXY)、S&P500、VIX 的每日收盤價。
 2. 從 FRED 抓 10 年期公債殖利率(DGS10) 與 CPI(CPIAUCSL)。
 3. 對齊成「以日期為索引」的每日資料。
 4. 特別處理 CPI：用「實際公布日」生效（避免前視偏誤），再 forward fill。
@@ -119,7 +119,7 @@ def build_dataset(save: bool = True) -> pd.DataFrame:
     print("[3/3] 對齊資料 ...")
     # 先把每日型資料 (4 個 yfinance + DGS10) 外部合併
     df = pd.concat(
-        [series["GLD"], series["DXY"], series["SP500"], series["VIX"], dgs10],
+        [series["GOLD"], series["DXY"], series["SP500"], series["VIX"], dgs10],
         axis=1,
     )
 

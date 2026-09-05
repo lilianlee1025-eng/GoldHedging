@@ -190,7 +190,7 @@ def compare_baselines(df, verbose: int = 0) -> dict:
     # 多因子資料
     data_multi = prepare_data(df, feature_cols=config.FEATURE_COLS)
     # 單因子資料（只有金價）
-    data_single = prepare_data(df, feature_cols=["GLD"])
+    data_single = prepare_data(df, feature_cols=[config.TARGET_COL])
 
     # Baseline 1：naive
     naive = evaluate_naive(data_multi)
