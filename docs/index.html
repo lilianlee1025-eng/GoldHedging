@@ -246,7 +246,20 @@
             <span onClick="{{ h.reset }}" title="清除記憶，回到目前市價" style="font-size:11px;color:#7A847E;cursor:pointer;text-decoration:underline;">重設</span>
           </div>
           <div style="display:flex;flex-direction:column;gap:14px;">
-            <label style="display:block;"><span style="display:block;font-size:11.5px;color:#7A847E;margin-bottom:6px;font-family:'JetBrains Mono',monospace;">持有量 (盎司)</span><input type="number" value="{{ sim.ounces }}" onChange="{{ h.ounces }}" style="width:100%;background:#F2F3F2;border:1px solid #E4E7E5;color:#26302B;padding:9px 11px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:14px;"></label>
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                <span style="font-size:11.5px;color:#7A847E;font-family:'JetBrains Mono',monospace;">持有量</span>
+                <span style="display:flex;gap:3px;">
+                  <sc-for list="{{ qtyBtns }}" as="q" hint-placeholder-count="4">
+                    <span onClick="{{ q.onClick }}" style="font-size:10px;padding:2px 6px;border-radius:4px;cursor:pointer;background:{{ q.bg }};color:{{ q.fg }};border:1px solid {{ q.border }};">{{ q.label }}</span>
+                  </sc-for>
+                </span>
+              </div>
+              <input type="number" value="{{ sim.ounces }}" onChange="{{ h.ounces }}" style="width:100%;background:#F2F3F2;border:1px solid #E4E7E5;color:#26302B;padding:9px 11px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:14px;">
+              <sc-if value="{{ hasQtyNote }}" hint-placeholder-val="{{ false }}">
+                <div style="font-size:10.5px;color:#9AA39D;margin-top:5px;font-family:'JetBrains Mono',monospace;">{{ qtyNote }}</div>
+              </sc-if>
+            </div>
             <label style="display:block;"><span style="display:block;font-size:11.5px;color:#7A847E;margin-bottom:6px;font-family:'JetBrains Mono',monospace;">進場成本 ($/oz)</span><input type="number" value="{{ sim.entry }}" onChange="{{ h.entry }}" style="width:100%;background:#F2F3F2;border:1px solid #E4E7E5;color:#26302B;padding:9px 11px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:14px;"></label>
             <label style="display:block;"><span style="display:block;font-size:11.5px;color:#7A847E;margin-bottom:6px;font-family:'JetBrains Mono',monospace;">黃金現貨 ($/oz)</span><input type="number" value="{{ sim.spot }}" onChange="{{ h.spot }}" style="width:100%;background:#F2F3F2;border:1px solid #E4E7E5;color:#26302B;padding:9px 11px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:14px;"></label>
             <label style="display:block;"><span style="display:block;font-size:11.5px;color:#7A847E;margin-bottom:6px;font-family:'JetBrains Mono',monospace;">避險期間 (月)</span><input type="number" value="{{ sim.months }}" onChange="{{ h.months }}" style="width:100%;background:#F2F3F2;border:1px solid #E4E7E5;color:#26302B;padding:9px 11px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:14px;"></label>
@@ -254,6 +267,17 @@
               <label style="display:block;flex:1;"><span style="display:block;font-size:11.5px;color:#7A847E;margin-bottom:6px;font-family:'JetBrains Mono',monospace;">波動率 (%)</span><input type="number" value="{{ sim.vol }}" onChange="{{ h.vol }}" style="width:100%;background:#F2F3F2;border:1px solid #E4E7E5;color:#26302B;padding:9px 11px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:14px;"></label>
               <label style="display:block;flex:1;"><span style="display:block;font-size:11.5px;color:#7A847E;margin-bottom:6px;font-family:'JetBrains Mono',monospace;">利率 (%)</span><input type="number" value="{{ sim.rate }}" onChange="{{ h.rate }}" style="width:100%;background:#F2F3F2;border:1px solid #E4E7E5;color:#26302B;padding:9px 11px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:14px;"></label>
             </div>
+          </div>
+
+          <div style="margin-top:18px;padding-top:16px;border-top:1px solid #E4E7E5;">
+            <div style="font-size:12px;color:#7A847E;margin-bottom:8px;">風險偏好</div>
+            <div style="display:flex;gap:5px;">
+              <sc-for list="{{ profBtns }}" as="pf" hint-placeholder-count="3">
+                <span onClick="{{ pf.onClick }}" style="flex:1;text-align:center;font-size:12px;padding:7px 0;border-radius:6px;cursor:pointer;background:{{ pf.bg }};color:{{ pf.fg }};border:1px solid {{ pf.border }};font-weight:{{ pf.weight }};">{{ pf.label }}</span>
+              </sc-for>
+            </div>
+            <div style="font-size:11px;color:#7A847E;margin-top:8px;line-height:1.55;">{{ profDesc }}</div>
+            <div style="font-size:10.5px;color:#9AA39D;margin-top:6px;line-height:1.5;font-family:'JetBrains Mono',monospace;">{{ profBacktest }}</div>
           </div>
 
           <div style="margin-top:18px;padding-top:16px;border-top:1px solid #E4E7E5;">
@@ -270,6 +294,34 @@
         </div>
 
         <div>
+          <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:18px 20px;margin-bottom:16px;">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;">
+              <span style="font-size:15px;font-weight:600;color:#26302B;">如果金價下跌，你會賠多少</span>
+              <span style="font-size:11.5px;color:#7A847E;font-family:'JetBrains Mono',monospace;">部位現值 {{ posValueStr }}　·　建議避險 {{ hedgePctStr }}</span>
+            </div>
+            <div style="overflow-x:auto;margin-top:14px;">
+              <table style="width:100%;border-collapse:collapse;font-size:12.5px;min-width:420px;">
+                <tr style="color:#7A847E;font-family:'JetBrains Mono',monospace;font-size:10.5px;text-transform:uppercase;">
+                  <th style="text-align:left;padding:6px 8px;border-bottom:1px solid #E4E7E5;">跌幅</th>
+                  <th style="text-align:right;padding:6px 8px;border-bottom:1px solid #E4E7E5;">金價</th>
+                  <th style="text-align:right;padding:6px 8px;border-bottom:1px solid #E4E7E5;">不避險損失</th>
+                  <th style="text-align:right;padding:6px 8px;border-bottom:1px solid #E4E7E5;">避險後損失</th>
+                  <th style="text-align:right;padding:6px 8px;border-bottom:1px solid #E4E7E5;">少賠</th>
+                </tr>
+                <sc-for list="{{ dropRows }}" as="d" hint-placeholder-count="3">
+                  <tr>
+                    <td style="padding:9px 8px;border-bottom:1px solid #F2F3F2;font-weight:600;color:#C0473E;font-family:'JetBrains Mono',monospace;">{{ d.pct }}</td>
+                    <td style="padding:9px 8px;border-bottom:1px solid #F2F3F2;text-align:right;font-family:'JetBrains Mono',monospace;color:#4A544E;">{{ d.priceStr }}</td>
+                    <td style="padding:9px 8px;border-bottom:1px solid #F2F3F2;text-align:right;font-family:'JetBrains Mono',monospace;color:#C0473E;">{{ d.lossStr }}</td>
+                    <td style="padding:9px 8px;border-bottom:1px solid #F2F3F2;text-align:right;font-family:'JetBrains Mono',monospace;color:#4A544E;">{{ d.hedgedStr }}</td>
+                    <td style="padding:9px 8px;border-bottom:1px solid #F2F3F2;text-align:right;font-family:'JetBrains Mono',monospace;color:#1E8C66;">{{ d.savedStr }}</td>
+                  </tr>
+                </sc-for>
+              </table>
+            </div>
+            <div style="font-size:11px;color:#9AA39D;margin-top:10px;line-height:1.55;">「避險後損失」假設你照建議比例 {{ hedgePctStr }} 避險，被避掉的部分報酬視為中性化。實際還要扣權利金或交易成本。</div>
+          </div>
+
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
             <sc-for list="{{ strategies }}" as="st" hint-placeholder-count="4">
               <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:18px 20px;border:1px solid {{ st.border }};position:relative;">
@@ -556,6 +608,28 @@
 // localStorage 鍵名。改版若想讓舊設定失效，把 v1 往上加即可。
 const LS_KEY='goldhedge.prefs.v1';
 const SIM_DEFAULTS={ ounces:100, entry:1850, spot:2100, months:3, vol:18, rate:4.2 };
+
+/* 風險偏好：門檻越低＝越早啟動避險＝越保守。
+   這三個門檻刻意對齊 design_export.py 的敏感度分析（40/50/60），
+   所以每個偏好都能秀出它在 2008~2026 真實資料上的回測績效。*/
+const PROFILES={
+  conservative:{ key:'conservative', label:'保守', threshold:0.40,
+    desc:'下跌機率一過 40% 就開始避險。睡得安穩，代價是常付避險成本。' },
+  balanced:{ key:'balanced', label:'穩健', threshold:0.50,
+    desc:'機率過半才避險。報酬與保護的折衷，適合多數人。' },
+  aggressive:{ key:'aggressive', label:'積極', threshold:0.60,
+    desc:'機率高到 60% 才避險。盡量保留上漲，能忍受較大波動。' }
+};
+
+/* 持有量的計價單位。台灣人買金條多用台錢、黃金存摺用公克，
+   但所有計算內部一律換成金衡盎司(oz)。1 台錢 = 3.75 公克。*/
+const GRAMS_PER_OZ=31.1035, GRAMS_PER_TQIAN=3.75;
+const QTY_UNITS=[
+  {key:'oz',    label:'盎司'},
+  {key:'g',     label:'公克'},
+  {key:'tqian', label:'台錢'},
+  {key:'gld',   label:'GLD股'}
+];
 const PRIN_DEFAULTS={ K:2030, prem:60, spot:2100 };
 
 class Component extends DCLogic {
@@ -576,6 +650,8 @@ class Component extends DCLogic {
       // 使用者親手改過的欄位；這些不會被「最新市價」覆寫掉
       touched: sv.touched || {},
       restored: !!(sv.sim || sv.prin),  // 這次是不是從舊設定還原的
+      profile: sv.profile || 'balanced',   // 風險偏好
+      qtyUnit: sv.qtyUnit || 'oz',         // 持有量的單位
       /* ---- 會員登入 ---- */
       user: null,              // 登入中的使用者（null = 未登入）
       authOpen: false,         // 登入面板是否展開
@@ -602,7 +678,8 @@ class Component extends DCLogic {
   // 收集目前所有要同步的設定（跟存進 localStorage 的是同一份結構）
   collectPrefs(){
     const st=this.state;
-    return { sim:st.sim, prin:st.prin, unit:st.unit, tf:st.tf, ctype:st.ctype, touched:st.touched };
+    return { sim:st.sim, prin:st.prin, unit:st.unit, tf:st.tf, ctype:st.ctype,
+             touched:st.touched, profile:st.profile, qtyUnit:st.qtyUnit };
   }
 
   // 把一份設定套進畫面與本機儲存
@@ -614,6 +691,8 @@ class Component extends DCLogic {
     if(pf.unit) nx.unit=pf.unit;
     if(pf.tf)   nx.tf=pf.tf;
     if(pf.ctype)nx.ctype=pf.ctype;
+    if(pf.profile)nx.profile=pf.profile;
+    if(pf.qtyUnit)nx.qtyUnit=pf.qtyUnit;
     nx.touched=pf.touched||{};
     this._applying=true;      // 這是「從雲端拉下來的」，不要再推回雲端
     this.savePrefs(nx);
@@ -833,11 +912,53 @@ class Component extends DCLogic {
   dlabel(ds){ return ds.slice(5).replace('-','/'); }
 
   /* ---------- recommendation ---------- */
+  /* ---------- 風險偏好 ---------- */
+  prof(){ return PROFILES[this.state.profile]||PROFILES.balanced; }
+
+  // 建議避險比例：與後端 output_json.py 的公式一致
+  //   hedge = clip((p - threshold) / (1 - threshold), 0, 1)
+  hedgeRatio(p){
+    const T=this.prof().threshold;
+    return Math.max(0,Math.min(1,(p-T)/(1-T)));
+  }
+
+  // 持有量換算成盎司（內部計算一律用盎司）
+  ozHeld(){
+    const q=this.num(this.state.sim.ounces,0), u=this.state.qtyUnit;
+    if(u==='g')     return q/GRAMS_PER_OZ;
+    if(u==='tqian') return q*GRAMS_PER_TQIAN/GRAMS_PER_OZ;
+    if(u==='gld'){
+      const f=(this.state.pred.units&&this.state.pred.units.spot_oz_to_gld)||0.0909;
+      return q*f;                       // 1 股 GLD 約當 f 盎司黃金
+    }
+    return q;                            // oz
+  }
+
+  // 建議分級改成相對於使用者的風險門檻，而不是寫死 0.6/0.5/0.35。
+  // 代入穩健(0.5)時，分界正好還原成原本的 0.6/0.5/0.35。
   rec(p){
-    if(p>=0.6) return {key:'put',name:'保護性賣權',strength:'中高度避險',note:'下跌機率偏高，建議買進 Put 鎖住下檔，同時保留黃金續漲的上檔空間。'};
-    if(p>=0.5) return {key:'collar',name:'Collar 上下限',strength:'中度避險',note:'機率略過門檻，可用 Collar 以低成本建立保護，代價是放棄部分上檔。'};
-    if(p>=0.35) return {key:'futures',name:'期貨部分避險',strength:'輕度避險',note:'機率中性偏低，可放空部分期貨降低波動，保留多數部位。'};
-    return {key:'none',name:'維持不避險',strength:'暫不避險',note:'下跌機率低於門檻，避險成本不划算，建議持有觀望。'};
+    const T=this.prof().threshold;
+    if(p>=T+0.10) return {key:'put',name:'保護性賣權',strength:'中高度避險',note:'下跌機率明顯高於你的門檻，建議買進 Put 鎖住下檔，同時保留黃金續漲的上檔空間。'};
+    if(p>=T)      return {key:'collar',name:'Collar 上下限',strength:'中度避險',note:'機率略過你的門檻，可用 Collar 以低成本建立保護，代價是放棄部分上檔。'};
+    if(p>=T-0.15) return {key:'futures',name:'期貨部分避險',strength:'輕度避險',note:'機率接近門檻但未觸發，可放空部分期貨降低波動，保留多數部位。'};
+    return {key:'none',name:'維持不避險',strength:'暫不避險',note:'下跌機率低於你的門檻，避險成本不划算，建議持有觀望。'};
+  }
+
+  /* ---------- 下跌情境曝險 ----------
+     用「你的部位 × 現價」算出各跌幅下實際會賠多少錢，
+     並對照「照建議比例避險後」的損失。*/
+  dropScenarios(prob){
+    const oz=this.ozHeld(), spot=this.num(this.state.sim.spot,0);
+    const value=oz*spot, h=this.hedgeRatio(prob);
+    return [5,10,20].map(d=>{
+      const loss=-value*d/100;          // 未避險損失（負值）
+      const hedged=loss*(1-h);          // 避險後：曝險降為 (1-h)
+      return { pct:'-'+d+'%',
+               priceStr:this.fmtP(spot*(1-d/100)),
+               lossStr:this.ms(loss),
+               hedgedStr:this.ms(hedged),
+               savedStr:this.ms(hedged-loss) };
+    });
   }
 
   /* ---------- strategies ---------- */
@@ -1086,7 +1207,42 @@ class Component extends DCLogic {
       this.savePrefs({sim:nsim,touched:nt});
       this.setState({sim:nsim,touched:nt,restored:false});
     };
-    const unreal=this.num(sim.ounces,0)*(this.num(sim.spot,0)-this.num(sim.entry,0));
+    /* 風險偏好按鈕 */
+    const setProfile=k=>{ this.savePrefs({profile:k}); this.setState({profile:k}); };
+    const curProf=this.prof();
+    const profBtns=Object.keys(PROFILES).map(k=>{
+      const on=k===this.state.profile, P=PROFILES[k];
+      return { key:k, label:P.label, onClick:()=>setProfile(k),
+               bg:on?'#C8A951':'#FFFFFF', fg:on?'#26302B':'#7A847E',
+               border:on?'#C8A951':'#E4E7E5', weight:on?'600':'400' };
+    });
+    // 這個偏好在 2008~2026 真實回測的績效（對齊 sensitivity 的 40/50/60 門檻）
+    const sens=(bt.strategy_compare&&bt.strategy_compare.sensitivity)||[];
+    const sRow=sens.filter(r=>r.threshold===Math.round(curProf.threshold*100))[0];
+    const profBacktest=sRow
+      ? '這個設定在 '+(bt.strategy_compare.period||'')+' 的實際回測：報酬 '
+        +sRow.ret.toFixed(0)+'%、最大回撤 '+sRow.mdd.toFixed(0)+'%'
+      : '';
+
+    /* 持有量單位切換 */
+    const setQtyUnit=k=>{ this.savePrefs({qtyUnit:k}); this.setState({qtyUnit:k}); };
+    const qtyBtns=QTY_UNITS.map(u=>{
+      const on=u.key===this.state.qtyUnit;
+      return { key:u.key, label:u.label, onClick:()=>setQtyUnit(u.key),
+               bg:on?'#3A443E':'#FFFFFF', fg:on?'#FFFFFF':'#7A847E',
+               border:on?'#3A443E':'#E4E7E5' };
+    });
+    const ozHeld=this.ozHeld();
+    const qtyNote=this.state.qtyUnit==='oz' ? ''
+      : '＝ '+ozHeld.toLocaleString('en-US',{maximumFractionDigits:2})+' 盎司';
+
+    /* 下跌情境曝險 */
+    const dropRows=this.dropScenarios(pred.decline_prob);
+    const posValue=ozHeld*this.num(sim.spot,0);
+    const hedgePct=(this.hedgeRatio(pred.decline_prob)*100).toFixed(0)+'%';
+
+    // 未實現損益要用換算後的盎司數，否則填公克時金額會差 31 倍
+    const unreal=ozHeld*(this.num(sim.spot,0)-this.num(sim.entry,0));
     const strategies=this.buildStrategies();
     const recBan = (pred.decline_prob>=0.5);
 
@@ -1207,6 +1363,12 @@ class Component extends DCLogic {
       strategies:strategies,
       savedNote: st.restored ? '已載入你上次的設定（存在此瀏覽器）'
                              : '輸入會自動記住，重新整理不會歸零',
+      /* 個人化：風險偏好 / 單位 / 曝險 */
+      profBtns:profBtns, profDesc:curProf.desc, profBacktest:profBacktest,
+      profThreshStr:(curProf.threshold*100).toFixed(0)+'%',
+      qtyBtns:qtyBtns, qtyNote:qtyNote, hasQtyNote:!!qtyNote,
+      dropRows:dropRows, hedgePctStr:hedgePct,
+      posValueStr:'$'+Math.round(posValue).toLocaleString('en-US'),
       recBannerText:recObj.name+'（'+recObj.strength+'）', recBannerNote:recObj.note,
       recBannerBg: recBan?'#E2F0EA':'#E4E7E5', recBannerBorder: recBan?'rgba(30,140,102,0.4)':'#E4E7E5',
       strikesNote:'Put 履約價設於現價 95%，Collar 為 93% / 107%',
