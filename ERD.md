@@ -6,6 +6,12 @@
 
 ## 完整系統 ERD
 
+![資料庫關聯圖](docs/ERD.png)
+
+> 上圖為圖片檔（可右鍵另存），下方為 Mermaid 原始碼版本（GitHub 會自動渲染）。
+> 圖片由 `make_erd.py` 產生，改動結構後重跑該程式即可更新。
+
+
 ```mermaid
 erDiagram
     AUTH_USERS  ||--|| PROFILES  : "1:1 風險偏好與避險參數"
