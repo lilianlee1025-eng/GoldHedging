@@ -6,11 +6,6 @@
 
 ## 完整系統 ERD
 
-![資料庫關聯圖](docs/ERD.png)
-
-> 上圖為圖片檔（可右鍵另存），下方為 Mermaid 原始碼版本（GitHub 會自動渲染）。
-> 圖片由 `make_erd.py` 產生，改動結構後重跑該程式即可更新。
-
 
 ```mermaid
 erDiagram
@@ -137,3 +132,16 @@ create policy "own_select" on public.positions
 | **v2** | `profiles` / `positions` / `ui_prefs` 三表 | 正規化，支援多筆部位，可下條件查詢與約束 |
 
 `supabase_migration_v2.sql` 內含自動搬遷，v1 的資料不會遺失。
+
+---
+
+## 附：圖片檔版本
+
+上方的 Mermaid 圖由 GitHub 即時渲染，無法右鍵另存。若報告需要圖片檔：
+
+**方法一（推薦，樣式與上圖一致）**
+到 https://mermaid.live 貼上上方 ```mermaid 區塊的內容，右上角 **Actions → PNG / SVG** 下載。
+
+**方法二**
+本專案另附一張自行繪製的 [`docs/ERD.png`](docs/ERD.png)（2100×1500，黑白列印也清晰），
+由 `make_erd.py` 產生，結構變動後重跑即可更新。樣式與 Mermaid 版不同，擇一使用即可。
