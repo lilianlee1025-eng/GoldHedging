@@ -113,6 +113,6 @@ for i, t in enumerate([
 ]):
     d.text((60, y0 + i * 36), t, font=f_note, fill=GREY if i else INK)
 
-img.save("outputs/ERD.png")
+img.save("docs/ERD.png")          # 放 docs/ 才會進版控（.gitignore 排除 outputs/*.png）
 img.resize((W // 2, H // 2), Image.LANCZOS).save("outputs/ERD_small.png")
-print("已產生 outputs/ERD.png (%dx%d)" % (W, H))
+print("已產生 docs/ERD.png (%dx%d)" % (W, H))
