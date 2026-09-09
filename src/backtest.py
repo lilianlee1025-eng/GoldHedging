@@ -14,8 +14,14 @@
 策略比較：
 - 不避險 (buy & hold)：永遠 100% 持有黃金。
 - 依訊號避險：下跌機率越高 → 避險力道越大 → 黃金曝險越低。
-  避險部位視為被中性化（報酬 ≈ 0），因此當天組合報酬 = 黃金報酬 ×(1 - 避險比例)。
-計算兩者的累積損益曲線與最大回撤 (max drawdown)。
+  避險部位視為被中性化（報酬 ≈ 0），因此當天組合毛報酬 = 黃金報酬 ×(1 - 避險比例)。
+
+避險成本（重要）：
+  現實中避險不是免費的。本模組把成本拆成兩塊，從毛報酬扣除：
+    · 持有成本 carry    = 避險比例 × 年化成本 ÷ 252   （轉倉價差、保證金機會成本、權利金）
+    · 調倉成本 turnover = |避險比例變動| × 單邊交易成本 （手續費、滑價、買賣價差）
+  同時保留「未扣成本」的毛曲線，讓兩者並列 —— 差距就是這份保險的實際價格。
+  cost_sweep() 進一步掃過多種成本假設，回答「保險貴到什麼程度就不划算」。
 """
 
 import os
@@ -143,9 +149,47 @@ def _max_drawdown(equity: np.ndarray) -> float:
     return float(dd.min())
 
 
-def run_strategy(signals: pd.DataFrame, threshold: float = None) -> dict:
-    """根據訊號計算『避險 vs 不避險』的累積損益與最大回撤。"""
+def _apply_costs(ret: np.ndarray, h: np.ndarray,
+                 cost_annual: float, tc_oneway: float) -> tuple:
+    """把避險成本從毛報酬中扣除，回傳 (淨報酬, 持有成本序列, 調倉成本序列)。
+
+    - 持有成本：只要當天有避險部位就要付，按避險比例與在市天數計價
+      （年化成本平均攤到 252 個交易日）。
+    - 調倉成本：避險比例每變動 1 個單位就要進出市場一次，按單邊收取。
+      prepend=0 代表第一天是從「零避險」開始建倉，這筆建倉成本要算。
+    """
+    gross = ret * (1.0 - h)
+    carry = h * (cost_annual / 252.0)
+    turnover = np.abs(np.diff(h, prepend=0.0))
+    trade = turnover * tc_oneway
+    return gross - carry - trade, carry, trade
+
+
+def _stats(eq: np.ndarray, r: np.ndarray) -> dict:
+    """由淨值曲線與日報酬序列算出績效指標。"""
+    total_return = float(eq[-1] - 1.0)
+    ann = float((1.0 + total_return) ** (252.0 / len(r)) - 1.0)
+    vol = float(np.std(r) * np.sqrt(252))
+    sharpe = float(np.mean(r) / (np.std(r) + 1e-9) * np.sqrt(252))
+    return {
+        "total_return": total_return,
+        "annual_return": ann,
+        "annual_vol": vol,
+        "sharpe": sharpe,
+        "max_drawdown": _max_drawdown(eq),
+    }
+
+
+def run_strategy(signals: pd.DataFrame, threshold: float = None,
+                 cost_annual: float = None, tc_oneway: float = None) -> dict:
+    """根據訊號計算『避險 vs 不避險』的累積損益與最大回撤（含避險成本）。
+
+    同時輸出「毛」（gross，未扣成本）與「淨」（扣成本）兩條避險曲線：
+    毛曲線是舊版行為，等於假設保險免費，留著當理論上限對照。
+    """
     threshold = threshold if threshold is not None else config.HEDGE_PROB_THRESHOLD
+    cost_annual = cost_annual if cost_annual is not None else config.HEDGE_COST_ANNUAL
+    tc_oneway = tc_oneway if tc_oneway is not None else config.HEDGE_TC_ONEWAY
 
     # 因果對齊：prob_down[t] 在第 t 日收盤後即可得知，據此決定「t→t+1」的曝險，
     # 而 ret_1d[t] 正是 t→t+1 的報酬，兩者配對不含前視偏誤。
@@ -155,44 +199,119 @@ def run_strategy(signals: pd.DataFrame, threshold: float = None) -> dict:
 
     # 不避險：全額持有黃金
     ret_nohedge = ret
-    # 避險：黃金曝險 = (1 - 避險比例)
-    ret_hedge = ret * (1.0 - h)
+    # 避險（毛）：黃金曝險 = (1 - 避險比例)，不計成本
+    ret_hedge_gross = ret * (1.0 - h)
+    # 避險（淨）：再扣掉持有成本與調倉成本
+    ret_hedge, carry, trade = _apply_costs(ret, h, cost_annual, tc_oneway)
 
     eq_nohedge = np.cumprod(1.0 + ret_nohedge)
+    eq_hedge_gross = np.cumprod(1.0 + ret_hedge_gross)
     eq_hedge = np.cumprod(1.0 + ret_hedge)
 
-    def _stats(eq, r):
-        total_return = float(eq[-1] - 1.0)
-        ann = float((1.0 + total_return) ** (252.0 / len(r)) - 1.0)
-        vol = float(np.std(r) * np.sqrt(252))
-        sharpe = float(np.mean(r) / (np.std(r) + 1e-9) * np.sqrt(252))
-        return {
-            "total_return": total_return,
-            "annual_return": ann,
-            "annual_vol": vol,
-            "sharpe": sharpe,
-            "max_drawdown": _max_drawdown(eq),
-        }
-
+    n_years = len(ret) / 252.0
     return {
         "dates": [d.strftime("%Y-%m-%d") for d in signals.index],
         "equity_nohedge": eq_nohedge.tolist(),
         "equity_hedge": eq_hedge.tolist(),
+        "equity_hedge_gross": eq_hedge_gross.tolist(),
         "hedge_ratio": h.tolist(),
         "stats_nohedge": _stats(eq_nohedge, ret_nohedge),
         "stats_hedge": _stats(eq_hedge, ret_hedge),
+        "stats_hedge_gross": _stats(eq_hedge_gross, ret_hedge_gross),
         "threshold": threshold,
+        "cost": {
+            "cost_annual": cost_annual,
+            "tc_oneway": tc_oneway,
+            # 累計付出的成本（佔期初本金的比例）
+            "carry_total": float(carry.sum()),
+            "trade_total": float(trade.sum()),
+            "total": float(carry.sum() + trade.sum()),
+            # 平均每年付多少保費、平均避險比例、平均年換手次數
+            "carry_annual_avg": float(carry.sum() / n_years),
+            "avg_hedge_ratio": float(h.mean()),
+            "hedged_days_ratio": float((h > 0).mean()),
+            "turnover_per_year": float(np.abs(np.diff(h, prepend=0.0)).sum() / n_years),
+            # 成本讓避險曲線少賺多少（總報酬的百分點差）
+            "drag_on_return": float(eq_hedge_gross[-1] - eq_hedge[-1]),
+        },
     }
+
+
+def cost_sweep(signals: pd.DataFrame, threshold: float = None,
+               scenarios=None, tc_oneway: float = None) -> list:
+    """掃過多組年化避險成本，量化「保險費 vs 回撤改善」的權衡。
+
+    回答的問題：避險確實壓低了回撤，但那個保護值多少錢？成本升到哪裡就不划算？
+    每一列附上 protection_price —— 每買到 1 個百分點的回撤改善，要放棄幾個百分點
+    的總報酬。數字越小代表這份保險越划算。
+
+    注意：scenarios 只變動「年化持有成本」，調倉成本 tc_oneway 各列一律照收，
+    所以成本 0 的那一列是「零持有成本」的對照組，不是完全免費。
+    """
+    threshold = threshold if threshold is not None else config.HEDGE_PROB_THRESHOLD
+    tc_oneway = tc_oneway if tc_oneway is not None else config.HEDGE_TC_ONEWAY
+    scenarios = scenarios if scenarios is not None else config.HEDGE_COST_SCENARIOS
+
+    prob_down = signals["prob_down"].values
+    ret = signals["ret_1d"].values
+    h = _hedge_ratio(prob_down, threshold)
+
+    eq_nohedge = np.cumprod(1.0 + ret)
+    base_return = float(eq_nohedge[-1] - 1.0)
+    base_mdd = _max_drawdown(eq_nohedge)
+
+    out = []
+    for cost_annual, label in scenarios:
+        net, _, _ = _apply_costs(ret, h, cost_annual, tc_oneway)
+        eq = np.cumprod(1.0 + net)
+        total_return = float(eq[-1] - 1.0)
+        mdd = _max_drawdown(eq)
+        # 回撤改善（正值＝回撤變淺）、報酬讓出（正值＝比不避險少賺）
+        dd_gain = (mdd - base_mdd) * 100.0
+        ret_giveup = (base_return - total_return) * 100.0
+        out.append({
+            "cost_annual": cost_annual,
+            "label": label,
+            "total_return": round(total_return * 100, 1),
+            "max_drawdown": round(mdd * 100, 1),
+            "dd_improvement": round(dd_gain, 1),
+            "return_giveup": round(ret_giveup, 1),
+            # 每換到 1pp 回撤改善，要付出幾 pp 報酬（越小越划算；<=0 代表白賺）
+            "protection_price": round(ret_giveup / dd_gain, 1) if dd_gain > 0.05 else None,
+            "worth_it": bool(dd_gain > 0.05 and ret_giveup <= dd_gain),
+        })
+    return out
 
 
 if __name__ == "__main__":
     from src.data_collection import load_dataset
-    df = load_dataset()
-    print("執行 walk-forward 回測（可能需要數分鐘）...")
-    sig = walk_forward(df, verbose=True)
-    print(f"\n共產生 {len(sig)} 個每日訊號，區間 "
+
+    sig = load_signals()
+    if sig is None:
+        df = load_dataset()
+        print("執行 walk-forward 回測（可能需要數分鐘）...")
+        sig = walk_forward(df, verbose=True)
+    else:
+        print(f"使用快取訊號 {config.WF_SIGNALS_CSV}（不重訓模型）")
+
+    print(f"\n共 {len(sig)} 個每日訊號，區間 "
           f"{sig.index.min().date()} ~ {sig.index.max().date()}")
     res = run_strategy(sig)
     print("\n========= 策略比較 =========")
-    print("不避險：", {k: round(v, 4) for k, v in res["stats_nohedge"].items()})
-    print("避險：  ", {k: round(v, 4) for k, v in res["stats_hedge"].items()})
+    print("不避險：      ", {k: round(v, 4) for k, v in res["stats_nohedge"].items()})
+    print("避險（毛）：  ", {k: round(v, 4) for k, v in res["stats_hedge_gross"].items()})
+    print("避險（扣成本）:", {k: round(v, 4) for k, v in res["stats_hedge"].items()})
+    c = res["cost"]
+    print(f"\n避險成本：年化假設 {c['cost_annual']:.2%}，平均避險比例 {c['avg_hedge_ratio']:.1%}，"
+          f"年換手 {c['turnover_per_year']:.1f} 次")
+    print(f"          累計付出 {c['total']:.1%} 期初本金，"
+          f"經複利後拖累總報酬 {c['drag_on_return'] * 100:.1f} 個百分點")
+
+    print("\n========= 成本 vs 回撤改善 權衡 =========")
+    print(f"{'避險工具':<22}{'年化成本':>8}{'總報酬':>9}{'最大回撤':>9}"
+          f"{'回撤改善':>9}{'報酬讓出':>9}{'保護單價':>9}")
+    for r in cost_sweep(sig):
+        price = "—" if r["protection_price"] is None else f"{r['protection_price']:.1f}"
+        print(f"{r['label']:<22}{r['cost_annual']:>7.1%}{r['total_return']:>8.1f}%"
+              f"{r['max_drawdown']:>8.1f}%{r['dd_improvement']:>8.1f}pp"
+              f"{r['return_giveup']:>8.1f}pp{price:>9}")

@@ -13,6 +13,8 @@
 2. backtest.json
    - 有避險 vs 無避險的累積損益曲線、避險比例。
    - 兩者的總報酬、年化報酬、波動、Sharpe、最大回撤。
+   - 避險成本明細，以及「毛（假設保險免費）vs 淨（扣成本）」的對照曲線。
+   - cost_sweep：不同避險工具成本下的「報酬讓出 vs 回撤改善」權衡表。
    - 各年度（情境）表現。
 """
 
@@ -26,6 +28,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import config
 from src.preprocessing import prepare_data, inverse_return
 from src.model import build_lstm_model, train_model, set_seed, pos_weight_from
+from src.backtest import cost_sweep
 
 
 def _to_native(obj):
@@ -188,11 +191,17 @@ def save_predictions_json(df: pd.DataFrame, compare_res: dict,
 # ---------------------------------------------------------------------------
 def _yearly_scenarios(signals: pd.DataFrame, strategy: dict) -> list:
     """依年度切出『情境表現』：每年有避險 vs 無避險的報酬與回撤。"""
+    h = np.asarray(strategy["hedge_ratio"])
+    cost = strategy["cost"]
+    # 逐年也要扣避險成本，否則年度表會跟總表的口徑對不起來
+    carry = h * (cost["cost_annual"] / 252.0)
+    trade = np.abs(np.diff(h, prepend=0.0)) * cost["tc_oneway"]
+
     df = pd.DataFrame({
         "ret_nohedge": signals["ret_1d"].values,
-        "hedge_ratio": strategy["hedge_ratio"],
+        "hedge_ratio": h,
     }, index=signals.index)
-    df["ret_hedge"] = df["ret_nohedge"] * (1.0 - df["hedge_ratio"])
+    df["ret_hedge"] = df["ret_nohedge"] * (1.0 - h) - carry - trade
 
     out = []
     for year, g in df.groupby(df.index.year):
@@ -213,6 +222,7 @@ def _backtest_summary(signals: pd.DataFrame, strategy: dict) -> dict:
     """整理『避險相對不避險』的改善幅度，與目前最新的避險建議。"""
     sn = strategy["stats_nohedge"]
     sh = strategy["stats_hedge"]
+    sg = strategy["stats_hedge_gross"]
     # 最新一日的避險訊號（回測期最後一天）
     last_prob = float(signals["prob_down"].iloc[-1])
     last_hedge = float(strategy["hedge_ratio"][-1])
@@ -226,6 +236,14 @@ def _backtest_summary(signals: pd.DataFrame, strategy: dict) -> dict:
         "vol_reduction": round(sn["annual_vol"] - sh["annual_vol"], 5),
         "sharpe_delta": round(sh["sharpe"] - sn["sharpe"], 5),
         "return_giveup": round(sn["total_return"] - sh["total_return"], 5),
+        # 保護單價：每換到 1 個百分點的回撤改善，要放棄幾個百分點的總報酬。
+        # 這是整份回測最關鍵的一個數字 —— 它把「回撤變淺」這件事標上價格。
+        "protection_price": (
+            round((sn["total_return"] - sh["total_return"])
+                  / (sh["max_drawdown"] - sn["max_drawdown"]), 1)
+            if sh["max_drawdown"] - sn["max_drawdown"] > 0.0005 else None),
+        # 成本佔了多少：毛（假設保險免費）與淨（扣成本）的總報酬差距
+        "cost_drag": round(sg["total_return"] - sh["total_return"], 5),
         "latest_recommendation": reco,
     }
 
@@ -244,12 +262,20 @@ def save_backtest_json(signals: pd.DataFrame, strategy: dict,
             "dates": strategy["dates"],
             "nohedge": [round(x, 5) for x in strategy["equity_nohedge"]],
             "hedge": [round(x, 5) for x in strategy["equity_hedge"]],
+            # 未扣避險成本的對照曲線（舊版行為＝假設保險免費）
+            "hedge_gross": [round(x, 5) for x in strategy["equity_hedge_gross"]],
             "hedge_ratio": [round(x, 4) for x in strategy["hedge_ratio"]],
         },
         "stats": {
             "nohedge": {k: round(v, 5) for k, v in strategy["stats_nohedge"].items()},
             "hedge": {k: round(v, 5) for k, v in strategy["stats_hedge"].items()},
+            "hedge_gross": {k: round(v, 5) for k, v in strategy["stats_hedge_gross"].items()},
         },
+        # 避險成本明細：年化假設、累計付出、平均避險比例、年換手次數
+        "cost": {k: (round(v, 6) if isinstance(v, float) else v)
+                 for k, v in strategy["cost"].items()},
+        # 成本 vs 回撤改善 權衡表（由 cost_sweep 產生，各避險工具一列）
+        "cost_sweep": cost_sweep(signals, threshold=strategy["threshold"]),
         "scenarios_by_year": _yearly_scenarios(signals, strategy),
         "summary": _backtest_summary(signals, strategy),
     }

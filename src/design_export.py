@@ -10,6 +10,7 @@ JSON schema，輸出到 frontend/predictions.json 與 frontend/backtest.json。
 - pred.current / decline_prob / direction：由我們的 future 物件導出。
 - pred.history + model + future(5天)：重組成設計檔的圖表格式。
 - bt.equity_curve.hedged/unhedged、bt.metrics.*（百分比）、bt.scenarios（具名情境）。
+- bt.cost：避險成本明細與「成本 vs 回撤改善」權衡表（由 backtest.cost_sweep 產生）。
 不需重訓模型，純資料轉換。
 """
 
@@ -360,15 +361,73 @@ def _pick_scenarios(scenarios_by_year: list) -> list:
     return out
 
 
+def _cost_block(our_bt: dict) -> dict:
+    """把避險成本明細與權衡表整理成前端可直接渲染的樣子。
+
+    網站前四頁都在教「怎麼避險」，這一塊負責回答「避險划不划算」：
+    把「回撤變淺」標上價格 —— 每換到 1 個百分點的回撤改善，要放棄幾個百分點的報酬。
+    """
+    c = our_bt.get("cost")
+    sweep = our_bt.get("cost_sweep") or []
+    if not c:
+        return None
+
+    rows = [{
+        "label": r["label"],
+        "costStr": f"{r['cost_annual'] * 100:.1f}%",
+        "retStr": f"{r['total_return']:.0f}%",
+        "mddStr": f"{r['max_drawdown']:.1f}%",
+        "ddGainStr": f"+{r['dd_improvement']:.1f}pp",
+        "giveupStr": f"−{r['return_giveup']:.0f}pp",
+        "priceStr": "—" if r["protection_price"] is None else f"{r['protection_price']:.0f}×",
+        "worth": r["worth_it"],
+    } for r in sweep]
+
+    best = min((r for r in sweep if r["protection_price"] is not None),
+               key=lambda r: r["protection_price"], default=None)
+    note = (
+        f"避險期間平均只降低 {c['avg_hedge_ratio'] * 100:.0f}% 的黃金曝險、一年換手 "
+        f"{c['turnover_per_year']:.1f} 次，所以「成本」本身不是這套策略的瓶頸："
+        f"就算用最貴的保護性賣權，累計成本也只拖累總報酬 "
+        f"{sweep[-1]['return_giveup'] - sweep[0]['return_giveup']:.0f} 個百分點。"
+    ) if sweep else ""
+    verdict = (
+        f"真正的問題在保護單價：即使假設保險完全免費，每換到 1 個百分點的回撤改善"
+        f"仍要放棄 {best['protection_price']:.0f} 個百分點的總報酬。"
+        "黃金長期走多，把曝險關掉的代價遠大於它擋掉的跌幅 —— "
+        "這套訊號式避險在本回測期間並不划算。"
+    ) if best else ""
+
+    return {
+        "annualStr": f"{c['cost_annual'] * 100:.1f}%",
+        "tcStr": f"{c['tc_oneway'] * 100:.2f}%",
+        "avgHedgeStr": f"{c['avg_hedge_ratio'] * 100:.0f}%",
+        "hedgedDaysStr": f"{c['hedged_days_ratio'] * 100:.0f}%",
+        "turnoverStr": f"{c['turnover_per_year']:.1f} 次/年",
+        "paidStr": f"{c['total'] * 100:.1f}%",
+        "dragStr": f"{c['drag_on_return'] * 100:.1f}pp",
+        "rows": rows,
+        "note": note,
+        "verdict": verdict,
+        "assumptions": (
+            "持有成本按避險比例逐日計提（年化 ÷ 252），調倉成本按避險比例變動量單邊收取 "
+            f"{c['tc_oneway'] * 100:.2f}%。各情境只變動持有成本，調倉成本一律照收，"
+            "因此「零持有成本」列並非完全免費。"),
+    }
+
+
 def build_backtest(our_bt: dict) -> dict:
     """組出設計檔用的 backtest.json。"""
     ec = our_bt["equity_curve"]
     dates = _downsample(ec["dates"], EQUITY_POINTS)
     hedged = _downsample(ec["hedge"], EQUITY_POINTS)
     unhedged = _downsample(ec["nohedge"], EQUITY_POINTS)
+    # 未扣避險成本的對照曲線（舊版行為＝假設保險免費）
+    hedged_gross = _downsample(ec.get("hedge_gross", ec["hedge"]), EQUITY_POINTS)
 
     sn = our_bt["stats"]["nohedge"]
     sh = our_bt["stats"]["hedge"]
+    sg = our_bt["stats"].get("hedge_gross", sh)
     u_tot, h_tot = sn["total_return"], sh["total_return"]
     cost_ratio = (u_tot - h_tot) / u_tot * 100 if u_tot else 0.0  # 放棄的上檔佔比
 
@@ -381,7 +440,8 @@ def build_backtest(our_bt: dict) -> dict:
 
     return {
         "meta": our_bt["meta"],
-        "equity_curve": {"dates": dates, "hedged": hedged, "unhedged": unhedged},
+        "equity_curve": {"dates": dates, "hedged": hedged, "unhedged": unhedged,
+                         "hedged_gross": hedged_gross},
         "metrics": {
             "total_return_hedged": round(h_tot * 100, 2),
             "total_return_unhedged": round(u_tot * 100, 2),
@@ -389,7 +449,12 @@ def build_backtest(our_bt: dict) -> dict:
             "max_drawdown_unhedged": round(sn["max_drawdown"] * 100, 1),
             "hedge_cost_ratio": round(cost_ratio, 1),
             "hedged_trigger_days": trigger_days,
+            "total_return_hedged_gross": round(sg["total_return"] * 100, 2),
+            # 保護單價：每換到 1pp 回撤改善要放棄幾 pp 總報酬（越小越划算）
+            "protection_price": our_bt.get("summary", {}).get("protection_price"),
         },
+        # 避險成本：明細 + 「成本 vs 回撤改善」權衡表
+        "cost": _cost_block(our_bt),
         # 優先用具名歷史事件（對比較有故事性）；抓不到訊號時退回逐年挑選
         "scenarios": (_event_scenarios(threshold)
                       or _pick_scenarios(our_bt.get("scenarios_by_year", []))),
