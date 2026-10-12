@@ -231,6 +231,8 @@
             </sc-for>
           </div>
           <div style="margin-top:auto;padding-top:16px;font-size:12px;color:#7A847E;line-height:1.6;">{{ futLead }}<span style="color:#C8A951;font-family:'JetBrains Mono',monospace;">{{ declinePctStr }}</span>{{ futTail }}</div>
+          <!-- 雙輸出的分工說明：避免「機率高但幅度小」被誤讀成模型自相矛盾 -->
+          <div style="margin-top:10px;padding:10px 12px;background:#F2F3F2;border-radius:7px;font-size:11px;color:#7A847E;line-height:1.6;">{{ headsNote }}</div>
         </div>
       </div>
     </div>
@@ -1657,6 +1659,7 @@ class Component extends DCLogic {
       recName:recObj.name, recStrength:recObj.strength, recLevelNote:recLevelNote, dashChart:dashChart, futureRows:futureRows, histLen:chartLen,
       dirSubtitle:dirSubtitle, futLead:futLead, futTail:futTail,
       futCardTitle:'未來'+hzWord+'預測', futCardSub:'LSTM horizon = '+hzDays,
+      headsNote:'模型有兩個輸出：分類頭給「下跌機率」（方向），迴歸頭給「預測價格」（幅度），兩者獨立，因此可能出現「機率高但幅度小」——也就是「很可能小跌」，並非自相矛盾。避險建議只採用下跌機率；價格線由模型預測的'+hzWord+'後目標價內插而成，中間各日為平滑推估，僅供參考。',
       modelOutLabel:'未來'+hzWord+'價格 + 下跌機率',
       /* simulator */
       sim:sim, h:h, unrealStr:this.ms(unreal), unrealColor:unreal>=0?'#1E8C66':'#C0473E',
