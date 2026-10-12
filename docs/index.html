@@ -690,6 +690,147 @@
     </div>
     </sc-if>
 
+
+    <!-- ============ VERIFY ============ -->
+    <sc-if value="{{ isVerify }}" hint-placeholder-val="{{ false }}">
+    <div>
+
+      <sc-if value="{{ noVerify }}" hint-placeholder-val="{{ false }}">
+      <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:28px;font-size:13px;color:#7A847E;line-height:1.7;">
+        找不到 <span style="font-family:'JetBrains Mono',monospace;">verification.json</span>。請在專案根目錄執行
+        <span style="font-family:'JetBrains Mono',monospace;color:#26302B;">python -m src.verify</span> 產生這份資料後重新整理。
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ hasVerify }}" hint-placeholder-val="{{ true }}">
+      <div>
+
+        <!-- 條件設定 -->
+        <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;margin-bottom:16px;">
+          <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:14px;">① 設定情境</div>
+          <div style="font-size:11.5px;color:#7A847E;margin-bottom:8px;">起始日</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;">
+            <sc-for list="{{ vfPresets }}" as="ps" hint-placeholder-count="6">
+              <span onClick="{{ ps.onClick }}" style="cursor:pointer;background:{{ ps.bg }};color:{{ ps.fg }};border:1px solid {{ ps.bd }};border-radius:7px;padding:8px 13px;font-size:12.5px;">{{ ps.label }}<span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;opacity:0.65;margin-left:7px;">{{ ps.dateStr }}</span></span>
+            </sc-for>
+          </div>
+          <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end;">
+            <label style="flex:1;min-width:170px;"><span style="display:block;font-size:11.5px;color:#7A847E;margin-bottom:6px;">自訂起始日</span>
+              <input type="date" value="{{ vfStart }}" onChange="{{ onVfStart }}" style="width:100%;background:#F2F3F2;border:1px solid #E4E7E5;color:#26302B;padding:9px 11px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:13.5px;"></label>
+            <label style="flex:1;min-width:170px;"><span style="display:block;font-size:11.5px;color:#7A847E;margin-bottom:6px;">投資本金（美元）</span>
+              <input type="number" value="{{ vfCapital }}" onChange="{{ onVfCapital }}" style="width:100%;background:#F2F3F2;border:1px solid #E4E7E5;color:#26302B;padding:9px 11px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:13.5px;"></label>
+            <div style="flex:1.4;min-width:230px;"><span style="display:block;font-size:11.5px;color:#7A847E;margin-bottom:6px;">持有期間</span>
+              <div style="display:flex;gap:7px;flex-wrap:wrap;">
+                <sc-for list="{{ vfHoldBtns }}" as="hb" hint-placeholder-count="4">
+                  <span onClick="{{ hb.onClick }}" style="cursor:pointer;background:{{ hb.bg }};color:{{ hb.fg }};border:1px solid {{ hb.bd }};border-radius:6px;padding:8px 14px;font-size:12.5px;">{{ hb.label }}</span>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:14px;padding-top:13px;border-top:1px solid #F0F2F6;font-size:12px;color:#7A847E;font-family:'JetBrains Mono',monospace;">{{ v.rangeStr }}　·　本金 {{ v.capStr }}　·　金價 {{ v.priceStartStr }} → {{ v.priceEndStr }} <span style="color:{{ v.priceChgColor }};">{{ v.priceChgStr }}</span></div>
+        </div>
+
+        <!-- ②③ 預測紀錄 → 到期驗證 -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;align-items:start;">
+          <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;">
+            <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">② 當時系統說了什麼</div>
+            <div style="font-size:12px;color:#7A847E;margin-bottom:16px;">{{ v.entDate }} 收盤後，用當時就算得出來的資料產生的預測</div>
+            <div style="display:flex;flex-direction:column;gap:11px;font-size:13px;">
+              <div style="display:flex;justify-content:space-between;"><span style="color:#7A847E;">當時金價</span><span style="font-family:'JetBrains Mono',monospace;color:#26302B;">{{ v.entPriceStr }}</span></div>
+              <div style="display:flex;justify-content:space-between;"><span style="color:#7A847E;">預測漲跌（{{ v.entHorizonStr }}）</span><span style="font-family:'JetBrains Mono',monospace;color:#26302B;">{{ v.entPredStr }}</span></div>
+              <div style="display:flex;justify-content:space-between;"><span style="color:#7A847E;">下跌機率</span><span style="font-family:'JetBrains Mono',monospace;color:#C8A951;">{{ v.entProbStr }}</span></div>
+              <div style="display:flex;justify-content:space-between;"><span style="color:#7A847E;">建議避險比例</span><span style="font-family:'JetBrains Mono',monospace;color:#26302B;">{{ v.entHedgeStr }}</span></div>
+            </div>
+          </div>
+
+          <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;">
+            <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">③ 到期後的真實結果</div>
+            <div style="font-size:12px;color:#7A847E;margin-bottom:16px;">{{ v.verDate }} 的實際市場價格</div>
+            <div style="display:flex;flex-direction:column;gap:11px;font-size:13px;">
+              <div style="display:flex;justify-content:space-between;"><span style="color:#7A847E;">實際金價</span><span style="font-family:'JetBrains Mono',monospace;color:#26302B;">{{ v.verPriceStr }}</span></div>
+              <div style="display:flex;justify-content:space-between;"><span style="color:#7A847E;">實際漲跌</span><span style="font-family:'JetBrains Mono',monospace;color:#26302B;">{{ v.verActualStr }}</span></div>
+              <div style="display:flex;justify-content:space-between;"><span style="color:#7A847E;">預測誤差</span><span style="font-family:'JetBrains Mono',monospace;color:#26302B;">{{ v.verErrStr }}</span></div>
+            </div>
+            <div style="margin-top:15px;padding:11px 14px;border-radius:8px;background:{{ v.verDirBg }};font-size:13px;font-weight:600;color:{{ v.verDirColor }};text-align:center;">{{ v.verDirStr }}</div>
+          </div>
+        </div>
+
+        <!-- ④ 投資成果 -->
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:16px;">
+          <div style="background:#E2F0EA;border-radius:10px;padding:18px 20px;">
+            <div style="font-size:11px;color:#1E8C66;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;">期末資產 · 有避險</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:23px;font-weight:600;color:#1E8C66;margin-top:12px;">{{ v.finalHStr }}</div>
+            <div style="font-size:11.5px;color:#1A6B4F;margin-top:6px;font-family:'JetBrains Mono',monospace;">{{ v.pnlHStr }}　{{ v.retHStr }}</div>
+          </div>
+          <div style="background:#F4E4E2;border-radius:10px;padding:18px 20px;">
+            <div style="font-size:11px;color:#C0473E;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;">期末資產 · 不避險</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:23px;font-weight:600;color:#C0473E;margin-top:12px;">{{ v.finalUStr }}</div>
+            <div style="font-size:11.5px;color:#8E332C;margin-top:6px;font-family:'JetBrains Mono',monospace;">{{ v.pnlUStr }}　{{ v.retUStr }}</div>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:18px 20px;">
+            <div style="font-size:11px;color:#7A847E;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;">避險讓你多賺／少賺</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:23px;font-weight:600;color:{{ v.diffColor }};margin-top:12px;">{{ v.diffStr }}</div>
+            <div style="font-size:11.5px;color:#7A847E;margin-top:6px;">其中避險成本 {{ v.costStr }}</div>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:18px 20px;">
+            <div style="font-size:11px;color:#7A847E;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;">最大虧損改善</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:23px;font-weight:600;color:{{ v.ddGainColor }};margin-top:12px;">{{ v.ddGainStr }}</div>
+            <div style="font-size:11.5px;color:#7A847E;margin-top:6px;font-family:'JetBrains Mono',monospace;">{{ v.mddUStr }} → {{ v.mddHStr }}</div>
+          </div>
+        </div>
+
+        <!-- 淨值走勢 -->
+        <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;margin-bottom:16px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+            <div style="font-size:14px;font-weight:600;color:#26302B;">資產走勢 · 照系統避險 vs 完全不避險</div>
+            <div style="display:flex;gap:16px;font-size:11.5px;font-family:'JetBrains Mono',monospace;color:#7A847E;">
+              <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:2px;background:#1E8C66;display:inline-block;"></span>有避險</span>
+              <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:2px;background:#C0473E;display:inline-block;"></span>不避險</span>
+            </div>
+          </div>
+          <div style="margin-top:10px;">{{ v.chart }}</div>
+        </div>
+
+        <!-- ⑤ 避險效果 + 預測準確度 -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;align-items:start;">
+          <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;">
+            <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:14px;">⑤ 避險動作統計</div>
+            <div style="display:flex;flex-direction:column;gap:11px;font-size:13px;">
+              <div style="display:flex;justify-content:space-between;"><span style="color:#7A847E;">有避險的天數</span><span style="font-family:'JetBrains Mono',monospace;color:#26302B;">{{ v.hedgedDaysStr }}</span></div>
+              <div style="display:flex;justify-content:space-between;"><span style="color:#7A847E;">平均避險比例</span><span style="font-family:'JetBrains Mono',monospace;color:#26302B;">{{ v.avgHedgeStr }}</span></div>
+              <div style="display:flex;justify-content:space-between;"><span style="color:#7A847E;">最大虧損 · 不避險</span><span style="font-family:'JetBrains Mono',monospace;color:#C0473E;">{{ v.mddUStr }}</span></div>
+              <div style="display:flex;justify-content:space-between;"><span style="color:#7A847E;">最大虧損 · 有避險</span><span style="font-family:'JetBrains Mono',monospace;color:#1E8C66;">{{ v.mddHStr }}</span></div>
+            </div>
+          </div>
+          <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;">
+            <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">⑥ 這段期間的預測準確度</div>
+            <div style="font-size:12px;color:#7A847E;margin-bottom:16px;">{{ v.hitDetailStr }}</div>
+            <div style="display:flex;gap:26px;align-items:flex-end;">
+              <div>
+                <div style="font-size:10.5px;color:#7A847E;font-family:'JetBrains Mono',monospace;text-transform:uppercase;">模型</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:34px;font-weight:600;color:{{ v.hitColor }};">{{ v.hitStr }}</div>
+              </div>
+              <div style="padding-bottom:6px;">
+                <div style="font-size:10.5px;color:#7A847E;font-family:'JetBrains Mono',monospace;text-transform:uppercase;">永遠猜漲（基準）</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:600;color:#7A847E;">{{ v.baseStr }}</div>
+              </div>
+            </div>
+            <div style="font-size:11.5px;color:#7A847E;margin-top:12px;line-height:1.7;">{{ v.hitNote }}</div>
+          </div>
+        </div>
+
+        <!-- ⑦ 驗證報告 -->
+        <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;">
+          <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:12px;">⑦ 驗證報告</div>
+          <div style="padding:14px;background:#F2F3F2;border-radius:8px;font-size:12.5px;color:#26302B;line-height:1.8;">{{ v.verdict }}</div>
+          <div style="margin-top:12px;font-size:11px;color:#9AA39D;line-height:1.7;font-family:'JetBrains Mono',monospace;">{{ v.srcNote }}</div>
+        </div>
+
+      </div>
+      </sc-if>
+    </div>
+    </sc-if>
+
   </main>
 </div>
 </x-dc>
@@ -756,6 +897,9 @@ class Component extends DCLogic {
       touched: sv.touched || {},
       restored: !!(sv.sim || sv.prin),  // 這次是不是從舊設定還原的
       profile: sv.profile || 'balanced',   // 風險偏好
+      vf: null,                           // 成效驗證序列（verification.json）
+      // 成效驗證的查詢條件：起始日、本金、持有的交易日數
+      vq: sv.vq || { start:'', capital:1000000, hold:60 },
       qtyUnit: sv.qtyUnit || 'oz',         // 新增部位時的預設單位
       // 多筆部位。舊版只有單一 sim.ounces，這裡自動轉成第一筆，不會遺失資料。
       positions: (sv.positions && sv.positions.length) ? sv.positions
@@ -946,8 +1090,10 @@ class Component extends DCLogic {
     const t='?t='+Date.now();
     Promise.all([
       fetch('./predictions.json'+t).then(r=>r.json()),
-      fetch('./backtest.json'+t).then(r=>r.json())
-    ]).then(([p,b])=>{
+      fetch('./backtest.json'+t).then(r=>r.json()),
+      // 成效驗證用的每日序列。這支是選用的：抓不到就隱藏該頁，不影響其他功能。
+      fetch('./verification.json'+t).then(r=>r.json()).catch(()=>null)
+    ]).then(([p,b,v])=>{
         const sv=this.loadPrefs(), tc=this.state.touched||{};
         // 計價單位：使用者選過就聽使用者的，否則用 JSON 給的預設
         const u=sv.unit||(p.units&&p.units.default)||'spot';
@@ -965,7 +1111,7 @@ class Component extends DCLogic {
           if(!tc.prem) pf.prem=Math.round(S*0.03);
           prin=Object.assign({},prin,pf);
         }
-        this.setState({ pred:p, bt:b, unit:u, sim, prin, loaded:true });
+        this.setState({ pred:p, bt:b, vf:v, unit:u, sim, prin, loaded:true });
       })
       .catch(()=>{ this.setState({ loaded:true }); });   // 失敗也解除動畫（用內建範例資料）
 
@@ -1124,6 +1270,68 @@ class Component extends DCLogic {
     return { avg: oz>0?cost/oz:0, costedOz: oz };
   }
   avgCost(){ return this.costBasis().avg; }
+
+  /* ---------------- 成效驗證 ----------------
+     從 start 起投入 capital、持有 hold 個交易日的逐日模擬。
+     用到的每日下跌機率全部來自 walk-forward（各時點只用該時點之前的資料訓練），
+     所以這是真正的事後驗證，不是拿現在的模型回頭套用。*/
+  vfSim(V,q,threshold){
+    if(!V||!V.dates||!V.dates.length) return null;
+    const d=V.dates, px=V.price, pb=V.prob, pr=V.pred;
+    const hz=V.meta.horizon, ca=V.meta.cost_annual, tc=V.meta.tc_oneway;
+    let i0=q.start?d.findIndex(x=>x>=q.start):-1;
+    if(i0<0) i0=Math.max(0,d.length-1-q.hold);          // 沒指定就用「最近一段」
+    const i1=Math.min(i0+Math.max(5,q.hold),d.length-1);
+    if(i1<=i0) return null;
+
+    const hOf=p=>(p==null)?0:Math.max(0,Math.min(1,(p-threshold)/(1-threshold)));
+    let eqH=1,eqU=1,prevH=0,pkH=1,pkU=1,mddH=0,mddU=0,hedgedDays=0,cost=0;
+    const curveH=[],curveU=[],hs=[];
+    for(let i=i0;i<i1;i++){
+      const r=px[i+1]/px[i]-1, h=hOf(pb[i]);
+      if(h>0) hedgedDays++;
+      const c=h*ca/252+Math.abs(h-prevH)*tc;            // 持有成本 + 調倉成本
+      cost+=c; prevH=h; hs.push(h);
+      eqH*=1+r*(1-h)-c; eqU*=1+r;
+      pkH=Math.max(pkH,eqH); pkU=Math.max(pkU,eqU);
+      mddH=Math.min(mddH,eqH/pkH-1); mddU=Math.min(mddU,eqU/pkU-1);
+      curveH.push(eqH); curveU.push(eqU);
+    }
+
+    // 起始日當天「系統說了什麼」——這就是要被驗證的那筆預測紀錄
+    const entry={ date:d[i0], price:px[i0], prob:pb[i0], pred:pr[i0], hedge:hOf(pb[i0]) };
+    // 到期驗證：horizon 天後的真實價格 vs 當時的預測
+    const iH=i0+hz;
+    const ver=(iH<d.length&&pr[i0]!=null)?{
+      date:d[iH], price:px[iH],
+      actual:px[iH]/px[i0]-1, predicted:pr[i0],
+      dirOK:((pr[i0]<0)===(px[iH]<px[i0])),
+      err:Math.abs(pr[i0]-(px[iH]/px[i0]-1))
+    }:null;
+
+    /* 期間內每一天的方向判斷，事後對了幾次（機率 > 50% 視為看跌）。
+       一定要同時算「永遠猜漲」的命中率當對照：模型的機率輸出偏空，
+       絕對命中率本來就低，沒有基準會把讀者誤導成「模型完全沒用」。*/
+    let nCall=0,nHit=0,nUp=0;
+    for(let i=i0;i<i1;i++){
+      const j=i+hz;
+      if(pb[i]==null||j>=d.length) continue;
+      nCall++;
+      const down=px[j]<px[i];
+      if((pb[i]>0.5)===down) nHit++;
+      if(!down) nUp++;                       // 事後是漲的天數 →「永遠猜漲」會對
+    }
+
+    const cap=Math.max(1,q.capital||0);
+    return { i0:i0,i1:i1, start:d[i0], end:d[i1], days:i1-i0,
+      priceStart:px[i0], priceEnd:px[i1], priceChg:(px[i1]/px[i0]-1)*100,
+      finalH:cap*eqH, finalU:cap*eqU, pnlH:cap*(eqH-1), pnlU:cap*(eqU-1),
+      retH:(eqH-1)*100, retU:(eqU-1)*100, mddH:mddH*100, mddU:mddU*100,
+      costMoney:cap*cost, hedgedDays:hedgedDays, avgHedge:hs.length?hs.reduce((a,b)=>a+b,0)/hs.length:0,
+      curveH:curveH, curveU:curveU, entry:entry, ver:ver,
+      nCall:nCall, nHit:nHit, hitRate:nCall?nHit/nCall:null,
+      baseRate:nCall?nUp/nCall:null, hz:hz };
+  }
 
   // 建議分級改成相對於使用者的風險門檻，而不是寫死 0.6/0.5/0.35。
   // 代入穩健(0.5)時，分界正好還原成原本的 0.6/0.5/0.35。
@@ -1284,7 +1492,8 @@ class Component extends DCLogic {
     const learnItems=[
       {key:'principles',label:'期貨 vs 期權 原理',sub:'互動損益圖解'},
       {key:'backtest',label:'回測結果',sub:'有避險 vs 無避險'},
-      {key:'model',label:'模型說明',sub:'LSTM 架構與因子'}
+      {key:'model',label:'模型說明',sub:'LSTM 架構與因子'},
+      {key:'verify',label:'成效驗證',sub:'當時照做賺賠多少'}
     ];
     const mkNav=(items,start)=>items.map((it,i)=>({ idx:'0'+(start+i), label:it.label, sub:it.sub, onClick:()=>setPage(it.key),
       bg: st.page===it.key?'#F2EEDF':'transparent', fg: st.page===it.key?'#26302B':'#7A847E',
@@ -1308,7 +1517,8 @@ class Component extends DCLogic {
       simulator:['決策核心','避險策略模擬器','輸入部位參數，並排比較四種避險策略的損益結構與成本。'],
       principles:['原理圖解','期貨 vs 期權','拖動參數，即時觀察兩種避險工具的損益曲線差異。'],
       backtest:['歷史驗證','回測結果','以 walk-forward 回測比較有避險與無避險的累積損益與回撤。'],
-      model:['方法論','模型說明','LSTM 架構、輸入因子與相對基準線的表現比較。'] };
+      model:['方法論','模型說明','LSTM 架構、輸入因子與相對基準線的表現比較。'],
+      verify:['事後驗證','成效驗證','挑一個歷史起始日與本金，用真實金價檢驗當時的預測與避險建議。'] };
     const tt=titles[st.page];
     // 每頁一行白話導引（新手老手皆宜，點到為止）
     const helps={
@@ -1317,7 +1527,8 @@ class Component extends DCLogic {
       principles:'重點：期貨＝把價格鎖死（跌不賠、漲也不賺）；保護性賣權＝買保險（跌有底、漲還能賺，但先付權利金）。拖滑桿看曲線變化。',
       backtest:'重點：把策略套回真實歷史。綠線（有避險）在大跌時較抗跌，代價是大漲時少賺一點——看回撤差距就懂避險值不值得。',
       // 這裡刻意不寫死結論數字（會跟表格脫節），只說明怎麼看；真正的結論由 modelVerdict 即時生成。
-    model:'說明：模型用過去 '+((pred.meta&&pred.meta.lookback)||60)+' 天的 6 種數據，預測未來'+hzWord+'（'+hzDays+'）的走勢與下跌機率。下方表格比較三種模型的價格誤差(RMSE)與方向判斷力(AUC，要大於 0.5 才算有訊號)，結論寫在表格下方。'
+    model:'說明：模型用過去 '+((pred.meta&&pred.meta.lookback)||60)+' 天的 6 種數據，預測未來'+hzWord+'（'+hzDays+'）的走勢與下跌機率。下方表格比較三種模型的價格誤差(RMSE)與方向判斷力(AUC，要大於 0.5 才算有訊號)，結論寫在表格下方。',
+      verify:'用法：選一個過去的日期與本金，系統會用「當時就算得出來的訊號」模擬你照做的結果，再用真實金價驗證——預測準不準、避險有沒有幫你少賠。'
     };
 
     /* dashboard */
@@ -1586,6 +1797,109 @@ class Component extends DCLogic {
       hStr:this.pct(s.hedged_return), hColor:s.hedged_return>=0?'#1E8C66':'#C0473E', hBarW:(Math.abs(s.hedged_return)/maxAbs*100).toFixed(0)+'%',
       costStr:s.hedge_cost.toFixed(1)+'%', verdict:verdict }; });
 
+    /* ---------------- 成效驗證 ---------------- */
+    const V=st.vf;
+    const setVQ=o=>{ const nq=Object.assign({},this.state.vq,o);
+                     this.savePrefs({vq:nq}); this.setState({vq:nq}); };
+    let vfRows=[], vfPresets=[], vfHoldBtns=[], vf=null;
+    if(V && V.dates && V.dates.length){
+      // 起始日快捷鍵：三個具代表性的歷史事件 + 三個相對時點
+      const lastIdx=V.dates.length-1;
+      const back=n=>V.dates[Math.max(0,lastIdx-n)];
+      const presets=[
+        ['2020-02-20','新冠股災'], ['2022-03-08','Fed 升息'], ['2025-01-02','黃金大行情'],
+        [back(252),'一年前'], [back(126),'半年前'], [back(63),'三個月前']
+      ].filter(x=>x[0] && x[0]>=V.dates[0]);
+      const cur=st.vq.start||presets[presets.length-1][0];
+      vfPresets=presets.map(([dt,lb])=>({ key:dt, label:lb, dateStr:dt,
+        onClick:()=>setVQ({start:dt}),
+        bg: cur===dt?'#E2F0EA':'#fff', fg: cur===dt?'#1A6B4F':'#7A847E',
+        bd: cur===dt?'rgba(30,140,102,0.45)':'#E4E7E5' }));
+      vfHoldBtns=[[20,'1 個月'],[40,'2 個月'],[60,'3 個月'],[120,'半年']].map(([n,lb])=>({
+        key:String(n), label:lb, onClick:()=>setVQ({hold:n}),
+        bg: st.vq.hold===n?'#26302B':'#fff', fg: st.vq.hold===n?'#fff':'#7A847E',
+        bd: st.vq.hold===n?'#26302B':'#E4E7E5' }));
+      vf=this.vfSim(V,Object.assign({},st.vq,{start:cur}),this.prof().threshold);
+    }
+
+    let vfView=null;
+    if(vf){
+      const e=vf.entry, v=vf.ver, diff=vf.pnlH-vf.pnlU;
+      const money=x=>(x>=0?'+':'-')+'$'+Math.round(Math.abs(x)).toLocaleString('en-US');
+      const cap=Math.round(Math.max(1,st.vq.capital||0));
+      // 淨值圖：兩條線都以「期初本金」為基準
+      const n=vf.curveH.length;
+      const all=vf.curveH.concat(vf.curveU,[1]);
+      const lo=Math.min.apply(null,all), hi=Math.max.apply(null,all), sp=(hi-lo)||0.01;
+      const ti=[0,Math.floor(n*0.33),Math.floor(n*0.66),n-1].filter((x,i,a)=>a.indexOf(x)===i&&x>=0);
+      const chart=this.chartEl({ w:920,h:280,pad:{l:62,r:16,t:16,b:26},
+        xmin:0,xmax:Math.max(1,n-1),ymin:lo-sp*0.08,ymax:hi+sp*0.08,
+        yticks:[lo,1,hi].filter((x,i,a)=>a.indexOf(x)===i),
+        yfmt:x=>'$'+Math.round(x*cap/1000)+'k',
+        series:[{pts:vf.curveU.map((y,i)=>[i,y]),stroke:'#C0473E',width:1.8},
+                {pts:vf.curveH.map((y,i)=>[i,y]),stroke:'#1E8C66',width:1.8}],
+        xticks:ti.map(i=>({x:i,label:this.dlabel(V.dates[vf.i0+i+1]||V.dates[vf.i1])})) });
+
+      // 綜合結論：照數字講，不預設避險一定好
+      const better=diff>0;
+      const ddGain=vf.mddH-vf.mddU;     // 正值＝回撤較淺
+      let verdict;
+      if(better) verdict='這段期間照系統避險比不避險多賺 '+money(diff).replace('+','')
+        +'，同時最大虧損少了 '+Math.abs(ddGain).toFixed(1)+' 個百分點——避險在這段期間是划算的。';
+      else verdict='這段期間金價上漲，避險讓你少賺了 '+money(-diff).replace('-','')
+        +'，但最大虧損少了 '+Math.abs(ddGain).toFixed(1)+' 個百分點。'
+        +'這正是保險的本質：漲的時候是成本，跌的時候才是保障。';
+
+      vfView={
+        rangeStr:vf.start+' ~ '+vf.end+'（'+vf.days+' 個交易日）',
+        capStr:'$'+cap.toLocaleString('en-US'),
+        priceStartStr:this.fmtP(vf.priceStart), priceEndStr:this.fmtP(vf.priceEnd),
+        priceChgStr:this.pct(vf.priceChg), priceChgColor:vf.priceChg>=0?'#1E8C66':'#C0473E',
+        /* ① 當時的預測紀錄 */
+        entDate:e.date, entPriceStr:this.fmtP(e.price),
+        entProbStr:e.prob==null?'—':(e.prob*100).toFixed(1)+'%',
+        entPredStr:e.pred==null?'—':this.pct(e.pred*100),
+        entHedgeStr:(e.hedge*100).toFixed(0)+'%',
+        entHorizonStr:vf.hz+' 個交易日後',
+        /* ② 到期驗證 */
+        hasVer:!!v,
+        verDate:v?v.date:'—', verPriceStr:v?this.fmtP(v.price):'—',
+        verActualStr:v?this.pct(v.actual*100):'—',
+        verPredStr:v?this.pct(v.predicted*100):'—',
+        verErrStr:v?(v.err*100).toFixed(1)+'pp':'—',
+        verDirStr:v?(v.dirOK?'方向正確':'方向錯誤'):'—',
+        verDirColor:v?(v.dirOK?'#1E8C66':'#C0473E'):'#7A847E',
+        verDirBg:v?(v.dirOK?'#E2F0EA':'#F4E4E2'):'#F2F3F2',
+        /* ③ 投資成果 */
+        finalHStr:'$'+Math.round(vf.finalH).toLocaleString('en-US'),
+        finalUStr:'$'+Math.round(vf.finalU).toLocaleString('en-US'),
+        pnlHStr:money(vf.pnlH), pnlHColor:vf.pnlH>=0?'#1E8C66':'#C0473E',
+        pnlUStr:money(vf.pnlU), pnlUColor:vf.pnlU>=0?'#1E8C66':'#C0473E',
+        retHStr:this.pct(vf.retH), retUStr:this.pct(vf.retU),
+        diffStr:money(diff), diffColor:diff>=0?'#1E8C66':'#C0473E',
+        costStr:'$'+Math.round(vf.costMoney).toLocaleString('en-US'),
+        /* ④ 避險效果 */
+        mddHStr:vf.mddH.toFixed(1)+'%', mddUStr:vf.mddU.toFixed(1)+'%',
+        ddGainStr:(ddGain>=0?'+':'')+ddGain.toFixed(1)+'pp',
+        ddGainColor:ddGain>=0?'#1E8C66':'#C0473E',
+        hedgedDaysStr:vf.hedgedDays+' / '+vf.days+' 天',
+        avgHedgeStr:(vf.avgHedge*100).toFixed(0)+'%',
+        /* ⑤ 預測準確度（一定要跟基準比，不然會被誤讀）*/
+        hitStr:vf.hitRate==null?'—':(vf.hitRate*100).toFixed(0)+'%',
+        baseStr:vf.baseRate==null?'—':(vf.baseRate*100).toFixed(0)+'%',
+        hitDetailStr:vf.nCall?('期間內 '+vf.nCall+' 次方向判斷，對了 '+vf.nHit+' 次'):'此區間尚無可驗證的判斷',
+        hitColor:(vf.hitRate!=null&&vf.baseRate!=null&&vf.hitRate>vf.baseRate)?'#1E8C66':'#C0473E',
+        hitNote:(vf.hitRate==null)?''
+          :((vf.hitRate>vf.baseRate)
+            ? '模型命中率高於「永遠猜漲」的基準，這段期間的方向判斷是有效的。'
+            : '模型命中率低於「永遠猜漲」的基準。原因是模型的機率輸出偏空（多數日子都在 50% 以上），'
+              +'絕對命中率因此偏低。模型真正可用的是「機率高低的相對排序」——機率越高的日子確實越容易下跌，'
+              +'這由模型說明頁的 AUC 衡量。本頁的避險比例採用的也是機率高低，而非機率是否過 50%。'),
+        chart:chart, verdict:verdict,
+        srcNote:V.meta.note
+      };
+    }
+
     /* model */
     const M=pred.metrics;
     const f3=v=>v.toFixed(3), f1=v=>(v*100).toFixed(1)+'%';
@@ -1648,7 +1962,7 @@ class Component extends DCLogic {
       syncMsg:st.syncMsg||'設定會自動同步到雲端',
       navDecide:navDecide, navLearn:navLearn, pageKicker:tt[0], pageTitle:tt[1], pageSubtitle:tt[2], beginnerHelp:helps[st.page],
       updatedStr:'資料截至 '+(pred.data_as_of||pred.current.date),
-      isDashboard:st.page==='dashboard', isSim:st.page==='simulator', isPrin:st.page==='principles', isBacktest:st.page==='backtest', isModel:st.page==='model',
+      isDashboard:st.page==='dashboard', isSim:st.page==='simulator', isPrin:st.page==='principles', isBacktest:st.page==='backtest', isModel:st.page==='model', isVerify:st.page==='verify',
       /* dashboard */
       priceStr:this.fmtP(S0), deltaStr:this.pct(deltaPct), deltaColor:delta>=0?'#1E8C66':'#C0473E',
       unitBtns:unitBtns, unitLabel:this.curUnit().label,
@@ -1704,7 +2018,12 @@ class Component extends DCLogic {
       scChart:scChart, scStats:scStats, scConc:scConc, scAssume:scAssume,
       svaRows:svaRows, svaNote:svaNote, sensRows:sensRows,
       /* model */
-      metricsRows:metricsRows, factors:factors, modelVerdict:modelVerdict
+      metricsRows:metricsRows, factors:factors, modelVerdict:modelVerdict,
+      /* 成效驗證 */
+      hasVerify:!!vfView, noVerify:!vfView, vfPresets:vfPresets, vfHoldBtns:vfHoldBtns,
+      vfCapital:st.vq.capital, onVfCapital:e=>setVQ({capital:Number(e.target.value)||0}),
+      vfStart:(st.vq.start||''), onVfStart:e=>setVQ({start:e.target.value}),
+      v:(vfView||{})
     };
   }
 }
