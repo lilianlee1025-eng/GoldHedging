@@ -217,8 +217,8 @@
         </div>
 
         <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;display:flex;flex-direction:column;">
-          <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">未來 5 日預測</div>
-          <div style="font-size:11.5px;color:#7A847E;margin-bottom:14px;font-family:'JetBrains Mono',monospace;">LSTM horizon = 5</div>
+          <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">{{ futCardTitle }}</div>
+          <div style="font-size:11.5px;color:#7A847E;margin-bottom:14px;font-family:'JetBrains Mono',monospace;">{{ futCardSub }}</div>
           <div style="display:flex;flex-direction:column;gap:2px;">
             <sc-for list="{{ futureRows }}" as="fr" hint-placeholder-count="5">
               <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #E4E7E5;">
@@ -643,7 +643,7 @@
           <span style="color:#AAB1AC;font-family:'JetBrains Mono',monospace;">→</span>
           <div style="background:#F2F3F2;border:1px solid #E4E7E5;border-radius:8px;padding:14px 18px;text-align:center;flex:none;"><div style="font-size:12px;color:#26302B;font-weight:600;">Dropout + Dense</div><div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#7A847E;margin-top:5px;">FC → 32</div></div>
           <span style="color:#AAB1AC;font-family:'JetBrains Mono',monospace;">→</span>
-          <div style="background:rgba(200,169,81,0.12);border:1px solid #C8A951;border-radius:8px;padding:14px 18px;text-align:center;flex:none;"><div style="font-size:12px;color:#C8A951;font-weight:600;">輸出</div><div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#A98F3E;margin-top:5px;">未來 5 日價格 + 下跌機率</div></div>
+          <div style="background:rgba(200,169,81,0.12);border:1px solid #C8A951;border-radius:8px;padding:14px 18px;text-align:center;flex:none;"><div style="font-size:12px;color:#C8A951;font-weight:600;">輸出</div><div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#A98F3E;margin-top:5px;">{{ modelOutLabel }}</div></div>
         </div>
       </div>
 
@@ -1290,6 +1290,18 @@ class Component extends DCLogic {
     const navDecide=mkNav(decideItems,1);
     const navLearn=mkNav(learnItems,decideItems.length+1);
 
+    /* 預測期間（horizon）一律從 meta 讀，不寫死。
+       改 config.py 的 HORIZON 後，網頁上所有「未來 N 日」會自動跟著變。*/
+    const hz=(pred.meta&&pred.meta.horizon)||5;
+    const _cn=n=>({1:'一',2:'兩',3:'三',4:'四',5:'五',6:'六',7:'七',8:'八',9:'九',10:'十'}[n]||n);
+    /* 換算成中文時要誠實：hz 的單位是「交易日」，一週 5 天、一個月約 21 天。
+       42 天以下一律用「週」講（30 交易日 = 6 週，講成「一個月」會低估近五成）；
+       42 天以上才用「月」。*/
+    const hzWord = hz>=42 ? _cn(Math.round(hz/21))+'個月'
+                 : hz>=5  ? _cn(Math.round(hz/5))+'週'
+                 : hz+' 日';
+    const hzDays = hz+' 個交易日';
+
     const titles={ dashboard:['即時看板','黃金避險總覽','LSTM 預測訊號、下跌機率與建議避險方向一覽。'],
       simulator:['決策核心','避險策略模擬器','輸入部位參數，並排比較四種避險策略的損益結構與成本。'],
       principles:['原理圖解','期貨 vs 期權','拖動參數，即時觀察兩種避險工具的損益曲線差異。'],
@@ -1303,7 +1315,7 @@ class Component extends DCLogic {
       principles:'重點：期貨＝把價格鎖死（跌不賠、漲也不賺）；保護性賣權＝買保險（跌有底、漲還能賺，但先付權利金）。拖滑桿看曲線變化。',
       backtest:'重點：把策略套回真實歷史。綠線（有避險）在大跌時較抗跌，代價是大漲時少賺一點——看回撤差距就懂避險值不值得。',
       // 這裡刻意不寫死結論數字（會跟表格脫節），只說明怎麼看；真正的結論由 modelVerdict 即時生成。
-    model:'說明：模型用過去 60 天的 6 種數據，預測未來 5 天的走勢與下跌機率。下方表格比較三種模型的價格誤差(RMSE)與方向判斷力(AUC，要大於 0.5 才算有訊號)，結論寫在表格下方。'
+    model:'說明：模型用過去 '+((pred.meta&&pred.meta.lookback)||60)+' 天的 6 種數據，預測未來'+hzWord+'（'+hzDays+'）的走勢與下跌機率。下方表格比較三種模型的價格誤差(RMSE)與方向判斷力(AUC，要大於 0.5 才算有訊號)，結論寫在表格下方。'
     };
 
     /* dashboard */
@@ -1349,7 +1361,20 @@ class Component extends DCLogic {
     } else {
       chartLen=0; dashChart=this.chartEl({w:920,h:300,xmin:0,xmax:1,ymin:0,ymax:1});
     }
-    const futureRows=Fu.map((d,i)=>{ const prev=i===0?S0:Fu[i-1].price; const dd=d.price-prev; return {date:this.dlabel(d.date),priceStr:this.fmtP(d.price),deltaStr:this.pct(dd/prev*100),color:dd>=0?'#1E8C66':'#C0473E'}; });
+    /* 未來預測列表。horizon 短時逐日列出；拉長到一個月（21 筆）會爆版，
+       因此等距抽樣最多 6 列並保留最後一天。抽樣後相鄰兩列不再是連續交易日，
+       逐日漲跌沒有意義，所以百分比改成「相對今天現價」的累計變化。*/
+    const _pick=(arr,n)=>{
+      if(arr.length<=n) return arr.map((d,i)=>[d,i]);
+      const step=(arr.length-1)/(n-1), out=[];
+      for(let k=0;k<n;k++){ const i=Math.round(k*step); if(!out.length||out[out.length-1][1]!==i) out.push([arr[i],i]); }
+      return out;
+    };
+    const futureRows=_pick(Fu,6).map(([d,i])=>{
+      const dd=d.price-S0;
+      return { date:this.dlabel(d.date), priceStr:this.fmtP(d.price),
+               deltaStr:this.pct(dd/S0*100), color:dd>=0?'#1E8C66':'#C0473E' };
+    });
     const recObj=this.rec(pred.decline_prob);
     // 把下跌機率對應到四級區間的白話說明
     const dp=pred.decline_prob;
@@ -1357,11 +1382,11 @@ class Component extends DCLogic {
     const recLevelNote = '下跌機率 '+(dp*100).toFixed(0)+'%，落在「'+recObj.strength+'」（'+recRange+'）區間';
     const dirDown = pred.direction==='down';
     /* 依真實資料產生敘述（取代原本寫死的「走弱」文字）*/
-    const fut5Pct = Fu.length ? (Fu[Fu.length-1].price - S0)/S0*100 : 0;
-    const trendWord = fut5Pct>0.3?'走升':(fut5Pct<-0.3?'走弱':'大致持平');
-    const dirSubtitle = '模型預期 5 日後'+trendWord+'（'+this.pct(fut5Pct)+'）';
+    const futEndPct = Fu.length ? (Fu[Fu.length-1].price - S0)/S0*100 : 0;
+    const trendWord = futEndPct>0.3?'走升':(futEndPct<-0.3?'走弱':'大致持平');
+    const dirSubtitle = '模型預期'+hzWord+'後'+trendWord+'（'+this.pct(futEndPct)+'）';
     const declineHigh = pred.decline_prob >= ((bt.meta&&bt.meta.hedge_threshold)||0.5);
-    const futLead = '未來 5 日預測'+trendWord+'，下跌機率 ';
+    const futLead = '未來'+hzWord+'預測'+trendWord+'，下跌機率 ';
     const futTail = declineHigh ? '，已超過門檻，建議啟動避險。' : '，仍低於門檻，可暫不避險。';
     /* 計價單位切換按鈕 */
     const setUnit=u=>{ this.savePrefs({unit:u}); this.setState({unit:u}); };
@@ -1631,6 +1656,8 @@ class Component extends DCLogic {
       declinePctStr:(pred.decline_prob*100).toFixed(0)+'%', threshStr:(bt.meta.hedge_threshold*100).toFixed(0)+'%',
       recName:recObj.name, recStrength:recObj.strength, recLevelNote:recLevelNote, dashChart:dashChart, futureRows:futureRows, histLen:chartLen,
       dirSubtitle:dirSubtitle, futLead:futLead, futTail:futTail,
+      futCardTitle:'未來'+hzWord+'預測', futCardSub:'LSTM horizon = '+hzDays,
+      modelOutLabel:'未來'+hzWord+'價格 + 下跌機率',
       /* simulator */
       sim:sim, h:h, unrealStr:this.ms(unreal), unrealColor:unreal>=0?'#1E8C66':'#C0473E',
       strategies:strategies,

@@ -292,12 +292,30 @@ def _strategy_comparison(threshold: float) -> dict:
         row("期貨 · 依訊號", fut_sig, "signal"),
         row("期貨 · 無腦每月", fut_all, "always"),
     ]
+    # 訊號到底有沒有價值：拿「依訊號避險」對照「無腦每月都避險」，同一種工具、同一段期間。
+    # 這句結論必須跟著數字走——換 horizon 或重訓後優劣可能翻轉，寫死會變成自打嘴巴。
     put_sig_ret = (put_sig[-1] - 1) * 100; put_all_ret = (put_all[-1] - 1) * 100
-    signal_value_note = (
-        f"以保護性賣權為例：依模型訊號選擇性避險報酬 {put_sig_ret:.0f}%，明顯高於"
-        f"無腦每月都避險的 {put_all_ret:.0f}%（回撤相近）。代表模型訊號能在「該避才避」，"
-        "減少不必要的避險成本、保留上漲——預測訊號帶來實質價值。"
-    )
+    put_sig_mdd = mdd(put_sig) * 100;      put_all_mdd = mdd(put_all) * 100
+    ret_win = put_sig_ret > put_all_ret          # 報酬較高
+    mdd_win = put_sig_mdd > put_all_mdd          # 回撤較淺（負值，越大越好）
+    head = (f"以保護性賣權為例，同樣的工具、同一段期間："
+            f"依模型訊號選擇性避險 {put_sig_ret:.0f}% / 回撤 {put_sig_mdd:.1f}%，"
+            f"無腦每月都避險 {put_all_ret:.0f}% / 回撤 {put_all_mdd:.1f}%。")
+    if ret_win and mdd_win:
+        tail = ("依訊號在報酬與回撤上雙雙勝出，代表模型能在「該避才避」，"
+                "減少不必要的避險成本又保留上漲——預測訊號帶來實質價值。")
+    elif mdd_win:
+        tail = (f"依訊號的報酬較低（少 {put_all_ret - put_sig_ret:.0f} 個百分點），"
+                f"但回撤淺了 {put_sig_mdd - put_all_mdd:.1f} 個百分點。"
+                "也就是說訊號把避險的力道集中在風險較高的時段，買到更好的保護，"
+                "代價是放棄更多上漲——有價值，但方向是「加強保護」而非「省下成本」。")
+    elif ret_win:
+        tail = (f"依訊號的報酬較高（多 {put_sig_ret - put_all_ret:.0f} 個百分點），"
+                "但回撤並未改善，代表訊號的作用是少付避險成本，而非買到更好的保護。")
+    else:
+        tail = ("依訊號在報酬與回撤上都沒有勝過無腦每月避險，"
+                "代表在這個設定下，模型訊號尚未展現出選擇時機的價值。")
+    signal_value_note = head + tail
 
     # 敏感度分析：保護性賣權在不同下跌機率門檻
     sensitivity = []
