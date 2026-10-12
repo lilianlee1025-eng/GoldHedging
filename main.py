@@ -25,6 +25,7 @@ from src.model import compare_baselines
 from src.backtest import walk_forward, run_strategy
 from src.output_json import forecast_future, save_predictions_json, save_backtest_json
 from src.design_export import export as export_design_json
+from src.verify import export as export_verification
 
 
 def main(quick: bool = False, refresh: bool = False):
@@ -80,7 +81,8 @@ def main(quick: bool = False, refresh: bool = False):
     # 7) 轉成前端設計檔（Gold Hedge System）所需的 JSON
     print("\n[步驟 7] 產生前端設計檔資料")
     f1, f2 = export_design_json()
-    print(f"   {f1}\n   {f2}")
+    f3 = export_verification()      # 成效驗證頁與預測紀錄簿的每日序列
+    print(f"   {f1}\n   {f2}\n   {f3}")
 
     print("\n完成！")
     print("  · 原生 JSON：outputs/predictions.json、outputs/backtest.json")

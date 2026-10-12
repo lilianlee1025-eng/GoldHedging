@@ -18,6 +18,7 @@ from src.data_collection import build_dataset
 from src.model import compare_baselines
 from src.output_json import forecast_future, save_predictions_json
 from src.design_export import export as export_design_json
+from src.verify import export as export_verification
 
 
 def main():
@@ -33,11 +34,14 @@ def main():
 
     print("[每日更新 4/4] 產生前端設計檔 JSON（含 K 棒/單位/時間）...")
     f1, f2 = export_design_json()
+    # verification.json 的價格序列每天都要跟著延長，否則預測紀錄到期後驗不出結果
+    f3 = export_verification()
 
     print("完成：")
     print("  ", j1)
     print("  ", f1)
     print("  ", f2)
+    print("  ", f3)
     print(f"  最新金價 {future['current_price']}（資料截至 {future['current_date']}），"
           f"下跌機率 {future['prob_down']:.0%}")
 

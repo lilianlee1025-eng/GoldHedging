@@ -233,6 +233,11 @@
           <div style="margin-top:auto;padding-top:16px;font-size:12px;color:#7A847E;line-height:1.6;">{{ futLead }}<span style="color:#C8A951;font-family:'JetBrains Mono',monospace;">{{ declinePctStr }}</span>{{ futTail }}</div>
           <!-- 雙輸出的分工說明：避免「機率高但幅度小」被誤讀成模型自相矛盾 -->
           <div style="margin-top:10px;padding:10px 12px;background:#F2F3F2;border-radius:7px;font-size:11px;color:#7A847E;line-height:1.6;">{{ headsNote }}</div>
+          <!-- 把當下的預測存檔，到期後在「成效驗證」頁自動驗證 -->
+          <div onClick="{{ onLogPred }}" style="margin-top:10px;text-align:center;background:#26302B;color:#fff;border-radius:7px;padding:10px;cursor:pointer;font-size:12.5px;">{{ logBtnLabel }}</div>
+          <sc-if value="{{ hasPlogMsg }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:8px;font-size:11px;color:#7A847E;line-height:1.6;text-align:center;">{{ plogMsg }}</div>
+          </sc-if>
         </div>
       </div>
     </div>
@@ -705,6 +710,55 @@
       <sc-if value="{{ hasVerify }}" hint-placeholder-val="{{ true }}">
       <div>
 
+        <!-- 預測紀錄簿：記錄當下不知道答案，因此無法事後挑選有利區間 -->
+        <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;margin-bottom:16px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;">
+            <div>
+              <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">我的預測紀錄</div>
+              <div style="font-size:12px;color:#7A847E;line-height:1.6;max-width:620px;">在總覽頁按「記錄這次預測」把當下的判斷存起來，到期後這裡會自動用真實金價驗證。<b style="color:#26302B;">記錄的當下沒有人知道答案</b>，所以不可能事後挑選對自己有利的區間——這是比下方「挑歷史日期」更強的驗證方式。</div>
+            </div>
+            <sc-if value="{{ hasPlogStats }}" hint-placeholder-val="{{ true }}">
+            <div style="text-align:right;flex:none;">
+              <div style="font-size:10.5px;color:#7A847E;font-family:'JetBrains Mono',monospace;text-transform:uppercase;">方向命中率</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:600;color:{{ plogStats.rateColor }};">{{ plogStats.rateStr }}</div>
+              <div style="font-size:11px;color:#7A847E;font-family:'JetBrains Mono',monospace;">{{ plogStats.hit }} / {{ plogStats.done }} 已到期</div>
+            </div>
+            </sc-if>
+          </div>
+
+          <sc-if value="{{ noPlog }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:16px;padding:16px;background:#F2F3F2;border-radius:8px;font-size:12.5px;color:#7A847E;line-height:1.7;">還沒有任何紀錄。登入後到<b style="color:#26302B;">總覽 Dashboard</b> 按「📌 記錄這次預測」，就會在這裡出現。</div>
+          </sc-if>
+
+          <sc-if value="{{ hasPlog }}" hint-placeholder-val="{{ true }}">
+          <div style="margin-top:16px;display:flex;flex-direction:column;gap:11px;">
+            <sc-for list="{{ plogRows }}" as="pl" hint-placeholder-count="2">
+              <div style="border:1px solid #E4E7E5;border-radius:9px;padding:15px 17px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+                  <span style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                    <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#26302B;">{{ pl.loggedOn }}</span>
+                    <span style="font-size:10.5px;color:#fff;background:{{ pl.statusColor }};padding:2px 9px;border-radius:4px;">{{ pl.statusStr }}</span>
+                    <span style="font-size:11.5px;color:#7A847E;">{{ pl.detailStr }}</span>
+                  </span>
+                  <span style="display:flex;align-items:center;gap:12px;flex:none;">
+                    <span style="font-family:'JetBrains Mono',monospace;font-size:14px;color:{{ pl.pnlColor }};">{{ pl.pnlStr }}</span>
+                    <span onClick="{{ pl.onDel }}" title="刪除這筆" style="font-size:14px;color:#C0473E;cursor:pointer;padding:0 4px;">×</span>
+                  </span>
+                </div>
+                <div style="margin-top:12px;display:grid;grid-template-columns:repeat(5,1fr);gap:10px;font-family:'JetBrains Mono',monospace;">
+                  <span><span style="display:block;font-size:10px;color:#9AA39D;margin-bottom:3px;">當時金價</span><span style="font-size:12.5px;color:#26302B;">{{ pl.priceStr }}</span></span>
+                  <span><span style="display:block;font-size:10px;color:#9AA39D;margin-bottom:3px;">預測漲跌</span><span style="font-size:12.5px;color:#26302B;">{{ pl.predStr }}</span></span>
+                  <span><span style="display:block;font-size:10px;color:#9AA39D;margin-bottom:3px;">實際漲跌</span><span style="font-size:12.5px;color:#26302B;">{{ pl.actualStr }}</span></span>
+                  <span><span style="display:block;font-size:10px;color:#9AA39D;margin-bottom:3px;">誤差</span><span style="font-size:12.5px;color:#26302B;">{{ pl.errStr }}</span></span>
+                  <span><span style="display:block;font-size:10px;color:#9AA39D;margin-bottom:3px;">下跌機率 / 避險</span><span style="font-size:12.5px;color:#26302B;">{{ pl.probStr }} / {{ pl.hedgeStr }}</span></span>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="margin-top:12px;font-size:11px;color:#9AA39D;line-height:1.7;">損益以記錄當下的避險比例固定持有到期（靜態避險）計算，並扣除持有成本；本金為記錄當下成效驗證頁設定的金額。紀錄寫入後不可修改，只能刪除。</div>
+          </sc-if>
+        </div>
+
         <!-- 條件設定 -->
         <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;margin-bottom:16px;">
           <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:14px;">① 設定情境</div>
@@ -903,6 +957,8 @@ class Component extends DCLogic {
       vf: null,                           // 成效驗證序列（verification.json）
       // 成效驗證的查詢條件：起始日、本金、持有的交易日數
       vq: sv.vq || { start:'', capital:1000000, hold:60 },
+      plog: [],                           // 預測紀錄簿（登入後從雲端讀）
+      plogMsg: '', plogBusy: false,
       qtyUnit: sv.qtyUnit || 'oz',         // 新增部位時的預設單位
       // 多筆部位。舊版只有單一 sim.ounces，這裡自動轉成第一筆，不會遺失資料。
       positions: (sv.positions && sv.positions.length) ? sv.positions
@@ -958,6 +1014,69 @@ class Component extends DCLogic {
     this.savePrefs(nx);
     this._applying=false;
     this.setState(nx);
+  }
+
+  /* ================= 預測紀錄簿 =================
+     「今天先記下來，到期後用真實金價驗證」。
+     和成效驗證頁的差別：那頁挑的是歷史日期，答案早就存在，所以永遠會被質疑
+     「是不是挑了對自己有利的區間」；這裡記錄的當下沒有人知道答案，無法事後挑選。
+     紀錄一旦寫入就不提供修改（資料表也沒開 update 政策），只能刪除。*/
+  async loadPredLog(){
+    const sb=this.sb(), user=this.state.user;
+    if(!sb||!user){ this.setState({plog:[]}); return; }
+    try{
+      const r=await sb.from('prediction_log').select('*')
+        .eq('user_id',user.id).order('logged_on',{ascending:false});
+      if(r.error) throw r.error;
+      this.setState({plog:r.data||[]});
+    }catch(e){ this.setState({plog:[], plogMsg:'讀取紀錄失敗：'+(e.message||e)}); }
+  }
+
+  async logPrediction(){
+    const sb=this.sb(), user=this.state.user, p=this.state.pred;
+    if(!sb||!user||!p){ this.setState({plogMsg:'請先登入才能保存預測紀錄。'}); return; }
+    if(this.state.plogBusy) return;
+    this.setState({plogBusy:true, plogMsg:''});
+    try{
+      const hz=(p.meta&&p.meta.horizon)||30;
+      const loggedOn=p.data_as_of||p.current.date;
+      const th=this.prof().threshold;
+      const prob=p.decline_prob;
+      const hedge=Math.max(0,Math.min(1,(prob-th)/(1-th)));
+      // 預測報酬：由現價與模型目標價反推（future 最後一筆就是 horizon 天後的目標價）
+      const S0=p.current.price, tgt=(p.future&&p.future.length)?p.future[p.future.length-1].price:S0;
+      // 到期日只是給人看的概估：horizon 個交易日 ≈ horizon×7/5 個日曆天
+      const due=new Date(loggedOn+'T00:00:00');
+      due.setDate(due.getDate()+Math.round(hz*7/5));
+      const r=await sb.from('prediction_log').insert({
+        user_id:user.id, logged_on:loggedOn, horizon:hz,
+        due_on:due.toISOString().slice(0,10),
+        price_at_log:Number(S0.toFixed(2)),
+        pred_return:Number((tgt/S0-1).toFixed(6)),
+        prob_down:Number(prob.toFixed(4)),
+        hedge_ratio:Number(hedge.toFixed(4)),
+        capital:Math.max(1,Math.round(this.state.vq.capital||1000000)),
+        risk_profile:this.state.profile
+      }).select();
+      if(r.error){
+        // 唯一索引擋下同一天重複記錄
+        const dup=(r.error.code==='23505')||/duplicate|unique/i.test(r.error.message||'');
+        throw new Error(dup?('今天（'+loggedOn+'）已經記錄過了，同一天只會保留一筆。'):r.error.message);
+      }
+      this.setState({plogMsg:'已記錄 '+loggedOn+' 的預測，到期後會自動驗證。'});
+      await this.loadPredLog();
+    }catch(e){ this.setState({plogMsg:(e.message||String(e))}); }
+    finally{ this.setState({plogBusy:false}); }
+  }
+
+  async delPredLog(id){
+    const sb=this.sb(), user=this.state.user;
+    if(!sb||!user) return;
+    try{
+      const r=await sb.from('prediction_log').delete().eq('id',id).eq('user_id',user.id);
+      if(r.error) throw r.error;
+      await this.loadPredLog();
+    }catch(e){ this.setState({plogMsg:'刪除失敗：'+(e.message||e)}); }
   }
 
   // 登入後把雲端與本機比對：誰新用誰（last-write-wins）
@@ -1123,7 +1242,7 @@ class Component extends DCLogic {
     if(sb){
       sb.auth.getSession().then(({data})=>{
         const u=data&&data.session?data.session.user:null;
-        if(u){ this.setState({user:u}); this.pullPrefs(u); }
+        if(u){ this.setState({user:u}); this.pullPrefs(u); this.loadPredLog(); }
       }).catch(()=>{});
       // 登入／登出／換帳號時同步更新畫面
       sb.auth.onAuthStateChange((_e,session)=>{
@@ -1473,7 +1592,7 @@ class Component extends DCLogic {
             // 專案若開了「Confirm email」，這時還不會有 session，要先去收信
             if(data.session){
               this.setState({authOpen:false,auth:{email:'',pw:''}});
-              this.pullPrefs(data.session.user);
+              this.pullPrefs(data.session.user); this.loadPredLog();
             }else{
               this.setState({authMsg:'註冊成功，請到信箱點確認連結後再登入',authMsgKind:'ok'});
             }
@@ -1481,7 +1600,7 @@ class Component extends DCLogic {
             const {data,error}=await sb.auth.signInWithPassword({email:email,password:pw});
             if(error) throw error;
             this.setState({authOpen:false,auth:{email:'',pw:''}});
-            this.pullPrefs(data.user);
+            this.pullPrefs(data.user); this.loadPredLog();
           }
         }catch(err){
           this.setState({authMsg:this.authErrMsg(err),authMsgKind:'err'});
@@ -1920,6 +2039,53 @@ class Component extends DCLogic {
       };
     }
 
+    /* 預測紀錄簿：逐筆用真實金價驗證。
+       到期判定用「logged_on 往後數 horizon 個交易日」，而不是日曆天，
+       這樣跟模型的 horizon 定義完全一致，也不必處理假日。*/
+    let plogRows=[], plogStats=null;
+    if(V && V.dates && V.dates.length){
+      const d=V.dates, px=V.price, ca=V.meta.cost_annual;
+      const money=x=>(x>=0?'+':'-')+'$'+Math.round(Math.abs(x)).toLocaleString('en-US');
+      let done=0, hit=0;
+      plogRows=(st.plog||[]).map(row=>{
+        const i0=d.indexOf(row.logged_on);
+        const iH=(i0>=0)?i0+row.horizon:-1;
+        const ready=(i0>=0 && iH<d.length);
+        const S0=Number(row.price_at_log), pr=Number(row.pred_return);
+        const base={ id:row.id, loggedOn:row.logged_on, dueOn:row.due_on||'—',
+          priceStr:this.fmtP(S0), predStr:this.pct(pr*100),
+          probStr:(Number(row.prob_down)*100).toFixed(0)+'%',
+          hedgeStr:(Number(row.hedge_ratio)*100).toFixed(0)+'%',
+          capStr:'$'+Math.round(Number(row.capital||0)).toLocaleString('en-US'),
+          onDel:()=>this.delPredLog(row.id) };
+        if(!ready){
+          const left=(i0>=0)?(row.horizon-(d.length-1-i0)):row.horizon;
+          return Object.assign(base,{ ready:false, pending:true,
+            statusStr:'尚未到期', statusColor:'#7A847E', statusBg:'#F2F3F2',
+            actualStr:'—', errStr:'—', pnlStr:'—', pnlColor:'#7A847E',
+            detailStr:(i0<0?'等待資料更新':('還需 '+Math.max(1,left)+' 個交易日')) });
+        }
+        const S1=px[iH], actual=S1/S0-1;
+        const ok=((pr<0)===(actual<0));
+        done++; if(ok) hit++;
+        // 損益：以記錄當下的避險比例固定持有到期（靜態避險），扣持有成本
+        const h=Number(row.hedge_ratio), cap=Number(row.capital||0);
+        const cost=h*ca*(row.horizon/252);
+        const retH=actual*(1-h)-cost;
+        return Object.assign(base,{ ready:true, pending:false,
+          statusStr:ok?'方向正確':'方向錯誤',
+          statusColor:ok?'#1E8C66':'#C0473E', statusBg:ok?'#E2F0EA':'#F4E4E2',
+          actualStr:this.pct(actual*100), errStr:(Math.abs(pr-actual)*100).toFixed(1)+'pp',
+          pnlStr:money(cap*retH), pnlColor:(cap*retH)>=0?'#1E8C66':'#C0473E',
+          detailStr:'到期金價 '+this.fmtP(S1)+'　·　不避險 '+money(cap*actual) });
+      });
+      plogStats = (st.plog||[]).length
+        ? { total:(st.plog||[]).length, done:done, hit:hit,
+            rateStr: done? (hit/done*100).toFixed(0)+'%' : '—',
+            rateColor: (done && hit/done>0.5)?'#1E8C66':'#C0473E' }
+        : null;
+    }
+
     /* model */
     const M=pred.metrics;
     const f3=v=>v.toFixed(3), f1=v=>(v*100).toFixed(1)+'%';
@@ -2041,6 +2207,12 @@ class Component extends DCLogic {
       metricsRows:metricsRows, factors:factors, modelVerdict:modelVerdict,
       /* 成效驗證 */
       hasVerify:!!vfView, noVerify:!vfView, vfPresets:vfPresets, vfHoldBtns:vfHoldBtns,
+      /* 預測紀錄簿 */
+      plogRows:plogRows, hasPlog:plogRows.length>0, noPlog:plogRows.length===0,
+      plogStats:(plogStats||{}), hasPlogStats:!!plogStats,
+      plogMsg:st.plogMsg, hasPlogMsg:!!st.plogMsg,
+      onLogPred:()=>this.logPrediction(),
+      logBtnLabel:st.plogBusy?'記錄中…':'📌 記錄這次預測',
       vfCapital:st.vq.capital, onVfCapital:e=>setVQ({capital:Number(e.target.value)||0}),
       vfStart:(st.vq.start||''), onVfStart:e=>setVQ({start:e.target.value}),
       vfMin:(V&&V.dates?V.dates[0]:''), vfMax:(V&&V.dates?V.dates[V.dates.length-1]:''),
