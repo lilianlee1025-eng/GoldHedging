@@ -715,8 +715,8 @@
             </sc-for>
           </div>
           <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end;">
-            <label style="flex:1;min-width:170px;"><span style="display:block;font-size:11.5px;color:#7A847E;margin-bottom:6px;">自訂起始日</span>
-              <input type="date" value="{{ vfStart }}" onChange="{{ onVfStart }}" style="width:100%;background:#F2F3F2;border:1px solid #E4E7E5;color:#26302B;padding:9px 11px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:13.5px;"></label>
+            <label style="flex:1;min-width:170px;"><span style="display:block;font-size:11.5px;color:#7A847E;margin-bottom:6px;">自訂起始日（最晚 {{ vfMax }}）</span>
+              <input type="date" value="{{ vfStart }}" onChange="{{ onVfStart }}" min="{{ vfMin }}" max="{{ vfMax }}" style="width:100%;background:#F2F3F2;border:1px solid #E4E7E5;color:#26302B;padding:9px 11px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:13.5px;"></label>
             <label style="flex:1;min-width:170px;"><span style="display:block;font-size:11.5px;color:#7A847E;margin-bottom:6px;">投資本金（美元）</span>
               <input type="number" value="{{ vfCapital }}" onChange="{{ onVfCapital }}" style="width:100%;background:#F2F3F2;border:1px solid #E4E7E5;color:#26302B;padding:9px 11px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:13.5px;"></label>
             <div style="flex:1.4;min-width:230px;"><span style="display:block;font-size:11.5px;color:#7A847E;margin-bottom:6px;">持有期間</span>
@@ -727,6 +727,9 @@
               </div>
             </div>
           </div>
+          <sc-if value="{{ v.hasWarn }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:14px;padding:11px 14px;background:#FBF7EC;border:1px solid #EADfBE;border-left:3px solid #C8A951;border-radius:8px;font-size:12px;color:#5A5238;line-height:1.65;">{{ v.warnStr }}</div>
+          </sc-if>
           <div style="margin-top:14px;padding-top:13px;border-top:1px solid #F0F2F6;font-size:12px;color:#7A847E;font-family:'JetBrains Mono',monospace;">{{ v.rangeStr }}　·　本金 {{ v.capStr }}　·　金價 {{ v.priceStartStr }} → {{ v.priceEndStr }} <span style="color:{{ v.priceChgColor }};">{{ v.priceChgStr }}</span></div>
         </div>
 
@@ -1279,8 +1282,17 @@ class Component extends DCLogic {
     if(!V||!V.dates||!V.dates.length) return null;
     const d=V.dates, px=V.price, pb=V.prob, pr=V.pred;
     const hz=V.meta.horizon, ca=V.meta.cost_annual, tc=V.meta.tc_oneway;
+    /* 使用者可能選到未來日期或資料範圍外的日期。這時不能默默換掉他的選擇，
+       要退到可用範圍並回報 clamped，由畫面明講「已調整為某日」。*/
     let i0=q.start?d.findIndex(x=>x>=q.start):-1;
-    if(i0<0) i0=Math.max(0,d.length-1-q.hold);          // 沒指定就用「最近一段」
+    let clamped=null;
+    if(q.start && i0<0){                                 // 選到資料結束之後
+      i0=Math.max(0,d.length-1-q.hold); clamped='after';
+    }else if(q.start && d[i0]!==q.start){                // 選到假日，順延到下一個交易日
+      clamped='holiday';
+    }else if(!q.start){
+      i0=Math.max(0,d.length-1-q.hold);
+    }
     const i1=Math.min(i0+Math.max(5,q.hold),d.length-1);
     if(i1<=i0) return null;
 
@@ -1323,7 +1335,8 @@ class Component extends DCLogic {
     }
 
     const cap=Math.max(1,q.capital||0);
-    return { i0:i0,i1:i1, start:d[i0], end:d[i1], days:i1-i0,
+    return { i0:i0,i1:i1, start:d[i0], end:d[i1], days:i1-i0, clamped:clamped,
+      wanted:q.start||'', dataEnd:d[d.length-1], truncated:(i0+q.hold)>(d.length-1),
       priceStart:px[i0], priceEnd:px[i1], priceChg:(px[i1]/px[i0]-1)*100,
       finalH:cap*eqH, finalU:cap*eqU, pnlH:cap*(eqH-1), pnlU:cap*(eqU-1),
       retH:(eqH-1)*100, retU:(eqU-1)*100, mddH:mddH*100, mddU:mddU*100,
@@ -1852,6 +1865,13 @@ class Component extends DCLogic {
 
       vfView={
         rangeStr:vf.start+' ~ '+vf.end+'（'+vf.days+' 個交易日）',
+        hasWarn:!!(vf.clamped||vf.truncated),
+        warnStr: vf.clamped==='after'
+          ? ('你選的 '+vf.wanted+' 還沒有資料（最新到 '+vf.dataEnd+'）。這頁是用真實結果做事後驗證，'
+             +'起始日必須往回選才有答案可比對，已自動改用最近一段區間。')
+          : (vf.truncated
+             ? ('資料只到 '+vf.dataEnd+'，持有期間不足你設定的天數，已縮短為 '+vf.days+' 個交易日。')
+             : (vf.clamped==='holiday' ? ('你選的 '+vf.wanted+' 非交易日，已順延至 '+vf.start+'。') : '')),
         capStr:'$'+cap.toLocaleString('en-US'),
         priceStartStr:this.fmtP(vf.priceStart), priceEndStr:this.fmtP(vf.priceEnd),
         priceChgStr:this.pct(vf.priceChg), priceChgColor:vf.priceChg>=0?'#1E8C66':'#C0473E',
@@ -2023,6 +2043,7 @@ class Component extends DCLogic {
       hasVerify:!!vfView, noVerify:!vfView, vfPresets:vfPresets, vfHoldBtns:vfHoldBtns,
       vfCapital:st.vq.capital, onVfCapital:e=>setVQ({capital:Number(e.target.value)||0}),
       vfStart:(st.vq.start||''), onVfStart:e=>setVQ({start:e.target.value}),
+      vfMin:(V&&V.dates?V.dates[0]:''), vfMax:(V&&V.dates?V.dates[V.dates.length-1]:''),
       v:(vfView||{})
     };
   }
