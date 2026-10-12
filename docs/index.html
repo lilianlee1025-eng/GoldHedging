@@ -678,11 +678,11 @@
               <div style="font-size:12.5px;color:#26302B;padding:11px 6px;border-top:1px solid #F0F2F6;background:{{ m.bg }};font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-weight:{{ m.weight }};">{{ m.name }}</div>
               <div style="font-size:12.5px;color:#26302B;padding:11px 6px;border-top:1px solid #F0F2F6;background:{{ m.bg }};text-align:right;">{{ m.rmse }}</div>
               <div style="font-size:12.5px;padding:11px 6px;border-top:1px solid #F0F2F6;background:{{ m.bg }};text-align:right;color:{{ m.daccColor }};font-weight:{{ m.weight }};">{{ m.dacc }}</div>
-              <div style="font-size:12.5px;color:#26302B;padding:11px 6px;border-top:1px solid #F0F2F6;background:{{ m.bg }};text-align:right;">{{ m.auc }}</div>
+              <div style="font-size:12.5px;color:{{ m.aucColor }};padding:11px 6px;border-top:1px solid #F0F2F6;background:{{ m.bg }};text-align:right;font-weight:{{ m.weight }};">{{ m.auc }}</div>
             </sc-for>
           </div>
           </div>
-          <div style="margin-top:18px;padding:14px;background:#F2F3F2;border-radius:8px;font-size:12.5px;color:#26302B;line-height:1.6;">多因子 LSTM 的<b>下跌方向準確率達 60.0%</b>，明顯優於單因子 (43.5%) 與隨機基準，是避險訊號的主要依據；RMSE 亦小幅勝過 Naive。</div>
+          <div style="margin-top:18px;padding:14px;background:#F2F3F2;border-radius:8px;font-size:12.5px;color:#26302B;line-height:1.7;">{{ modelVerdict }}</div>
         </div>
       </div>
     </div>
@@ -1302,7 +1302,8 @@ class Component extends DCLogic {
       simulator:'用法：左邊填你手上的黃金部位，右邊會算出四種避險方式各自的損益與最壞損失，並標出建議的一個。',
       principles:'重點：期貨＝把價格鎖死（跌不賠、漲也不賺）；保護性賣權＝買保險（跌有底、漲還能賺，但先付權利金）。拖滑桿看曲線變化。',
       backtest:'重點：把策略套回真實歷史。綠線（有避險）在大跌時較抗跌，代價是大漲時少賺一點——看回撤差距就懂避險值不值得。',
-      model:'說明：模型用過去 60 天的 6 種數據預測未來。下方表格比三種模型，多因子方向準確率最高，所以最可信。'
+      // 這裡刻意不寫死結論數字（會跟表格脫節），只說明怎麼看；真正的結論由 modelVerdict 即時生成。
+    model:'說明：模型用過去 60 天的 6 種數據，預測未來 5 天的走勢與下跌機率。下方表格比較三種模型的價格誤差(RMSE)與方向判斷力(AUC，要大於 0.5 才算有訊號)，結論寫在表格下方。'
     };
 
     /* dashboard */
@@ -1561,13 +1562,39 @@ class Component extends DCLogic {
     /* model */
     const M=pred.metrics;
     const f3=v=>v.toFixed(3), f1=v=>(v*100).toFixed(1)+'%';
+    const mn=M.naive, ms=M.lstm_single, mm=M.lstm_multi;
+    const baseAcc=(mm.base_rate_acc!=null?mm.base_rate_acc:null);
+    // 好壞一律由數據判定，不寫死顏色：
+    //   下跌準確率要贏「永遠猜多數類別」的基準率才算有用；AUC 要 > 0.5 才算有方向判斷力。
+    const accCol=v=>(baseAcc!=null&&v>baseAcc)?'#1E8C66':'#C0473E';
+    const aucCol=v=>v>0.5?'#1E8C66':'#C0473E';
     const metricsRows=[
-      {name:'Naive 基準',rmse:f3(M.naive.rmse),dacc:'—',auc:'—',bg:'transparent',weight:'400',daccColor:'#7A847E'},
-      {name:'LSTM 單因子',rmse:f3(M.lstm_single.rmse),dacc:f1(M.lstm_single.decline_acc),auc:f3(M.lstm_single.auc),bg:'transparent',weight:'400',daccColor:'#C0473E'},
-      {name:'LSTM 多因子',rmse:f3(M.lstm_multi.rmse),dacc:f1(M.lstm_multi.decline_acc),auc:f3(M.lstm_multi.auc),bg:'rgba(200,169,81,0.10)',weight:'600',daccColor:'#1E8C66'}
+      {name:'Naive 基準',rmse:f3(mn.rmse),dacc:'—',auc:'—',bg:'transparent',weight:'400',daccColor:'#7A847E',aucColor:'#7A847E'},
+      {name:'LSTM 單因子',rmse:f3(ms.rmse),dacc:f1(ms.decline_acc),auc:f3(ms.auc),bg:'transparent',weight:'400',daccColor:accCol(ms.decline_acc),aucColor:aucCol(ms.auc)},
+      {name:'LSTM 多因子',rmse:f3(mm.rmse),dacc:f1(mm.decline_acc),auc:f3(mm.auc),bg:'rgba(200,169,81,0.10)',weight:'600',daccColor:accCol(mm.decline_acc),aucColor:aucCol(mm.auc)}
     ];
+
+    /* 模型結論：一律由 metrics 即時生成。
+       這段原本是寫死的文字（宣稱下跌準確率 60.0%、RMSE 勝過 Naive），
+       在資料源改成 GC=F、期間延長後就與上方表格脫節了，因此改成跟著數據走。 */
+    const rlo=Math.min(mn.rmse,ms.rmse,mm.rmse).toFixed(1);
+    const rhi=Math.max(mn.rmse,ms.rmse,mm.rmse).toFixed(1);
+    let modelVerdict='三種模型的 RMSE 相當接近（'+rlo+'～'+rhi+'）：短天期金價接近隨機漫步，'
+      +'Naive（假設明天＝今天）在價格誤差上本來就是很難打敗的基準，多因子 LSTM '
+      +(mm.rmse<mn.rmse?'小幅勝過':'並未勝過')+'它。';
+    if(mm.auc>0.5){
+      modelVerdict+='方向判斷上，多因子 AUC '+f3(mm.auc)+' 高於 0.5，也優於單因子（'+f3(ms.auc)
+        +'），代表六因子確實帶進了額外資訊，可作為避險訊號的依據。';
+    }else{
+      modelVerdict+='方向判斷上，多因子 AUC '+f3(mm.auc)+' 不高於 0.5，代表目前尚未顯著優於隨機猜測'
+        +(baseAcc!=null?('；下跌準確率 '+f1(mm.decline_acc)+' 也低於「永遠猜多數類別」的基準率 '+f1(baseAcc)):'')
+        +'。這是本研究目前最主要的發現之一，也是後續改進的重點——實際避險划不划算，請見「回測結果」頁的成本分析。';
+    }
+
     const factors=[
-      {code:'GLD',name:'黃金 ETF 價格（目標 / 自迴歸）',role:'目標',src:'Yahoo Finance · 每日'},
+      {code:(pred.meta&&pred.meta.target_ticker)||'GC=F',
+       name:'黃金價格（目標 / 自迴歸，'+((pred.meta&&pred.meta.price_unit)||'USD/oz')+'）',
+       role:'目標',src:'Yahoo Finance · 每日'},
       {code:'DGS10',name:'美國 10 年期公債殖利率',role:'利率',src:'FRED · 每日'},
       {code:'CPI',name:'消費者物價指數（通膨）',role:'通膨',src:'FRED · 每月（延後公布日生效）'},
       {code:'DXY',name:'美元指數',role:'匯率',src:'Yahoo Finance · 每日'},
@@ -1647,7 +1674,7 @@ class Component extends DCLogic {
       scChart:scChart, scStats:scStats, scConc:scConc, scAssume:scAssume,
       svaRows:svaRows, svaNote:svaNote, sensRows:sensRows,
       /* model */
-      metricsRows:metricsRows, factors:factors
+      metricsRows:metricsRows, factors:factors, modelVerdict:modelVerdict
     };
   }
 }
