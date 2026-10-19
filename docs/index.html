@@ -87,7 +87,7 @@
           </button>
           <div style="display:{{ it.subDisplay }};padding:2px 0 6px 28px;">
             <sc-for list="{{ it.subs }}" as="sb" hint-placeholder-count="3">
-              <span onClick="{{ sb.onClick }}" style="display:block;padding:6px 10px;border-radius:6px;cursor:pointer;font-size:12px;color:#7A847E;line-height:1.3;">{{ sb.label }}</span>
+              <span onClick="{{ sb.onClick }}" style="display:block;padding:6px 10px;border-radius:6px;cursor:pointer;font-size:12px;line-height:1.3;background:{{ sb.sbg }};color:{{ sb.sfg }};font-weight:{{ sb.sweight }};">{{ sb.label }}</span>
             </sc-for>
           </div>
         </div>
@@ -106,7 +106,7 @@
           </button>
           <div style="display:{{ it.subDisplay }};padding:2px 0 6px 28px;">
             <sc-for list="{{ it.subs }}" as="sb" hint-placeholder-count="3">
-              <span onClick="{{ sb.onClick }}" style="display:block;padding:6px 10px;border-radius:6px;cursor:pointer;font-size:12px;color:#7A847E;line-height:1.3;">{{ sb.label }}</span>
+              <span onClick="{{ sb.onClick }}" style="display:block;padding:6px 10px;border-radius:6px;cursor:pointer;font-size:12px;line-height:1.3;background:{{ sb.sbg }};color:{{ sb.sfg }};font-weight:{{ sb.sweight }};">{{ sb.label }}</span>
             </sc-for>
           </div>
         </div>
@@ -475,6 +475,9 @@
     <!-- ============ BACKTEST ============ -->
     <sc-if value="{{ isBacktest }}" hint-placeholder-val="{{ false }}">
     <div>
+      <!-- 子頁 1／3：整體績效 -->
+      <sc-if value="{{ isBtPerf }}" hint-placeholder-val="{{ true }}">
+      <div>
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:18px;">
         <div style="background:#E2F0EA;border-radius:10px;padding:18px 20px;">
           <div style="font-size:11px;color:#1E8C66;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;">總報酬 · 有避險</div>
@@ -505,6 +508,12 @@
         <div style="margin-top:10px;">{{ equityChart }}</div>
       </div>
 
+      </div>
+      </sc-if>
+
+      <!-- 子頁 2／3：避險成本 -->
+      <sc-if value="{{ isBtCost }}" hint-placeholder-val="{{ false }}">
+      <div>
       <!-- 避險成本：這份保險花了多少錢、值不值得 -->
       <sc-if value="{{ hasCost }}" hint-placeholder-val="{{ true }}">
       <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;margin-bottom:16px;">
@@ -562,6 +571,12 @@
       </div>
       </sc-if>
 
+      </div>
+      </sc-if>
+
+      <!-- 子頁 3／3：工具與情境 -->
+      <sc-if value="{{ isBtTools }}" hint-placeholder-val="{{ false }}">
+      <div>
       <!-- 期貨 vs 期權 對決 -->
       <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;margin-bottom:16px;">
         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
@@ -651,6 +666,8 @@
           </div>
         </sc-for>
       </div>
+      </div>
+      </sc-if>
     </div>
     </sc-if>
 
@@ -726,6 +743,9 @@
       <sc-if value="{{ hasVerify }}" hint-placeholder-val="{{ true }}">
       <div>
 
+        <!-- 子頁 1／2：我的預測紀錄 -->
+        <sc-if value="{{ isVfLog }}" hint-placeholder-val="{{ true }}">
+        <div>
         <!-- 預測紀錄簿：記錄當下不知道答案，因此無法事後挑選有利區間 -->
         <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;margin-bottom:16px;">
           <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;">
@@ -782,6 +802,12 @@
           </sc-if>
         </div>
 
+        </div>
+        </sc-if>
+
+        <!-- 子頁 2／2：歷史情境驗證 -->
+        <sc-if value="{{ isVfSim }}" hint-placeholder-val="{{ false }}">
+        <div>
         <!-- 條件設定 -->
         <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;margin-bottom:16px;">
           <div id="sec-vf-setup" style="scroll-margin-top:20px;font-size:14px;font-weight:600;color:#26302B;margin-bottom:14px;">① 設定情境</div>
@@ -906,6 +932,9 @@
           <div style="margin-top:12px;font-size:11px;color:#9AA39D;line-height:1.7;font-family:'JetBrains Mono',monospace;">{{ v.srcNote }}</div>
         </div>
 
+        </div>
+        </sc-if>
+
       </div>
       </sc-if>
     </div>
@@ -980,6 +1009,7 @@ class Component extends DCLogic {
       vf: null,                           // 成效驗證序列（verification.json）
       // 成效驗證的查詢條件：起始日、本金、持有的交易日數
       vq: sv.vq || { start:'', capital:1000000, hold:60 },
+      sub: '',                            // 目前子頁（空字串＝該分頁的第一個子頁）
       plog: [],                           // 預測紀錄簿（登入後從雲端讀）
       plogMsg: '', plogBusy: false,
       qtyUnit: sv.qtyUnit || 'oz',         // 新增部位時的預設單位
@@ -1416,13 +1446,11 @@ class Component extends DCLogic {
   }
   avgCost(){ return this.costBasis().avg; }
 
-  /* 次選單跳轉：必要時先切頁，再捲到該區塊。
-     切頁後 DOM 要重繪，所以用 setTimeout 等一拍再找元素。*/
-  goSection(page,id){
-    const jump=()=>{ const el=document.getElementById(id);
-      if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); };
-    if(this.state.page!==page){ this.setState({page:page}); setTimeout(jump,80); }
-    else jump();
+  /* 切換子頁。內容多的分頁（回測、成效驗證）拆成真正的子頁而不是同一頁往下捲——
+     就像鞋店不會把靴子和平底鞋放在同一頁。切換後捲回頂端，避免停在上一頁的位置。*/
+  setSub(page,sub){
+    this.setState({page:page, sub:sub});
+    try{ window.scrollTo({top:0,behavior:'smooth'}); }catch(e){ window.scrollTo(0,0); }
   }
 
   /* ---------------- 成效驗證 ----------------
@@ -1647,7 +1675,7 @@ class Component extends DCLogic {
       }
     };
 
-    const setPage=p=>this.setState({page:p});
+    const setPage=p=>this.setState({page:p, sub:''});   // 換分頁時回到該頁的第一個子頁
     // 兩區分組（按使用流程）：決策工具 vs 原理與驗證
     const decideItems=[
       {key:'dashboard',label:'總覽 Dashboard',sub:'金價與預測訊號'},
@@ -1659,31 +1687,34 @@ class Component extends DCLogic {
       {key:'model',label:'模型說明',sub:'LSTM 架構與因子'},
       {key:'verify',label:'成效驗證',sub:'當時照做賺賠多少'}
     ];
-    /* 每頁的區塊錨點。頁面內容多（回測 6 區、成效驗證 6 區），
-       只給一個頁籤會讓使用者得一路往下捲才找得到東西。*/
-    const SECTIONS={
-      dashboard:[['sec-dash-chart','金價走勢'],['sec-dash-future','未來預測與建議']],
-      simulator:[['sec-sim-pos','部位設定與策略比較']],
-      principles:[['sec-prin-how','避險力道怎麼決定'],['sec-prin-params','互動參數'],
-                  ['sec-prin-fut','期貨 Payoff'],['sec-prin-put','賣權 Payoff']],
-      backtest:[['sec-bt-equity','累積損益曲線'],['sec-bt-cost','避險成本與保護單價'],
-                ['sec-bt-tools','期貨 vs 期權對決'],['sec-bt-signal','訊號有沒有用'],
-                ['sec-bt-sens','敏感度分析'],['sec-bt-scen','歷史情境']],
-      model:[['sec-model-arch','LSTM 架構'],['sec-model-factor','輸入因子'],
-             ['sec-model-perf','表現比較']],
-      verify:[['sec-vf-log','我的預測紀錄'],['sec-vf-setup','設定情境'],
-              ['sec-vf-entry','預測 vs 真實結果'],['sec-vf-chart','資產走勢'],
-              ['sec-vf-stats','避險統計與準確度'],['sec-vf-report','驗證報告']]
+    /* 子頁定義。只有內容真的多的分頁才拆——其餘維持單頁，硬拆反而更難用。
+       沒有子頁的分頁 subs 為空陣列，導覽列就不顯示展開箭頭。*/
+    const SUBPAGES={
+      backtest:[['perf','整體績效'],['cost','避險成本'],['tools','工具與情境']],
+      verify:[['log','我的預測紀錄'],['sim','歷史情境驗證']]
     };
+    // 目前子頁：state 沒值（或值不屬於這頁）時，用該分頁的第一個
+    const curSub=k=>{
+      const list=SUBPAGES[k]||[];
+      if(!list.length) return '';
+      const hit=list.filter(a=>a[0]===st.sub);
+      return hit.length?hit[0][0]:list[0][0];
+    };
+    const activeSub=curSub(st.page);
 
     const mkNav=(items,start)=>items.map((it,i)=>{
-      const on=st.page===it.key, subs=SECTIONS[it.key]||[];
+      const on=st.page===it.key, subs=SUBPAGES[it.key]||[];
+      const cur=on?activeSub:'';
       return { idx:'0'+(start+i), label:it.label, sub:it.sub, onClick:()=>setPage(it.key),
         bg: on?'#F2EEDF':'transparent', fg: on?'#26302B':'#7A847E',
         bar: on?'#C8A951':'transparent', num: on?'#C8A951':'#7A847E',
         chev: (subs.length? (on?'⌄':'›') : ''),
         subDisplay: (on&&subs.length)?'block':'none',
-        subs: subs.map(a=>({ key:a[0], label:a[1], onClick:()=>this.goSection(it.key,a[0]) })) };
+        subs: subs.map(a=>({ key:a[0], label:a[1],
+          onClick:()=>this.setSub(it.key,a[0]),
+          sbg: cur===a[0]?'#F2EEDF':'transparent',
+          sfg: cur===a[0]?'#26302B':'#7A847E',
+          sweight: cur===a[0]?'600':'400' })) };
     });
     const navDecide=mkNav(decideItems,1);
     const navLearn=mkNav(learnItems,decideItems.length+1);
@@ -2204,6 +2235,9 @@ class Component extends DCLogic {
       navDecide:navDecide, navLearn:navLearn, pageKicker:tt[0], pageTitle:tt[1], pageSubtitle:tt[2], beginnerHelp:helps[st.page],
       updatedStr:'資料截至 '+(pred.data_as_of||pred.current.date),
       isDashboard:st.page==='dashboard', isSim:st.page==='simulator', isPrin:st.page==='principles', isBacktest:st.page==='backtest', isModel:st.page==='model', isVerify:st.page==='verify',
+      /* 子頁旗標 */
+      isBtPerf:activeSub==='perf', isBtCost:activeSub==='cost', isBtTools:activeSub==='tools',
+      isVfLog:activeSub==='log',  isVfSim:activeSub==='sim',
       /* dashboard */
       priceStr:this.fmtP(S0), deltaStr:this.pct(deltaPct), deltaColor:delta>=0?'#1E8C66':'#C0473E',
       unitBtns:unitBtns, unitLabel:this.curUnit().label,
