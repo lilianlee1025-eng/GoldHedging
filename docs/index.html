@@ -717,17 +717,24 @@
               <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">我的預測紀錄</div>
               <div style="font-size:12px;color:#7A847E;line-height:1.6;max-width:620px;">在總覽頁按「記錄這次預測」把當下的判斷存起來，到期後這裡會自動用真實金價驗證。<b style="color:#26302B;">記錄的當下沒有人知道答案</b>，所以不可能事後挑選對自己有利的區間——這是比下方「挑歷史日期」更強的驗證方式。</div>
             </div>
-            <sc-if value="{{ hasPlogStats }}" hint-placeholder-val="{{ true }}">
-            <div style="text-align:right;flex:none;">
-              <div style="font-size:10.5px;color:#7A847E;font-family:'JetBrains Mono',monospace;text-transform:uppercase;">方向命中率</div>
-              <div style="font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:600;color:{{ plogStats.rateColor }};">{{ plogStats.rateStr }}</div>
-              <div style="font-size:11px;color:#7A847E;font-family:'JetBrains Mono',monospace;">{{ plogStats.hit }} / {{ plogStats.done }} 已到期</div>
+            <div style="display:flex;align-items:center;gap:20px;flex:none;">
+              <sc-if value="{{ hasPlogStats }}" hint-placeholder-val="{{ true }}">
+              <div style="text-align:right;">
+                <div style="font-size:10.5px;color:#7A847E;font-family:'JetBrains Mono',monospace;text-transform:uppercase;">方向命中率</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:600;color:{{ plogStats.rateColor }};">{{ plogStats.rateStr }}</div>
+                <div style="font-size:11px;color:#7A847E;font-family:'JetBrains Mono',monospace;">{{ plogStats.hit }} / {{ plogStats.done }} 已到期</div>
+              </div>
+              </sc-if>
+              <!-- 與總覽頁同一個動作，放兩個入口：那邊是「看到預測順手記下」，這裡是「在紀錄列表旁再記一筆」 -->
+              <div onClick="{{ onLogPred }}" style="background:#26302B;color:#fff;border-radius:7px;padding:10px 16px;cursor:pointer;font-size:12.5px;white-space:nowrap;">{{ logBtnLabel }}</div>
             </div>
-            </sc-if>
           </div>
+          <sc-if value="{{ hasPlogMsg }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:12px;padding:10px 13px;background:#F2F3F2;border-radius:7px;font-size:12px;color:#5A5238;line-height:1.6;">{{ plogMsg }}</div>
+          </sc-if>
 
           <sc-if value="{{ noPlog }}" hint-placeholder-val="{{ false }}">
-          <div style="margin-top:16px;padding:16px;background:#F2F3F2;border-radius:8px;font-size:12.5px;color:#7A847E;line-height:1.7;">還沒有任何紀錄。登入後到<b style="color:#26302B;">總覽 Dashboard</b> 按「📌 記錄這次預測」，就會在這裡出現。</div>
+          <div style="margin-top:16px;padding:16px;background:#F2F3F2;border-radius:8px;font-size:12.5px;color:#7A847E;line-height:1.7;">還沒有任何紀錄。<b style="color:#26302B;">登入後按右上角的「記錄這次預測」</b>（總覽 Dashboard 的預測卡片下方也有同一顆按鈕），記錄就會出現在這裡。</div>
           </sc-if>
 
           <sc-if value="{{ hasPlog }}" hint-placeholder-val="{{ true }}">
