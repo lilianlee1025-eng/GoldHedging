@@ -31,6 +31,29 @@ jobs:
       - name: 重抓資料、重算預測、更新 docs/
         run: python daily_update.py
 
+      # Supabase 免費專案閒置約一週就會自動暫停，暫停後登入與預測紀錄全部失效。
+      # 每天戳一下 REST API 就算「有活動」，可避免被暫停。
+      # 用的是 docs/supabase-config.js 裡的 anon 金鑰——它本來就是設計成公開的，
+      # 真正的防線是資料庫的 Row Level Security，所以不需要存成 secret。
+      # 加 || true 是因為：專案若已被暫停，這裡一定失敗，但不該讓整個每日更新跟著失敗。
+      - name: 喚醒 Supabase（避免閒置被暫停）
+        if: always()
+        run: |
+          URL=$(grep -oP 'SUPABASE_URL = "\K[^"]+' docs/supabase-config.js || true)
+          KEY=$(grep -oP 'SUPABASE_ANON_KEY = "\K[^"]+' docs/supabase-config.js || true)
+          if [ -z "$URL" ] || [ -z "$KEY" ]; then
+            echo "未設定 Supabase 金鑰，略過。"; exit 0
+          fi
+          CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 30 \
+            "$URL/rest/v1/profiles?select=user_id&limit=1" \
+            -H "apikey: $KEY" -H "Authorization: Bearer $KEY" || true)
+          echo "Supabase 回應 HTTP $CODE"
+          if [ "$CODE" = "200" ]; then
+            echo "✅ 專案是醒著的"
+          else
+            echo "⚠️ 專案可能已被暫停，需到 Supabase 後台按 Restore project 手動恢復"
+          fi
+
       - name: 有變動就 commit 並 push
         run: |
           git config user.name  "github-actions[bot]"
