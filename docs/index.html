@@ -75,25 +75,41 @@
     <nav style="display:flex;flex-direction:column;gap:3px;margin-top:18px;flex:1;">
       <div style="font-size:10px;color:#A98F3E;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em;text-transform:uppercase;padding:0 12px 6px;font-weight:600;">決策工具</div>
       <sc-for list="{{ navDecide }}" as="it" hint-placeholder-count="2">
-        <button onClick="{{ it.onClick }}" style="display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:none;cursor:pointer;padding:10px 12px;border-radius:7px;font-family:inherit;background:{{ it.bg }};color:{{ it.fg }};transition:background .15s;">
-          <span style="width:3px;height:30px;border-radius:2px;background:{{ it.bar }};flex:none;"></span>
-          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:{{ it.num }};flex:none;">{{ it.idx }}</span>
-          <span style="flex:1;min-width:0;">
-            <span style="display:block;font-size:13.5px;font-weight:500;line-height:1.25;">{{ it.label }}</span>
-            <span style="display:block;font-size:10.5px;color:#7A847E;margin-top:2px;">{{ it.sub }}</span>
-          </span>
-        </button>
+        <div>
+          <button onClick="{{ it.onClick }}" style="display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:none;cursor:pointer;padding:10px 12px;border-radius:7px;font-family:inherit;background:{{ it.bg }};color:{{ it.fg }};transition:background .15s;">
+            <span style="width:3px;height:30px;border-radius:2px;background:{{ it.bar }};flex:none;"></span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:{{ it.num }};flex:none;">{{ it.idx }}</span>
+            <span style="flex:1;min-width:0;">
+              <span style="display:block;font-size:13.5px;font-weight:500;line-height:1.25;">{{ it.label }}</span>
+              <span style="display:block;font-size:10.5px;color:#7A847E;margin-top:2px;">{{ it.sub }}</span>
+            </span>
+            <span style="font-size:13px;color:{{ it.num }};flex:none;">{{ it.chev }}</span>
+          </button>
+          <div style="display:{{ it.subDisplay }};padding:2px 0 6px 28px;">
+            <sc-for list="{{ it.subs }}" as="sb" hint-placeholder-count="3">
+              <span onClick="{{ sb.onClick }}" style="display:block;padding:6px 10px;border-radius:6px;cursor:pointer;font-size:12px;color:#7A847E;line-height:1.3;">{{ sb.label }}</span>
+            </sc-for>
+          </div>
+        </div>
       </sc-for>
       <div style="font-size:10px;color:#A98F3E;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em;text-transform:uppercase;padding:16px 12px 6px;font-weight:600;">原理與驗證</div>
       <sc-for list="{{ navLearn }}" as="it" hint-placeholder-count="3">
-        <button onClick="{{ it.onClick }}" style="display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:none;cursor:pointer;padding:10px 12px;border-radius:7px;font-family:inherit;background:{{ it.bg }};color:{{ it.fg }};transition:background .15s;">
-          <span style="width:3px;height:30px;border-radius:2px;background:{{ it.bar }};flex:none;"></span>
-          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:{{ it.num }};flex:none;">{{ it.idx }}</span>
-          <span style="flex:1;min-width:0;">
-            <span style="display:block;font-size:13.5px;font-weight:500;line-height:1.25;">{{ it.label }}</span>
-            <span style="display:block;font-size:10.5px;color:#7A847E;margin-top:2px;">{{ it.sub }}</span>
-          </span>
-        </button>
+        <div>
+          <button onClick="{{ it.onClick }}" style="display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:none;cursor:pointer;padding:10px 12px;border-radius:7px;font-family:inherit;background:{{ it.bg }};color:{{ it.fg }};transition:background .15s;">
+            <span style="width:3px;height:30px;border-radius:2px;background:{{ it.bar }};flex:none;"></span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:{{ it.num }};flex:none;">{{ it.idx }}</span>
+            <span style="flex:1;min-width:0;">
+              <span style="display:block;font-size:13.5px;font-weight:500;line-height:1.25;">{{ it.label }}</span>
+              <span style="display:block;font-size:10.5px;color:#7A847E;margin-top:2px;">{{ it.sub }}</span>
+            </span>
+            <span style="font-size:13px;color:{{ it.num }};flex:none;">{{ it.chev }}</span>
+          </button>
+          <div style="display:{{ it.subDisplay }};padding:2px 0 6px 28px;">
+            <sc-for list="{{ it.subs }}" as="sb" hint-placeholder-count="3">
+              <span onClick="{{ sb.onClick }}" style="display:block;padding:6px 10px;border-radius:6px;cursor:pointer;font-size:12px;color:#7A847E;line-height:1.3;">{{ sb.label }}</span>
+            </sc-for>
+          </div>
+        </div>
       </sc-for>
     </nav>
   </aside>
@@ -193,7 +209,7 @@
       <div style="display:grid;grid-template-columns:1fr 280px;gap:16px;">
         <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:10px;">
-            <div style="font-size:14px;font-weight:600;color:#26302B;">GLD 價格 · 近 {{ histLen }} {{ tfUnit }}</div>
+            <div id="sec-dash-chart" style="scroll-margin-top:20px;font-size:14px;font-weight:600;color:#26302B;">金價走勢 · 近 {{ histLen }} {{ tfUnit }}</div>
             <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
               <div style="display:flex;gap:4px;">
                 <sc-for list="{{ tfBtns }}" as="t" hint-placeholder-count="4">
@@ -217,7 +233,7 @@
         </div>
 
         <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;display:flex;flex-direction:column;">
-          <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">{{ futCardTitle }}</div>
+          <div id="sec-dash-future" style="scroll-margin-top:20px;font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">{{ futCardTitle }}</div>
           <div style="font-size:11.5px;color:#7A847E;margin-bottom:14px;font-family:'JetBrains Mono',monospace;">{{ futCardSub }}</div>
           <div style="display:flex;flex-direction:column;gap:2px;">
             <sc-for list="{{ futureRows }}" as="fr" hint-placeholder-count="5">
@@ -249,7 +265,7 @@
       <div style="display:grid;grid-template-columns:300px 1fr;gap:16px;align-items:start;">
         <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:22px;position:sticky;top:20px;">
           <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:16px;">
-            <span style="font-size:14px;font-weight:600;color:#26302B;">部位設定</span>
+            <span id="sec-sim-pos" style="scroll-margin-top:20px;font-size:14px;font-weight:600;color:#26302B;">部位設定</span>
             <span onClick="{{ h.reset }}" title="清除記憶，回到目前市價" style="font-size:11px;color:#7A847E;cursor:pointer;text-decoration:underline;">重設</span>
           </div>
           <div style="display:flex;flex-direction:column;gap:14px;">
@@ -397,7 +413,7 @@
       </div>
 
       <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:22px 24px;margin-bottom:16px;">
-        <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">避險力道怎麼決定？</div>
+        <div id="sec-prin-how" style="scroll-margin-top:20px;font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">避險力道怎麼決定？</div>
         <div style="font-size:12.5px;color:#7A847E;margin-bottom:16px;line-height:1.6;">系統依模型算出的「未來下跌機率」決定要不要避險、避多重。機率越高，保護做越重。觸發門檻 = <b style="color:#26302B;">50%</b>（超過才開始建議避險）。</div>
         <div style="display:flex;flex-direction:column;gap:10px;">
           <div style="display:flex;align-items:center;gap:14px;padding:11px 14px;background:#F2F3F2;border-radius:8px;">
@@ -426,7 +442,7 @@
 
       <div style="display:grid;grid-template-columns:260px 1fr;gap:16px;align-items:start;">
         <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:22px;position:sticky;top:20px;">
-          <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:18px;">互動參數</div>
+          <div id="sec-prin-params" style="scroll-margin-top:20px;font-size:14px;font-weight:600;color:#26302B;margin-bottom:18px;">互動參數</div>
           <div style="margin-bottom:20px;">
             <div style="display:flex;justify-content:space-between;margin-bottom:9px;"><span style="font-size:12px;color:#7A847E;">Put 履約價</span><span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#C8A951;">{{ prinKStr }}</span></div>
             <input type="range" min="{{ prinKMin }}" max="{{ prinKMax }}" step="{{ prinKStep }}" value="{{ prin.K }}" onInput="{{ ph.K }}" style="width:100%;">
@@ -442,12 +458,12 @@
 
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
           <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;">
-            <div style="font-size:14px;font-weight:600;color:#26302B;">期貨避險 · Payoff</div>
+            <div id="sec-prin-fut" style="scroll-margin-top:20px;font-size:14px;font-weight:600;color:#26302B;">期貨避險 · Payoff</div>
             <div style="font-size:12px;color:#7A847E;margin-top:4px;">水平線：上下檔皆鎖定，損益兩平 {{ beFutStr }}</div>
             <div style="margin-top:12px;">{{ futChart }}</div>
           </div>
           <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;">
-            <div style="font-size:14px;font-weight:600;color:#26302B;">保護性賣權 · Payoff</div>
+            <div id="sec-prin-put" style="scroll-margin-top:20px;font-size:14px;font-weight:600;color:#26302B;">保護性賣權 · Payoff</div>
             <div style="font-size:12px;color:#7A847E;margin-top:4px;">曲棍球桿：地板在履約價，損益兩平 {{ bePutStr }}</div>
             <div style="margin-top:12px;">{{ putChart }}</div>
           </div>
@@ -480,7 +496,7 @@
 
       <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;margin-bottom:16px;">
         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
-          <div style="font-size:14px;font-weight:600;color:#26302B;">累積損益曲線 · 有避險 vs 無避險</div>
+          <div id="sec-bt-equity" style="scroll-margin-top:20px;font-size:14px;font-weight:600;color:#26302B;">累積損益曲線 · 有避險 vs 無避險</div>
           <div style="display:flex;gap:16px;font-size:11.5px;font-family:'JetBrains Mono',monospace;color:#7A847E;">
             <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:2px;background:#1E8C66;display:inline-block;"></span>有避險</span>
             <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:2px;background:#C0473E;display:inline-block;"></span>無避險</span>
@@ -492,7 +508,7 @@
       <!-- 避險成本：這份保險花了多少錢、值不值得 -->
       <sc-if value="{{ hasCost }}" hint-placeholder-val="{{ true }}">
       <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;margin-bottom:16px;">
-        <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">這份保險花了多少錢？成本 vs 回撤改善</div>
+        <div id="sec-bt-cost" style="scroll-margin-top:20px;font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">這份保險花了多少錢？成本 vs 回撤改善</div>
         <div style="font-size:12px;color:#7A847E;line-height:1.6;margin-bottom:16px;max-width:820px;">上面那條綠線已經扣掉避險成本（持有成本＋調倉成本）。避險確實把回撤壓淺了，但那個保護要用報酬去換——下表把「回撤變淺」標上價格。</div>
 
         <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:18px;">
@@ -549,7 +565,7 @@
       <!-- 期貨 vs 期權 對決 -->
       <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;margin-bottom:16px;">
         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
-          <div style="font-size:14px;font-weight:600;color:#26302B;">期貨 vs 期權 對決 · 四種做法累積損益</div>
+          <div id="sec-bt-tools" style="scroll-margin-top:20px;font-size:14px;font-weight:600;color:#26302B;">期貨 vs 期權 對決 · 四種做法累積損益</div>
           <div style="display:flex;gap:14px;font-size:11.5px;font-family:'JetBrains Mono',monospace;color:#7A847E;flex-wrap:wrap;">
             <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:2px;background:#3A443E;display:inline-block;"></span>不避險</span>
             <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:2px;background:#1E8C66;display:inline-block;"></span>保護性賣權</span>
@@ -577,7 +593,7 @@
       <!-- #2 訊號避險 vs 無腦避險 + 敏感度 -->
       <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:16px;margin-bottom:16px;align-items:start;">
         <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;">
-          <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">模型訊號有沒有用？依訊號 vs 無腦每月避險</div>
+          <div id="sec-bt-signal" style="scroll-margin-top:20px;font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">模型訊號有沒有用？依訊號 vs 無腦每月避險</div>
           <div style="font-size:12px;color:#7A847E;margin-bottom:14px;">同樣的避險工具，比較「聽模型訊號才避」與「每月都避」。</div>
           <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
           <div class="dctable" style="display:grid;grid-template-columns:1.7fr 1fr 1fr;gap:0;font-family:'JetBrains Mono',monospace;">
@@ -595,7 +611,7 @@
         </div>
 
         <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;">
-          <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">敏感度分析</div>
+          <div id="sec-bt-sens" style="scroll-margin-top:20px;font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">敏感度分析</div>
           <div style="font-size:12px;color:#7A847E;margin-bottom:14px;">保護性賣權在不同「下跌機率門檻」下的表現（門檻越高→避越少）。</div>
           <div class="dctable" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;font-family:'JetBrains Mono',monospace;">
             <div style="font-size:10.5px;color:#7A847E;padding:8px 6px;text-transform:uppercase;">門檻</div>
@@ -611,7 +627,7 @@
         </div>
       </div>
 
-      <div style="font-size:13px;font-weight:600;color:#26302B;margin:24px 0 6px;">不同情境下的避險效果</div>
+      <div id="sec-bt-scen" style="scroll-margin-top:20px;font-size:13px;font-weight:600;color:#26302B;margin:24px 0 6px;">不同情境下的避險效果</div>
       <div style="font-size:12px;color:#7A847E;line-height:1.6;margin-bottom:14px;max-width:760px;">下列為真實歷史事件、以實際資料試算。模型偏保守——只在「下跌機率超過門檻」時才避險，因此會出現三種情況：<b style="color:#1E8C66;">下跌時抗跌</b>、<b style="color:#C0473E;">上漲時少賺（避險成本）</b>、以及<b style="color:#26302B;">模型未觸發避險</b>（如 2022/2023，差異為 0，屬正常，非錯誤）。此處完整呈現，未只挑對避險有利的事件。</div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
         <sc-for list="{{ scenarios }}" as="sc" hint-placeholder-count="3">
@@ -642,7 +658,7 @@
     <sc-if value="{{ isModel }}" hint-placeholder-val="{{ false }}">
     <div>
       <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:24px 26px;margin-bottom:16px;">
-        <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:18px;">LSTM 模型架構</div>
+        <div id="sec-model-arch" style="scroll-margin-top:20px;font-size:14px;font-weight:600;color:#26302B;margin-bottom:18px;">LSTM 模型架構</div>
         <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
           <div style="background:#F2F3F2;border:1px solid #E4E7E5;border-radius:8px;padding:14px 18px;text-align:center;flex:none;"><div style="font-size:12px;color:#26302B;font-weight:600;">輸入序列</div><div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#7A847E;margin-top:5px;">60 × 6 因子</div></div>
           <span style="color:#AAB1AC;font-family:'JetBrains Mono',monospace;">→</span>
@@ -656,7 +672,7 @@
 
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;">
         <div style="background:#fff;border:1px solid #E4E7E5;border-radius:10px;padding:22px 24px;">
-          <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">輸入因子與資料來源</div>
+          <div id="sec-model-factor" style="scroll-margin-top:20px;font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">輸入因子與資料來源</div>
           <div style="font-size:12px;color:#7A847E;margin-bottom:16px;">六個因子皆取自免費公開來源（Yahoo Finance / FRED），2010 年至今每日對齊。</div>
           <div style="display:flex;flex-direction:column;gap:10px;">
             <sc-for list="{{ factors }}" as="f" hint-placeholder-count="6">
@@ -673,7 +689,7 @@
         </div>
 
         <div style="background:#fff;border:1px solid #E4E7E5;border-radius:10px;padding:22px 24px;">
-          <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">模型表現比較</div>
+          <div id="sec-model-perf" style="scroll-margin-top:20px;font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">模型表現比較</div>
           <div style="font-size:12px;color:#7A847E;margin-bottom:16px;">多因子 LSTM vs 單因子 vs Naive 基準</div>
           <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
           <div class="dctable" style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:0;font-family:'JetBrains Mono',monospace;">
@@ -714,7 +730,7 @@
         <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;margin-bottom:16px;">
           <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;">
             <div>
-              <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">我的預測紀錄</div>
+              <div id="sec-vf-log" style="scroll-margin-top:20px;font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">我的預測紀錄</div>
               <div style="font-size:12px;color:#7A847E;line-height:1.6;max-width:620px;">在總覽頁按「記錄這次預測」把當下的判斷存起來，到期後這裡會自動用真實金價驗證。<b style="color:#26302B;">記錄的當下沒有人知道答案</b>，所以不可能事後挑選對自己有利的區間——這是比下方「挑歷史日期」更強的驗證方式。</div>
             </div>
             <div style="display:flex;align-items:center;gap:20px;flex:none;">
@@ -768,7 +784,7 @@
 
         <!-- 條件設定 -->
         <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;margin-bottom:16px;">
-          <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:14px;">① 設定情境</div>
+          <div id="sec-vf-setup" style="scroll-margin-top:20px;font-size:14px;font-weight:600;color:#26302B;margin-bottom:14px;">① 設定情境</div>
           <div style="font-size:11.5px;color:#7A847E;margin-bottom:8px;">起始日</div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;">
             <sc-for list="{{ vfPresets }}" as="ps" hint-placeholder-count="6">
@@ -797,7 +813,7 @@
         <!-- ②③ 預測紀錄 → 到期驗證 -->
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;align-items:start;">
           <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;">
-            <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">② 當時系統說了什麼</div>
+            <div id="sec-vf-entry" style="scroll-margin-top:20px;font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">② 當時系統說了什麼</div>
             <div style="font-size:12px;color:#7A847E;margin-bottom:16px;">{{ v.entDate }} 收盤後，用當時就算得出來的資料產生的預測</div>
             <div style="display:flex;flex-direction:column;gap:11px;font-size:13px;">
               <div style="display:flex;justify-content:space-between;"><span style="color:#7A847E;">當時金價</span><span style="font-family:'JetBrains Mono',monospace;color:#26302B;">{{ v.entPriceStr }}</span></div>
@@ -846,7 +862,7 @@
         <!-- 淨值走勢 -->
         <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;margin-bottom:16px;">
           <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
-            <div style="font-size:14px;font-weight:600;color:#26302B;">資產走勢 · 照系統避險 vs 完全不避險</div>
+            <div id="sec-vf-chart" style="scroll-margin-top:20px;font-size:14px;font-weight:600;color:#26302B;">資產走勢 · 照系統避險 vs 完全不避險</div>
             <div style="display:flex;gap:16px;font-size:11.5px;font-family:'JetBrains Mono',monospace;color:#7A847E;">
               <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:2px;background:#1E8C66;display:inline-block;"></span>有避險</span>
               <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:2px;background:#C0473E;display:inline-block;"></span>不避險</span>
@@ -858,7 +874,7 @@
         <!-- ⑤ 避險效果 + 預測準確度 -->
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;align-items:start;">
           <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;">
-            <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:14px;">⑤ 避險動作統計</div>
+            <div id="sec-vf-stats" style="scroll-margin-top:20px;font-size:14px;font-weight:600;color:#26302B;margin-bottom:14px;">⑤ 避險動作統計</div>
             <div style="display:flex;flex-direction:column;gap:11px;font-size:13px;">
               <div style="display:flex;justify-content:space-between;"><span style="color:#7A847E;">有避險的天數</span><span style="font-family:'JetBrains Mono',monospace;color:#26302B;">{{ v.hedgedDaysStr }}</span></div>
               <div style="display:flex;justify-content:space-between;"><span style="color:#7A847E;">平均避險比例</span><span style="font-family:'JetBrains Mono',monospace;color:#26302B;">{{ v.avgHedgeStr }}</span></div>
@@ -885,7 +901,7 @@
 
         <!-- ⑦ 驗證報告 -->
         <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;">
-          <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:12px;">⑦ 驗證報告</div>
+          <div id="sec-vf-report" style="scroll-margin-top:20px;font-size:14px;font-weight:600;color:#26302B;margin-bottom:12px;">⑦ 驗證報告</div>
           <div style="padding:14px;background:#F2F3F2;border-radius:8px;font-size:12.5px;color:#26302B;line-height:1.8;">{{ v.verdict }}</div>
           <div style="margin-top:12px;font-size:11px;color:#9AA39D;line-height:1.7;font-family:'JetBrains Mono',monospace;">{{ v.srcNote }}</div>
         </div>
@@ -1400,6 +1416,15 @@ class Component extends DCLogic {
   }
   avgCost(){ return this.costBasis().avg; }
 
+  /* 次選單跳轉：必要時先切頁，再捲到該區塊。
+     切頁後 DOM 要重繪，所以用 setTimeout 等一拍再找元素。*/
+  goSection(page,id){
+    const jump=()=>{ const el=document.getElementById(id);
+      if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); };
+    if(this.state.page!==page){ this.setState({page:page}); setTimeout(jump,80); }
+    else jump();
+  }
+
   /* ---------------- 成效驗證 ----------------
      從 start 起投入 capital、持有 hold 個交易日的逐日模擬。
      用到的每日下跌機率全部來自 walk-forward（各時點只用該時點之前的資料訓練），
@@ -1634,9 +1659,32 @@ class Component extends DCLogic {
       {key:'model',label:'模型說明',sub:'LSTM 架構與因子'},
       {key:'verify',label:'成效驗證',sub:'當時照做賺賠多少'}
     ];
-    const mkNav=(items,start)=>items.map((it,i)=>({ idx:'0'+(start+i), label:it.label, sub:it.sub, onClick:()=>setPage(it.key),
-      bg: st.page===it.key?'#F2EEDF':'transparent', fg: st.page===it.key?'#26302B':'#7A847E',
-      bar: st.page===it.key?'#C8A951':'transparent', num: st.page===it.key?'#C8A951':'#7A847E' }));
+    /* 每頁的區塊錨點。頁面內容多（回測 6 區、成效驗證 6 區），
+       只給一個頁籤會讓使用者得一路往下捲才找得到東西。*/
+    const SECTIONS={
+      dashboard:[['sec-dash-chart','金價走勢'],['sec-dash-future','未來預測與建議']],
+      simulator:[['sec-sim-pos','部位設定與策略比較']],
+      principles:[['sec-prin-how','避險力道怎麼決定'],['sec-prin-params','互動參數'],
+                  ['sec-prin-fut','期貨 Payoff'],['sec-prin-put','賣權 Payoff']],
+      backtest:[['sec-bt-equity','累積損益曲線'],['sec-bt-cost','避險成本與保護單價'],
+                ['sec-bt-tools','期貨 vs 期權對決'],['sec-bt-signal','訊號有沒有用'],
+                ['sec-bt-sens','敏感度分析'],['sec-bt-scen','歷史情境']],
+      model:[['sec-model-arch','LSTM 架構'],['sec-model-factor','輸入因子'],
+             ['sec-model-perf','表現比較']],
+      verify:[['sec-vf-log','我的預測紀錄'],['sec-vf-setup','設定情境'],
+              ['sec-vf-entry','預測 vs 真實結果'],['sec-vf-chart','資產走勢'],
+              ['sec-vf-stats','避險統計與準確度'],['sec-vf-report','驗證報告']]
+    };
+
+    const mkNav=(items,start)=>items.map((it,i)=>{
+      const on=st.page===it.key, subs=SECTIONS[it.key]||[];
+      return { idx:'0'+(start+i), label:it.label, sub:it.sub, onClick:()=>setPage(it.key),
+        bg: on?'#F2EEDF':'transparent', fg: on?'#26302B':'#7A847E',
+        bar: on?'#C8A951':'transparent', num: on?'#C8A951':'#7A847E',
+        chev: (subs.length? (on?'⌄':'›') : ''),
+        subDisplay: (on&&subs.length)?'block':'none',
+        subs: subs.map(a=>({ key:a[0], label:a[1], onClick:()=>this.goSection(it.key,a[0]) })) };
+    });
     const navDecide=mkNav(decideItems,1);
     const navLearn=mkNav(learnItems,decideItems.length+1);
 
