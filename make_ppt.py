@@ -90,6 +90,21 @@ pred = json.load(open("docs/predictions.json", encoding="utf-8"))
 bt = json.load(open("docs/backtest.json", encoding="utf-8"))
 m, bm = pred["metrics"], bt["metrics"]
 
+# 核心權衡：避險放棄多少報酬、換到多少回撤改善（照業界避險報告的呈現方式並排）
+GIVEUP_PP = bm["total_return_unhedged"] - bm["total_return_hedged"]
+DDGAIN_PP = bm["max_drawdown_hedged"] - bm["max_drawdown_unhedged"]
+_cst = bt.get("cost") or {}
+# 成本為零那一列＝「保險免費」的理論上限
+_free = (_cst.get("rows") or [{}])[0]
+
+# 「依訊號避險」vs「無腦每月都避」：同一工具、同一期間的對照（不要寫死數字，
+# 換了預測期間之後這幾個數字會變，寫死就會跟網站的表格互相矛盾）
+_sva = {r["name"]: r for r in (bt.get("strategy_compare", {}).get("signal_vs_always") or [])}
+_sig = _sva.get("保護性賣權 · 依訊號", {})
+_alw = _sva.get("保護性賣權 · 無腦每月", {})
+_collar = next((r for r in (bt.get("strategy_compare", {}).get("stats") or [])
+                if r.get("key") == "collar"), {})
+
 # ===================== 1. 封面 =====================
 s = prs.slides.add_slide(BLANK)
 bg = s.shapes.add_shape(MSO_SHAPE.RECTANGLE, 0, 0, prs.slide_width, prs.slide_height)
@@ -240,7 +255,7 @@ for i, t in enumerate(["Walk-forward：每次只用當下之前的資料重訓",
                        "7 個真實歷史事件情境（海嘯、歐債、新冠…）",
                        "四種工具對決：不避險／期貨／Put／Collar",
                        "新增避險成本：轉倉、手續費、權利金逐日計提",
-                       "新指標「保護單價」：回撤改善 1pp 要花多少報酬"]):
+                       "成本 vs 回撤改善權衡表：五種避險工具並排比較"]):
     text(s, 7.2, 3.4 + i * 0.48, 5.0, 0.42,
          [[("・", {"color": "gold"}), (t, {"color": "dark"})]], size=12.5)
 
@@ -250,7 +265,7 @@ s = slide_head("06　實測結果", "目前跑出來的數字",
 kpi = [("不避險 總報酬", f"{bm['total_return_unhedged']:.0f}%", "dark", "light"),
        ("避險 總報酬", f"{bm['total_return_hedged']:.0f}%", "green", "mint"),
        ("最大回撤 改善", f"{bm['max_drawdown_unhedged']:.1f}% → {bm['max_drawdown_hedged']:.1f}%", "dark", "light"),
-       ("保護單價", f"{bm['protection_price']:.0f} 倍", "red", "blush")]
+       ("避險換到什麼", f"−{GIVEUP_PP:.0f}pp ／ +{DDGAIN_PP:.1f}pp", "red", "blush")]
 kw = 2.72; kx = (W - (kw * 4 + 0.3 * 3)) / 2
 for i, (t, v, col, bgc) in enumerate(kpi):
     x = kx + i * (kw + 0.3)
@@ -285,14 +300,20 @@ text(s, 1.3, 6.5, 10.9, 0.4,
 # ===================== 8. 主要發現 =====================
 s = slide_head("07　主要發現", "回測告訴我們的三件事")
 finds = [("避險確實有壓低風險，但代價很高",
-          f"最大回撤從 {bm['max_drawdown_unhedged']:.1f}% 改善到 {bm['max_drawdown_hedged']:.1f}%（+2.6pp），"
-          f"但總報酬從 {bm['total_return_unhedged']:.0f}% 掉到 {bm['total_return_hedged']:.0f}%（−52pp）。", "red"),
+          f"最大回撤從 {bm['max_drawdown_unhedged']:.1f}% 改善到 {bm['max_drawdown_hedged']:.1f}%（+{DDGAIN_PP:.1f}pp），"
+          f"但總報酬從 {bm['total_return_unhedged']:.0f}% 掉到 {bm['total_return_hedged']:.0f}%（−{GIVEUP_PP:.0f}pp）。", "red"),
          ("成本不是瓶頸，訊號品質才是",
-          "本週把轉倉、手續費、權利金都算進去後才發現：模型平均只降低 9% 曝險、一年換手 0.4 次，"
-          "所以就算假設保險完全免費，保護單價仍有 19 倍。", "gold"),
-         ("但訊號不是完全沒用 —— 有兩個正面證據",
-          "同樣用保護性賣權，「聽訊號才避」283% ／ −40.5%，優於「無腦每月都避」225% ／ −41.8%；"
-          "而 Collar 回撤 −37.8%，是四種做法裡權衡最好的。", "green")]
+          f"把轉倉、手續費、權利金都算進去後才發現：模型平均只降低 {_cst.get('avgHedgeStr', '—')} 曝險、"
+          f"換手 {_cst.get('turnoverStr', '—')}，所以就算假設保險完全免費，也要讓出 "
+          f"{_free.get('giveupStr', '—').lstrip('−-')} 報酬，才換到 "
+          f"{_free.get('ddGainStr', '—').lstrip('+')} 的回撤改善。", "gold"),
+         ("訊號不是完全沒用 —— 但價值在「保護」，不在「省錢」",
+          f"同樣用保護性賣權：「聽訊號才避」{_sig.get('ret', 0):.0f}% ／ {_sig.get('mdd', 0):.1f}%，"
+          f"「無腦每月都避」{_alw.get('ret', 0):.0f}% ／ {_alw.get('mdd', 0):.1f}%。"
+          f"訊號少賺 {_alw.get('ret', 0) - _sig.get('ret', 0):.0f}pp，"
+          f"但回撤淺 {_sig.get('mdd', 0) - _alw.get('mdd', 0):.1f}pp —— "
+          f"訊號把力道集中在風險高的時段，買到更好的保護。"
+          f"而 Collar 回撤 {_collar.get('mdd', 0):.1f}%，是四種做法裡權衡最好的。", "green")]
 for i, (t, d, col) in enumerate(finds):
     y = 2.1 + i * 1.55
     card(s, 0.9, y, 11.55, 1.35, fill="white")

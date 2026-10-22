@@ -164,7 +164,7 @@ function downsample(arr, n) {
     // 回測績效表
     const s = bt.stats;
     const rows = [["總報酬","total_return",true],["年化報酬","annual_return",true],
-      ["年化波動","annual_vol",true],["Sharpe","sharpe",false],["最大回撤","max_drawdown",true]];
+      ["年化波動","annual_vol",true],["風險調整後報酬","risk_adj_return",false],["最大回撤","max_drawdown",true]];
     let bh = "<tr><th>指標</th><th>不避險</th><th>依訊號避險</th></tr>";
     for (const [name,key,pct] of rows) {
       const a = s.nohedge[key], b = s.hedge[key];
@@ -179,7 +179,7 @@ function downsample(arr, n) {
       document.getElementById("btsummary").innerHTML =
         `避險相對不避險：最大回撤改善 <b>${(u.drawdown_reduction*100).toFixed(2)}pp</b>、` +
         `波動降低 <b>${(u.vol_reduction*100).toFixed(2)}pp</b>、` +
-        `Sharpe <b>${u.sharpe_delta>=0?"+":""}${u.sharpe_delta.toFixed(3)}</b>、` +
+        `風險調整後報酬 <b>${u.risk_adj_delta>=0?"+":""}${u.risk_adj_delta.toFixed(3)}</b>、` +
         `總報酬讓出 <b>${(u.return_giveup*100).toFixed(2)}pp</b>。` +
         `（回測末日建議：${u.latest_recommendation.signal_label}）`;
     }

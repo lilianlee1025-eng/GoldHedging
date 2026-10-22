@@ -166,16 +166,25 @@ def _apply_costs(ret: np.ndarray, h: np.ndarray,
 
 
 def _stats(eq: np.ndarray, r: np.ndarray) -> dict:
-    """由淨值曲線與日報酬序列算出績效指標。"""
+    """由淨值曲線與日報酬序列算出績效指標。
+
+    指標定義刻意對齊 World Gold Council《Gold as a Strategic Asset》的報表欄位
+    （年化報酬 / 年化波動 / 風險調整後報酬 / 最大回撤），方便跟業界報告對照。
+
+    為什麼叫「風險調整後報酬」而不是 Sharpe：
+      Sharpe 的定義是 (報酬 − 無風險利率) / 波動，分子一定要扣掉無風險利率。
+      我們沒有扣（2023~25 美國短率 4~5%，扣不扣差很多），所以不能叫 Sharpe。
+      年化報酬 ÷ 年化波動 這個寫法本身是 WGC 報表的定義，講清楚就站得住。
+    """
     total_return = float(eq[-1] - 1.0)
     ann = float((1.0 + total_return) ** (252.0 / len(r)) - 1.0)
     vol = float(np.std(r) * np.sqrt(252))
-    sharpe = float(np.mean(r) / (np.std(r) + 1e-9) * np.sqrt(252))
     return {
         "total_return": total_return,
         "annual_return": ann,
         "annual_vol": vol,
-        "sharpe": sharpe,
+        # 風險調整後報酬 = 年化報酬 ÷ 年化波動（WGC 定義）。不是 Sharpe，見上方說明。
+        "risk_adj_return": float(ann / vol) if vol > 1e-9 else float("nan"),
         "max_drawdown": _max_drawdown(eq),
     }
 
@@ -242,8 +251,10 @@ def cost_sweep(signals: pd.DataFrame, threshold: float = None,
     """掃過多組年化避險成本，量化「保險費 vs 回撤改善」的權衡。
 
     回答的問題：避險確實壓低了回撤，但那個保護值多少錢？成本升到哪裡就不划算？
-    每一列附上 protection_price —— 每買到 1 個百分點的回撤改善，要放棄幾個百分點
-    的總報酬。數字越小代表這份保險越划算。
+
+    呈現方式沿用業界避險報告的慣例（例如 Graham Capital 的 tail-risk hedging 研究、
+    MSCI 的尾部避險分析）：把「放棄多少報酬」與「回撤改善多少」兩個數字並排列出，
+    讓讀者自己判斷值不值得，而不是壓縮成單一個自訂比率。
 
     注意：scenarios 只變動「年化持有成本」，調倉成本 tc_oneway 各列一律照收，
     所以成本 0 的那一列是「零持有成本」的對照組，不是完全免費。
@@ -276,8 +287,7 @@ def cost_sweep(signals: pd.DataFrame, threshold: float = None,
             "max_drawdown": round(mdd * 100, 1),
             "dd_improvement": round(dd_gain, 1),
             "return_giveup": round(ret_giveup, 1),
-            # 每換到 1pp 回撤改善，要付出幾 pp 報酬（越小越划算；<=0 代表白賺）
-            "protection_price": round(ret_giveup / dd_gain, 1) if dd_gain > 0.05 else None,
+            # 划算與否：回撤真的變淺，且讓出的報酬不超過換到的回撤改善
             "worth_it": bool(dd_gain > 0.05 and ret_giveup <= dd_gain),
         })
     return out
@@ -309,9 +319,8 @@ if __name__ == "__main__":
 
     print("\n========= 成本 vs 回撤改善 權衡 =========")
     print(f"{'避險工具':<22}{'年化成本':>8}{'總報酬':>9}{'最大回撤':>9}"
-          f"{'回撤改善':>9}{'報酬讓出':>9}{'保護單價':>9}")
+          f"{'回撤改善':>9}{'報酬讓出':>9}{'划算?':>7}")
     for r in cost_sweep(sig):
-        price = "—" if r["protection_price"] is None else f"{r['protection_price']:.1f}"
         print(f"{r['label']:<22}{r['cost_annual']:>7.1%}{r['total_return']:>8.1f}%"
               f"{r['max_drawdown']:>8.1f}%{r['dd_improvement']:>8.1f}pp"
-              f"{r['return_giveup']:>8.1f}pp{price:>9}")
+              f"{r['return_giveup']:>8.1f}pp{'是' if r['worth_it'] else '否':>7}")

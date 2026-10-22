@@ -1066,8 +1066,7 @@
     "max_drawdown_unhedged": -44.4,
     "hedge_cost_ratio": 49.4,
     "hedged_trigger_days": 3399,
-    "total_return_hedged_gross": 202.08,
-    "protection_price": 22.3
+    "total_return_hedged_gross": 202.08
   },
   "cost": {
     "annualStr": "0.3%",
@@ -1085,7 +1084,7 @@
         "mddStr": "-35.6%",
         "ddGainStr": "+8.7pp",
         "giveupStr": "−188pp",
-        "priceStr": "22×",
+        "worthStr": "不划算",
         "worth": false
       },
       {
@@ -1095,7 +1094,7 @@
         "mddStr": "-35.7%",
         "ddGainStr": "+8.6pp",
         "giveupStr": "−192pp",
-        "priceStr": "22×",
+        "worthStr": "不划算",
         "worth": false
       },
       {
@@ -1105,7 +1104,7 @@
         "mddStr": "-36.0%",
         "ddGainStr": "+8.3pp",
         "giveupStr": "−201pp",
-        "priceStr": "24×",
+        "worthStr": "不划算",
         "worth": false
       },
       {
@@ -1115,7 +1114,7 @@
         "mddStr": "-36.4%",
         "ddGainStr": "+7.9pp",
         "giveupStr": "−213pp",
-        "priceStr": "27×",
+        "worthStr": "不划算",
         "worth": false
       },
       {
@@ -1125,12 +1124,12 @@
         "mddStr": "-37.6%",
         "ddGainStr": "+6.8pp",
         "giveupStr": "−246pp",
-        "priceStr": "36×",
+        "worthStr": "不划算",
         "worth": false
       }
     ],
     "note": "避險期間平均只降低 23% 的黃金曝險、一年換手 1.2 次，所以「成本」本身不是這套策略的瓶頸：就算用最貴的保護性賣權，累計成本也只拖累總報酬 58 個百分點。",
-    "verdict": "真正的問題在保護單價：即使假設保險完全免費，每換到 1 個百分點的回撤改善仍要放棄 22 個百分點的總報酬。黃金長期走多，把曝險關掉的代價遠大於它擋掉的跌幅 —— 這套訊號式避險在本回測期間並不划算。",
+    "verdict": "真正的問題不是成本，而是這筆交換本身不值得：即使假設保險完全免費，也要放棄 188 個百分點的總報酬，才換到 8.7 個百分點的回撤改善。黃金長期走多，把曝險關掉的代價遠大於它擋掉的跌幅 —— 這套訊號式避險在本回測期間並不划算。",
     "assumptions": "持有成本按避險比例逐日計提（年化 ÷ 252），調倉成本按避險比例變動量單邊收取 0.02%。各情境只變動持有成本，調倉成本一律照收，因此「零持有成本」列並非完全免費。"
   },
   "scenarios": [

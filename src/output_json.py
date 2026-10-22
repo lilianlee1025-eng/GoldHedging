@@ -12,7 +12,7 @@
 
 2. backtest.json
    - 有避險 vs 無避險的累積損益曲線、避險比例。
-   - 兩者的總報酬、年化報酬、波動、Sharpe、最大回撤。
+   - 兩者的總報酬、年化報酬、波動、風險調整後報酬、最大回撤。
    - 避險成本明細，以及「毛（假設保險免費）vs 淨（扣成本）」的對照曲線。
    - cost_sweep：不同避險工具成本下的「報酬讓出 vs 回撤改善」權衡表。
    - 各年度（情境）表現。
@@ -231,17 +231,13 @@ def _backtest_summary(signals: pd.DataFrame, strategy: dict) -> dict:
          "horizon_days": config.HORIZON},
         threshold=strategy["threshold"])
     return {
-        # 正值代表避險較好：回撤更淺、波動更低、Sharpe 更高
+        # 正值代表避險較好：回撤更淺、波動更低、風險調整後報酬更高
         "drawdown_reduction": round(sh["max_drawdown"] - sn["max_drawdown"], 5),
         "vol_reduction": round(sn["annual_vol"] - sh["annual_vol"], 5),
-        "sharpe_delta": round(sh["sharpe"] - sn["sharpe"], 5),
+        "risk_adj_delta": round(sh["risk_adj_return"] - sn["risk_adj_return"], 5),
+        # 這兩個數字是整份回測的核心權衡，照業界避險報告的慣例並排呈現：
+        # 放棄多少總報酬（return_giveup），換到多少回撤改善（drawdown_reduction）。
         "return_giveup": round(sn["total_return"] - sh["total_return"], 5),
-        # 保護單價：每換到 1 個百分點的回撤改善，要放棄幾個百分點的總報酬。
-        # 這是整份回測最關鍵的一個數字 —— 它把「回撤變淺」這件事標上價格。
-        "protection_price": (
-            round((sn["total_return"] - sh["total_return"])
-                  / (sh["max_drawdown"] - sn["max_drawdown"]), 1)
-            if sh["max_drawdown"] - sn["max_drawdown"] > 0.0005 else None),
         # 成本佔了多少：毛（假設保險免費）與淨（扣成本）的總報酬差距
         "cost_drag": round(sg["total_return"] - sh["total_return"], 5),
         "latest_recommendation": reco,

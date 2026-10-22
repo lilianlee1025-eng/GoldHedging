@@ -383,7 +383,8 @@ def _cost_block(our_bt: dict) -> dict:
     """把避險成本明細與權衡表整理成前端可直接渲染的樣子。
 
     網站前四頁都在教「怎麼避險」，這一塊負責回答「避險划不划算」：
-    把「回撤變淺」標上價格 —— 每換到 1 個百分點的回撤改善，要放棄幾個百分點的報酬。
+    照業界避險報告（Graham Capital、MSCI 的尾部避險研究）的慣例，把「放棄多少報酬」
+    與「回撤改善多少」兩個數字並排，讓讀者自己判斷，不壓縮成單一個自訂比率。
     """
     c = our_bt.get("cost")
     sweep = our_bt.get("cost_sweep") or []
@@ -397,12 +398,13 @@ def _cost_block(our_bt: dict) -> dict:
         "mddStr": f"{r['max_drawdown']:.1f}%",
         "ddGainStr": f"+{r['dd_improvement']:.1f}pp",
         "giveupStr": f"−{r['return_giveup']:.0f}pp",
-        "priceStr": "—" if r["protection_price"] is None else f"{r['protection_price']:.0f}×",
+        "worthStr": "划算" if r["worth_it"] else "不划算",
         "worth": r["worth_it"],
     } for r in sweep]
 
-    best = min((r for r in sweep if r["protection_price"] is not None),
-               key=lambda r: r["protection_price"], default=None)
+    # 取成本最低（零持有成本）的那一列當「理論上限」：連免費保險都不划算的話，
+    # 任何真實避險工具都不可能划算。
+    free = sweep[0] if sweep else None
     note = (
         f"避險期間平均只降低 {c['avg_hedge_ratio'] * 100:.0f}% 的黃金曝險、一年換手 "
         f"{c['turnover_per_year']:.1f} 次，所以「成本」本身不是這套策略的瓶頸："
@@ -410,11 +412,12 @@ def _cost_block(our_bt: dict) -> dict:
         f"{sweep[-1]['return_giveup'] - sweep[0]['return_giveup']:.0f} 個百分點。"
     ) if sweep else ""
     verdict = (
-        f"真正的問題在保護單價：即使假設保險完全免費，每換到 1 個百分點的回撤改善"
-        f"仍要放棄 {best['protection_price']:.0f} 個百分點的總報酬。"
+        f"真正的問題不是成本，而是這筆交換本身不值得：即使假設保險完全免費，"
+        f"也要放棄 {free['return_giveup']:.0f} 個百分點的總報酬，"
+        f"才換到 {free['dd_improvement']:.1f} 個百分點的回撤改善。"
         "黃金長期走多，把曝險關掉的代價遠大於它擋掉的跌幅 —— "
         "這套訊號式避險在本回測期間並不划算。"
-    ) if best else ""
+    ) if free else ""
 
     return {
         "annualStr": f"{c['cost_annual'] * 100:.1f}%",
@@ -468,8 +471,6 @@ def build_backtest(our_bt: dict) -> dict:
             "hedge_cost_ratio": round(cost_ratio, 1),
             "hedged_trigger_days": trigger_days,
             "total_return_hedged_gross": round(sg["total_return"] * 100, 2),
-            # 保護單價：每換到 1pp 回撤改善要放棄幾 pp 總報酬（越小越划算）
-            "protection_price": our_bt.get("summary", {}).get("protection_price"),
         },
         # 避險成本：明細 + 「成本 vs 回撤改善」權衡表
         "cost": _cost_block(our_bt),
