@@ -205,14 +205,20 @@ def run(L: int = BLOCK_LEN, B: int = N_BOOT) -> dict:
     }
 
 
-def save(path: str = None, **kw) -> str:
-    """把檢定結果存成 JSON，供書面報告與網頁引用（數字只算一次，不會前後不一致）。"""
+def _dump(r: dict) -> list:
+    """寫到 outputs/（原始輸出）與 docs/（網頁讀的那份），兩邊數字一定一致。"""
     import json
-    path = path or os.path.join(config.JSON_DIR, "significance.json")
-    r = run(**kw)
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(r, f, ensure_ascii=False, indent=2)
-    return path
+    paths = [os.path.join(config.JSON_DIR, "significance.json"),
+             os.path.join(config.BASE_DIR, "docs", "significance.json")]
+    for path in paths:
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(r, f, ensure_ascii=False, indent=2)
+    return paths
+
+
+def save(**kw) -> list:
+    """跑完檢定並存檔，供書面報告與網頁引用（數字只算一次，不會前後不一致）。"""
+    return _dump(run(**kw))
 
 
 _MARK = {"above": "✅ 顯著為正", "below": "🔻 顯著為負", "none": "❌ 不顯著"}
@@ -256,8 +262,5 @@ if __name__ == "__main__":
     print("  ・【2】只說明「降低曝險有沒有降低風險」——降低曝險本來就會降風險，不算模型的功勞。")
     print("  ・【3】才是模型的真正價值：同樣的平均曝險下，看訊號挑時機有沒有贏過固定比例。")
 
-    import json
-    out = os.path.join(config.JSON_DIR, "significance.json")
-    with open(out, "w", encoding="utf-8") as f:
-        json.dump(r, f, ensure_ascii=False, indent=2)
-    print(f"\n已存檔：{out}")
+    for out in _dump(r):
+        print(f"已存檔：{out}")

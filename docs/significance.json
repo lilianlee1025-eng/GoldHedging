@@ -1,0 +1,96 @@
+{
+  "method": "moving block bootstrap",
+  "block_len": 120,
+  "n_boot": 2000,
+  "horizon": 30,
+  "period": "2008-02-19 ~ 2026-08-27",
+  "auc": {
+    "value": 0.48470323649192865,
+    "ci_low": 0.4176008928091995,
+    "ci_high": 0.5669663904313551,
+    "p": 0.832,
+    "verdict": "none",
+    "significant": false,
+    "n": 4628,
+    "n_blocks": 39,
+    "down_rate": 0.44468452895419186,
+    "n_boot_ok": 2000
+  },
+  "hedge": {
+    "n": 4658,
+    "n_blocks": 39,
+    "avg_hedge_ratio": 0.23071404850088817,
+    "hedging_effectiveness": {
+      "value": 0.36036051800714675,
+      "ci_low": 0.2787876246214905,
+      "ci_high": 0.4618410195070175,
+      "p": 0.0,
+      "verdict": "above",
+      "significant": true
+    },
+    "hedging_effectiveness_const": {
+      "value": 0.40820004981821456,
+      "ci_low": 0.408199124826106,
+      "ci_high": 0.4081991248261063,
+      "p": 0.0,
+      "verdict": "above",
+      "significant": true
+    },
+    "hedging_effectiveness_vs_const": {
+      "value": -0.047839531811067815,
+      "ci_low": -0.12941150020461584,
+      "ci_high": 0.053641894680911385,
+      "p": 0.448,
+      "verdict": "none",
+      "significant": false
+    },
+    "drawdown_improvement": {
+      "value": 0.08614272107270249,
+      "ci_low": -0.03855065510321727,
+      "ci_high": 0.11163246100848472,
+      "p": 0.248,
+      "verdict": "none",
+      "significant": false
+    },
+    "drawdown_improvement_const": {
+      "value": 0.08711504419287786,
+      "ci_low": 0.051501603212231586,
+      "ci_high": 0.10199460868925576,
+      "p": 0.0,
+      "verdict": "above",
+      "significant": true
+    },
+    "drawdown_improvement_vs_const": {
+      "value": -0.0009723231201753668,
+      "ci_low": -0.11640374844735774,
+      "ci_high": 0.027743242074338693,
+      "p": 0.318,
+      "verdict": "none",
+      "significant": false
+    },
+    "annual_return_difference": {
+      "value": -0.029010761620261727,
+      "ci_low": -0.06586893875968902,
+      "ci_high": -0.001973584039032553,
+      "p": 0.031,
+      "verdict": "below",
+      "significant": true
+    },
+    "annual_return_difference_const": {
+      "value": -0.018866574967754124,
+      "ci_low": -0.04073833086545847,
+      "ci_high": 1.572308895169228e-05,
+      "p": 0.051,
+      "verdict": "none",
+      "significant": false
+    },
+    "annual_return_difference_vs_const": {
+      "value": -0.010144186652507603,
+      "ci_low": -0.03331303889582647,
+      "ci_high": 0.008015843350990764,
+      "p": 0.29,
+      "verdict": "none",
+      "significant": false
+    }
+  }
+}

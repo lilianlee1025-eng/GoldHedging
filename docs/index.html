@@ -776,6 +776,55 @@
           <div style="margin-top:18px;padding:14px;background:#F2F3F2;border-radius:8px;font-size:12.5px;color:#26302B;line-height:1.7;">{{ modelVerdict }}</div>
         </div>
       </div>
+
+      <!-- 統計顯著性檢定：回答「這些差異有多少可能只是運氣」。
+           抓不到 significance.json 時整張卡不顯示。 -->
+      <sc-if value="{{ sgHas }}" hint-placeholder-val="{{ true }}">
+      <div style="background:#fff;border:1px solid #E4E7E5;border-radius:10px;padding:22px 24px;margin-top:16px;">
+        <div id="sec-model-sig" style="scroll-margin-top:20px;font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">統計顯著性檢定</div>
+        <div style="font-size:12px;color:#7A847E;line-height:1.65;margin-bottom:16px;max-width:860px;">{{ sgMethod }}</div>
+
+        <div style="font-size:10.5px;color:#A98F3E;font-family:'JetBrains Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;margin-bottom:8px;">① 相對於「完全不避險」</div>
+        <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+        <div class="dctable" style="display:grid;grid-template-columns:1.5fr 0.9fr 1.5fr 0.8fr 0.9fr;gap:0;font-family:'JetBrains Mono',monospace;min-width:600px;">
+          <div style="font-size:10.5px;color:#7A847E;padding:8px 6px;text-transform:uppercase;">指標</div>
+          <div style="font-size:10.5px;color:#7A847E;padding:8px 6px;text-align:right;">值</div>
+          <div style="font-size:10.5px;color:#7A847E;padding:8px 6px;text-align:right;">95% 信賴區間</div>
+          <div style="font-size:10.5px;color:#7A847E;padding:8px 6px;text-align:right;">p</div>
+          <div style="font-size:10.5px;color:#7A847E;padding:8px 6px;text-align:right;">結論</div>
+          <sc-for list="{{ sgRows }}" as="sr" hint-placeholder-count="4">
+            <div style="font-size:12.5px;padding:11px 6px;border-top:1px solid #F0F2F6;color:#26302B;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;">{{ sr.name }}</div>
+            <div style="font-size:12.5px;padding:11px 6px;border-top:1px solid #F0F2F6;text-align:right;color:#26302B;font-weight:600;">{{ sr.val }}</div>
+            <div style="font-size:12px;padding:11px 6px;border-top:1px solid #F0F2F6;text-align:right;color:#7A847E;">{{ sr.ci }}</div>
+            <div style="font-size:12px;padding:11px 6px;border-top:1px solid #F0F2F6;text-align:right;color:#7A847E;">{{ sr.pStr }}</div>
+            <div style="font-size:12px;padding:11px 6px;border-top:1px solid #F0F2F6;text-align:right;color:{{ sr.vColor }};font-weight:600;">{{ sr.verdict }}</div>
+          </sc-for>
+        </div>
+        </div>
+        <div style="margin-top:12px;padding:13px;background:#F2F3F2;border-radius:8px;font-size:12.5px;color:#26302B;line-height:1.7;">{{ sgNote }}</div>
+
+        <div style="font-size:10.5px;color:#A98F3E;font-family:'JetBrains Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;margin:20px 0 8px;">② 訊號 − 固定比例避險（對照組）</div>
+        <div style="font-size:12px;color:#7A847E;line-height:1.65;margin-bottom:12px;max-width:860px;">{{ sgConstNote }}</div>
+        <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+        <div class="dctable" style="display:grid;grid-template-columns:1.5fr 0.9fr 1.5fr 0.8fr 0.9fr;gap:0;font-family:'JetBrains Mono',monospace;min-width:600px;">
+          <div style="font-size:10.5px;color:#7A847E;padding:8px 6px;text-transform:uppercase;">指標（訊號 − 固定）</div>
+          <div style="font-size:10.5px;color:#7A847E;padding:8px 6px;text-align:right;">差異</div>
+          <div style="font-size:10.5px;color:#7A847E;padding:8px 6px;text-align:right;">95% 信賴區間</div>
+          <div style="font-size:10.5px;color:#7A847E;padding:8px 6px;text-align:right;">p</div>
+          <div style="font-size:10.5px;color:#7A847E;padding:8px 6px;text-align:right;">結論</div>
+          <sc-for list="{{ sgDiffRows }}" as="sd" hint-placeholder-count="3">
+            <div style="font-size:12.5px;padding:11px 6px;border-top:1px solid #F0F2F6;color:#26302B;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;">{{ sd.name }}</div>
+            <div style="font-size:12.5px;padding:11px 6px;border-top:1px solid #F0F2F6;text-align:right;color:#26302B;font-weight:600;">{{ sd.val }}</div>
+            <div style="font-size:12px;padding:11px 6px;border-top:1px solid #F0F2F6;text-align:right;color:#7A847E;">{{ sd.ci }}</div>
+            <div style="font-size:12px;padding:11px 6px;border-top:1px solid #F0F2F6;text-align:right;color:#7A847E;">{{ sd.pStr }}</div>
+            <div style="font-size:12px;padding:11px 6px;border-top:1px solid #F0F2F6;text-align:right;color:{{ sd.vColor }};font-weight:600;">{{ sd.verdict }}</div>
+          </sc-for>
+        </div>
+        </div>
+
+        <div style="font-size:11px;color:#9AA39D;margin-top:12px;line-height:1.65;">檢定方法：移動區塊自助法（moving block bootstrap）。避險效率定義為 1 − 避險後報酬變異數 ÷ 未避險報酬變異數，取自 Ederington (1979)。自助法的 p 值為近似值，衡量「在這段歷史的統計特性下，觀察到的結果有多容易單靠運氣出現」。</div>
+      </div>
+      </sc-if>
     </div>
     </sc-if>
 
@@ -1058,6 +1107,7 @@ class Component extends DCLogic {
       restored: !!(sv.sim || sv.prin),  // 這次是不是從舊設定還原的
       profile: sv.profile || 'balanced',   // 風險偏好
       vf: null,                           // 成效驗證序列（verification.json）
+      sig: null,                          // 顯著性檢定結果（significance.json）
       // 成效驗證的查詢條件：起始日、本金、持有的交易日數
       vq: sv.vq || { start:'', capital:1000000, hold:60 },
       sub: '',                            // 目前子頁（空字串＝該分頁的第一個子頁）
@@ -1318,8 +1368,10 @@ class Component extends DCLogic {
       fetch('./predictions.json'+t).then(r=>r.json()),
       fetch('./backtest.json'+t).then(r=>r.json()),
       // 成效驗證用的每日序列。這支是選用的：抓不到就隱藏該頁，不影響其他功能。
-      fetch('./verification.json'+t).then(r=>r.json()).catch(()=>null)
-    ]).then(([p,b,v])=>{
+      fetch('./verification.json'+t).then(r=>r.json()).catch(()=>null),
+      // 顯著性檢定結果。同樣是選用的：抓不到就不顯示那張卡，其餘照常。
+      fetch('./significance.json'+t).then(r=>r.json()).catch(()=>null)
+    ]).then(([p,b,v,sg])=>{
         const sv=this.loadPrefs(), tc=this.state.touched||{};
         // 計價單位：使用者選過就聽使用者的，否則用 JSON 給的預設
         const u=sv.unit||(p.units&&p.units.default)||'spot';
@@ -1337,7 +1389,7 @@ class Component extends DCLogic {
           if(!tc.prem) pf.prem=Math.round(S*0.03);
           prin=Object.assign({},prin,pf);
         }
-        this.setState({ pred:p, bt:b, vf:v, unit:u, sim, prin, loaded:true });
+        this.setState({ pred:p, bt:b, vf:v, sig:sg, unit:u, sim, prin, loaded:true });
       })
       .catch(()=>{ this.setState({ loaded:true }); });   // 失敗也解除動畫（用內建範例資料）
 
@@ -2239,6 +2291,57 @@ class Component extends DCLogic {
       {name:'LSTM 多因子',rmse:f3(mm.rmse),dacc:f1(mm.decline_acc),auc:f3(mm.auc),bg:'rgba(200,169,81,0.10)',weight:'600',daccColor:accCol(mm.decline_acc),aucColor:aucCol(mm.auc)}
     ];
 
+    /* ---- 顯著性檢定（walk-forward ＋ 移動區塊自助法）----
+       上面那張表是「單次 80/20 切分」的結果，只測了最後約兩成的期間；
+       這裡是 walk-forward 全期的結果，評估方式比較嚴格，也比較接近實際使用情形。
+       抓不到 significance.json 時 sgHas 為 false，整張卡不顯示。 */
+    const SG=st.sig;
+    const sgTxt={above:'顯著為正',below:'顯著為負',none:'不顯著'};
+    const sgCol={above:'#1E8C66',below:'#C0473E',none:'#7A847E'};
+    const pp=v=>(v>=0?'+':'−')+Math.abs(v*100).toFixed(1)+'pp';
+    const f3s=v=>v.toFixed(3);
+    const sgRow=(name,d,isPct)=>({
+      name:name,
+      val: isPct?pp(d.value):f3s(d.value),
+      ci:  isPct?('['+pp(d.ci_low)+', '+pp(d.ci_high)+']')
+                :('['+f3s(d.ci_low)+', '+f3s(d.ci_high)+']'),
+      pStr:(d.p<0.001?'<0.001':d.p.toFixed(3)),
+      verdict:sgTxt[d.verdict], vColor:sgCol[d.verdict]
+    });
+    let sgRows=[], sgDiffRows=[], sgMethod='', sgNote='', sgConstNote='';
+    if(SG){
+      const hx=SG.hedge;
+      sgRows=[ sgRow('AUC（方向判斷力）',SG.auc,false),
+               sgRow('避險效率 HE',hx.hedging_effectiveness,true),
+               sgRow('最大回撤改善',hx.drawdown_improvement,true),
+               sgRow('年化報酬差',hx.annual_return_difference,true) ];
+      sgDiffRows=[ sgRow('避險效率 HE',hx.hedging_effectiveness_vs_const,true),
+                   sgRow('最大回撤改善',hx.drawdown_improvement_vs_const,true),
+                   sgRow('年化報酬差',hx.annual_return_difference_vs_const,true) ];
+      sgMethod='期間 '+SG.period+'，共 '+SG.auc.n.toLocaleString('en-US')+' 天。預測期間為 '
+        +SG.horizon+' 個交易日、但訊號每天產生，所以相鄰樣本的未來視窗重疊 '
+        +(SG.horizon-1)+'/'+SG.horizon+'——實際上只有約 '+SG.auc.n_blocks
+        +' 個獨立區塊，而不是 '+SG.auc.n.toLocaleString('en-US')+' 個獨立樣本。'
+        +'一般的 t 檢定會把信賴區間算得太窄，因此改用長度 '+SG.block_len
+        +' 天的移動區塊自助法，重抽 '+SG.n_boot.toLocaleString('en-US')+' 次。';
+      const aucOK=SG.auc.verdict!=='none';
+      sgNote='AUC '+f3s(SG.auc.value)+'，95% 信賴區間 ['+f3s(SG.auc.ci_low)+', '
+        +f3s(SG.auc.ci_high)+'] '+(aucOK?'未跨過':'跨過')+' 0.5，'
+        +(aucOK?'模型具有統計上可辨識的方向判斷力。'
+               :'因此無法宣稱模型的方向判斷優於隨機猜測。')
+        +'年化報酬差 '+pp(hx.annual_return_difference.value)
+        +(hx.annual_return_difference.verdict==='below'
+          ?'則是穩定為負，代表避險確實會讓長期報酬下降。':'。');
+      sgConstNote='避險效率 '+pp(hx.hedging_effectiveness.value)+'雖然顯著，但那主要來自「曝險降低」本身——'
+        +'只要少持有一些，變異數一定會下降，這是算術而不是模型的功勞。'
+        +'同樣平均曝險（'+(hx.avg_hedge_ratio*100).toFixed(1)+'%）但完全不看訊號的固定比例避險，'
+        +'避險效率是 '+pp(hx.hedging_effectiveness_const.value)+'。'
+        +(['hedging_effectiveness_vs_const','drawdown_improvement_vs_const',
+           'annual_return_difference_vs_const'].some(k=>hx[k].verdict==='above')
+          ?'下表中有項目顯著為正，代表訊號確實帶來額外價值。'
+          :'下表三項差異全部不顯著，代表在這段期間，模型的「挑時機」並未帶來可驗證的額外價值。');
+    }
+
     /* 模型結論：一律由 metrics 即時生成。
        這段原本是寫死的文字（宣稱下跌準確率 60.0%、RMSE 勝過 Naive），
        在資料源改成 GC=F、期間延長後就與上方表格脫節了，因此改成跟著數據走。 */
@@ -2247,13 +2350,25 @@ class Component extends DCLogic {
     let modelVerdict='三種模型的 RMSE 相當接近（'+rlo+'～'+rhi+'）：短天期金價接近隨機漫步，'
       +'Naive（假設明天＝今天）在價格誤差上本來就是很難打敗的基準，多因子 LSTM '
       +(mm.rmse<mn.rmse?'小幅勝過':'並未勝過')+'它。';
-    if(mm.auc>0.5){
-      modelVerdict+='方向判斷上，多因子 AUC '+f3(mm.auc)+' 高於 0.5，也優於單因子（'+f3(ms.auc)
-        +'），代表六因子確實帶進了額外資訊，可作為避險訊號的依據。';
+    /* 方向判斷的結論一律以 walk-forward 的顯著性檢定為準。
+       上表是單次 80/20 切分、只測最後約兩成期間，樣本少且剛好落在某一段行情，
+       單看它容易高估模型；之前這裡就曾因為只看上表而寫出「六因子確實帶進額外資訊」，
+       與下方檢定結果互相矛盾。 */
+    modelVerdict+='方向判斷上，上表的多因子 AUC '+f3(mm.auc)+' 來自單次 80/20 切分，只測了最後約兩成的期間。';
+    if(SG){
+      const ok=SG.auc.verdict!=='none';
+      modelVerdict+='改用涵蓋全期、每 60 個交易日重新訓練一次的 walk-forward 評估後，AUC 為 '
+        +f3s(SG.auc.value)+'（95% 信賴區間 ['+f3s(SG.auc.ci_low)+', '+f3s(SG.auc.ci_high)+']），'
+        +(ok?'未跨過 0.5，方向判斷力具統計顯著性。'
+            :'跨過 0.5，因此不能宣稱模型的方向判斷優於隨機猜測。')
+        +'兩個數字都是真的，差別在評估方式——walk-forward 比較嚴格，也比較接近實際使用情形，'
+        +'詳見下方「統計顯著性檢定」。';
+    }else if(mm.auc>0.5){
+      modelVerdict+='AUC 高於 0.5，也優於單因子（'+f3(ms.auc)+'），但尚未做顯著性檢定，不宜直接當成有效的證據。';
     }else{
-      modelVerdict+='方向判斷上，多因子 AUC '+f3(mm.auc)+' 不高於 0.5，代表目前尚未顯著優於隨機猜測'
+      modelVerdict+='AUC 不高於 0.5，代表尚未優於隨機猜測'
         +(baseAcc!=null?('；下跌準確率 '+f1(mm.decline_acc)+' 也低於「永遠猜多數類別」的基準率 '+f1(baseAcc)):'')
-        +'。這是本研究目前最主要的發現之一，也是後續改進的重點——實際避險划不划算，請見「回測結果」頁的成本分析。';
+        +'。'
     }
 
     const factors=[
@@ -2351,6 +2466,9 @@ class Component extends DCLogic {
       svaRows:svaRows, svaNote:svaNote, sensRows:sensRows,
       /* model */
       metricsRows:metricsRows, factors:factors, modelVerdict:modelVerdict,
+      /* 顯著性檢定 */
+      sgHas:!!SG, sgRows:sgRows, sgDiffRows:sgDiffRows,
+      sgMethod:sgMethod, sgNote:sgNote, sgConstNote:sgConstNote,
       /* 成效驗證 */
       hasVerify:!!vfView, noVerify:!vfView, vfPresets:vfPresets, vfHoldBtns:vfHoldBtns,
       /* 預測紀錄簿 */

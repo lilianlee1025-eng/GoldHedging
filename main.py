@@ -26,6 +26,7 @@ from src.backtest import walk_forward, run_strategy
 from src.output_json import forecast_future, save_predictions_json, save_backtest_json
 from src.design_export import export as export_design_json
 from src.verify import export as export_verification
+from src.significance import save as save_significance
 
 
 def main(quick: bool = False, refresh: bool = False):
@@ -83,6 +84,11 @@ def main(quick: bool = False, refresh: bool = False):
     f1, f2 = export_design_json()
     f3 = export_verification()      # 成效驗證頁與預測紀錄簿的每日序列
     print(f"   {f1}\n   {f2}\n   {f3}")
+
+    # 8) 顯著性檢定（吃 walk-forward 訊號，所以一定要在步驟 5 之後）
+    print("\n[步驟 8] 統計顯著性檢定（移動區塊自助法）")
+    for f in save_significance():
+        print(f"   {f}")
 
     print("\n完成！")
     print("  · 原生 JSON：outputs/predictions.json、outputs/backtest.json")
