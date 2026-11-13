@@ -40,7 +40,8 @@
     div[style*="100vh"]{ flex-direction:column !important; }   /* 後援比對 */
     /* 側邊欄變成頂部橫條，不再固定寬度與高度 */
     aside{ width:100% !important; height:auto !important; position:static !important; border-right:none !important; border-bottom:1px solid #E4E7E5 !important; padding:14px !important; }
-    aside nav{ flex-direction:row !important; flex-wrap:wrap !important; gap:6px !important; margin-top:12px !important; }
+    /* 側邊欄變頂部橫條後 aside 是 height:auto，桌機版那個「nav 自己捲動」的設定不需要了 */
+    aside nav{ flex-direction:row !important; flex-wrap:wrap !important; gap:6px !important; margin-top:12px !important; overflow:visible !important; }
     aside nav button{ width:auto !important; flex:1 1 auto !important; }
     /* 主內容縮小留白、不超出畫面 */
     main{ padding:16px 14px 48px !important; width:100% !important; min-width:0 !important; }
@@ -74,7 +75,7 @@
       </div>
     </div>
 
-    <nav style="display:flex;flex-direction:column;gap:3px;margin-top:18px;flex:1;">
+    <nav style="display:flex;flex-direction:column;gap:3px;margin-top:18px;flex:1;min-height:0;overflow-y:auto;">
       <div style="font-size:10px;color:#A98F3E;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em;text-transform:uppercase;padding:0 12px 6px;font-weight:600;">決策工具</div>
       <sc-for list="{{ navDecide }}" as="it" hint-placeholder-count="2">
         <div>
@@ -118,7 +119,7 @@
     <!-- ===== 帳號區：固定在側邊欄底部（nav 有 flex:1，會把這塊推到最下面）=====
          未設定 Supabase 金鑰時整區不顯示，其餘功能照常運作。 -->
     <sc-if value="{{ authEnabled }}" hint-placeholder-val="{{ true }}">
-    <div style="position:relative;margin-top:12px;padding-top:12px;border-top:1px solid #E4E7E5;">
+    <div style="position:relative;flex:none;margin-top:12px;padding-top:12px;border-top:1px solid #E4E7E5;background:#FFFFFF;">
 
       <!-- 觸發列：已登入顯示頭像＋帳號，未登入顯示一顆登入鈕 -->
       <sc-if value="{{ isLoggedIn }}" hint-placeholder-val="{{ false }}">
