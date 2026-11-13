@@ -272,7 +272,7 @@ def cost_sweep(signals: pd.DataFrame, threshold: float = None,
     base_mdd = _max_drawdown(eq_nohedge)
 
     out = []
-    for key, cost_annual, label in scenarios:
+    for cost_annual, label in scenarios:
         net, _, _ = _apply_costs(ret, h, cost_annual, tc_oneway)
         eq = np.cumprod(1.0 + net)
         total_return = float(eq[-1] - 1.0)
@@ -281,7 +281,6 @@ def cost_sweep(signals: pd.DataFrame, threshold: float = None,
         dd_gain = (mdd - base_mdd) * 100.0
         ret_giveup = (base_return - total_return) * 100.0
         out.append({
-            "key": key,
             "cost_annual": cost_annual,
             "label": label,
             "total_return": round(total_return * 100, 1),

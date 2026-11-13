@@ -392,7 +392,6 @@ def _cost_block(our_bt: dict) -> dict:
         return None
 
     rows = [{
-        "key": r["key"],
         "label": r["label"],
         "costStr": f"{r['cost_annual'] * 100:.1f}%",
         "retStr": f"{r['total_return']:.0f}%",

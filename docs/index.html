@@ -116,13 +116,6 @@
       </sc-for>
     </nav>
 
-    <!-- 設定：不編號也不歸入上面兩組，它不是分析流程的一站 -->
-    <div onClick="{{ onGoSettings }}" style="flex:none;display:flex;align-items:center;gap:12px;padding:10px 12px;margin-top:6px;border-radius:7px;cursor:pointer;background:{{ navSetBg }};color:{{ navSetFg }};">
-      <span style="width:3px;height:20px;flex:none;"></span>
-      <span style="font-size:13px;flex:none;">⚙</span>
-      <span style="flex:1;min-width:0;font-size:13px;font-weight:500;">設定</span>
-    </div>
-
     <!-- ===== 帳號區：固定在側邊欄底部（nav 有 flex:1，會把這塊推到最下面）=====
          未設定 Supabase 金鑰時整區不顯示，其餘功能照常運作。 -->
     <sc-if value="{{ authEnabled }}" hint-placeholder-val="{{ true }}">
@@ -160,6 +153,13 @@
         <div>
           <div style="font-size:10.5px;color:#7A847E;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;">帳號</div>
           <div style="font-size:13px;color:#26302B;margin-top:5px;word-break:break-all;font-weight:600;">{{ authEmail }}</div>
+
+          <div style="margin-top:14px;padding-top:12px;border-top:1px solid #F0F2F6;">
+            <div style="font-size:10.5px;color:#7A847E;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;">個人化設定</div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;padding:3px 0;"><span style="color:#7A847E;">風險屬性</span><span style="color:#26302B;font-weight:500;">{{ acctProfileLabel }}</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;padding:3px 0;"><span style="color:#7A847E;">持有部位</span><span style="color:#26302B;font-weight:500;">{{ acctPosCount }}</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;padding:3px 0;"><span style="color:#7A847E;">預測紀錄</span><span style="color:#26302B;font-weight:500;">{{ acctPlogCount }}</span></div>
+          </div>
 
           <div style="font-size:11px;color:#7A847E;margin-top:12px;line-height:1.6;">{{ syncMsg }}</div>
           <div onClick="{{ a.signOut }}" style="margin-top:12px;text-align:center;background:#F2F3F2;border:1px solid #E4E7E5;border-radius:7px;padding:9px;cursor:pointer;font-size:12.5px;color:#4A544E;">登出</div>
@@ -605,13 +605,13 @@
           <div style="font-size:10.5px;color:#7A847E;padding:8px 6px;text-align:right;">報酬讓出</div>
           <div style="font-size:10.5px;color:#7A847E;padding:8px 6px;text-align:right;">划算?</div>
           <sc-for list="{{ costRows }}" as="cr" hint-placeholder-count="5">
-            <div style="font-size:12.5px;padding:11px 6px;border-top:1px solid #F0F2F6;background:{{ cr.rowBg }};color:#26302B;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-weight:{{ cr.rowWeight }};">{{ cr.label }}<span style="font-size:10.5px;color:#A98F3E;font-family:'JetBrains Mono',monospace;">{{ cr.mineStr }}</span></div>
-            <div style="font-size:12.5px;padding:11px 6px;border-top:1px solid #F0F2F6;background:{{ cr.rowBg }};text-align:right;color:#7A847E;">{{ cr.costStr }}</div>
-            <div style="font-size:12.5px;padding:11px 6px;border-top:1px solid #F0F2F6;background:{{ cr.rowBg }};text-align:right;color:#26302B;font-weight:{{ cr.rowWeight }};">{{ cr.retStr }}</div>
-            <div style="font-size:12.5px;padding:11px 6px;border-top:1px solid #F0F2F6;background:{{ cr.rowBg }};text-align:right;color:#C0473E;">{{ cr.mddStr }}</div>
-            <div style="font-size:12.5px;padding:11px 6px;border-top:1px solid #F0F2F6;background:{{ cr.rowBg }};text-align:right;color:#1E8C66;">{{ cr.ddGainStr }}</div>
-            <div style="font-size:12.5px;padding:11px 6px;border-top:1px solid #F0F2F6;background:{{ cr.rowBg }};text-align:right;color:#C0473E;">{{ cr.giveupStr }}</div>
-            <div style="font-size:12.5px;padding:11px 6px;border-top:1px solid #F0F2F6;background:{{ cr.rowBg }};text-align:right;font-weight:600;color:{{ cr.worthColor }};">{{ cr.worthStr }}</div>
+            <div style="font-size:12.5px;padding:11px 6px;border-top:1px solid #F0F2F6;color:#26302B;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;">{{ cr.label }}</div>
+            <div style="font-size:12.5px;padding:11px 6px;border-top:1px solid #F0F2F6;text-align:right;color:#7A847E;">{{ cr.costStr }}</div>
+            <div style="font-size:12.5px;padding:11px 6px;border-top:1px solid #F0F2F6;text-align:right;color:#26302B;">{{ cr.retStr }}</div>
+            <div style="font-size:12.5px;padding:11px 6px;border-top:1px solid #F0F2F6;text-align:right;color:#C0473E;">{{ cr.mddStr }}</div>
+            <div style="font-size:12.5px;padding:11px 6px;border-top:1px solid #F0F2F6;text-align:right;color:#1E8C66;">{{ cr.ddGainStr }}</div>
+            <div style="font-size:12.5px;padding:11px 6px;border-top:1px solid #F0F2F6;text-align:right;color:#C0473E;">{{ cr.giveupStr }}</div>
+            <div style="font-size:12.5px;padding:11px 6px;border-top:1px solid #F0F2F6;text-align:right;font-weight:600;color:{{ cr.worthColor }};">{{ cr.worthStr }}</div>
           </sc-for>
         </div>
         </div>
@@ -852,78 +852,6 @@
           <div style="margin-top:20px;padding-top:14px;border-top:1px solid #F0F2F6;font-size:11px;color:#9AA39D;line-height:1.7;">
             指標定義參考 Ederington, L.H. (1979), “The Hedging Performance of the New Futures Markets”, <i>Journal of Finance</i> 34(1), 157–170；以及 World Gold Council《Gold as a Strategic Asset》的風險報酬表欄位。資料來源：Yahoo Finance、FRED（美國聖路易聯邦準備銀行）。
           </div>
-        </div>
-      </div>
-    </div>
-    </sc-if>
-
-
-    <!-- ============ SETTINGS ============ -->
-    <sc-if value="{{ isSettings }}" hint-placeholder-val="{{ false }}">
-    <div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;">
-
-        <!-- 避險偏好：會影響其他頁面的計算 -->
-        <div style="background:#fff;border:1px solid #E4E7E5;border-radius:10px;padding:22px 24px;">
-          <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">避險偏好</div>
-          <div style="font-size:12px;color:#7A847E;line-height:1.6;margin-bottom:18px;">這兩項會改變模擬器與回測頁的計算結果。</div>
-
-          <div style="font-size:12px;color:#4A544E;font-weight:600;margin-bottom:8px;">風險屬性</div>
-          <div style="display:flex;gap:7px;margin-bottom:8px;">
-            <sc-for list="{{ stProfBtns }}" as="sp" hint-placeholder-count="3">
-              <button onClick="{{ sp.onClick }}" style="flex:1;cursor:pointer;font-family:inherit;font-size:13px;padding:9px 0;border-radius:7px;border:1px solid {{ sp.border }};background:{{ sp.bg }};color:{{ sp.fg }};font-weight:{{ sp.weight }};transition:all .15s;">{{ sp.label }}</button>
-            </sc-for>
-          </div>
-          <div style="font-size:11.5px;color:#7A847E;line-height:1.6;margin-bottom:22px;">越保守＝越早啟動避險。<sc-for list="{{ stProfBtns }}" as="sp2" hint-placeholder-count="3"><span style="display:block;margin-top:3px;color:{{ sp2.fg }};">{{ sp2.label }}：{{ sp2.desc }}</span></sc-for></div>
-
-          <sc-if value="{{ stHasTool }}" hint-placeholder-val="{{ true }}">
-          <div>
-            <div style="font-size:12px;color:#4A544E;font-weight:600;margin-bottom:4px;">避險工具</div>
-            <div style="font-size:11.5px;color:#7A847E;line-height:1.6;margin-bottom:10px;">不同工具的持有成本差很多，划不划算的答案也會不一樣。</div>
-            <sc-for list="{{ stToolBtns }}" as="tb" hint-placeholder-count="5">
-              <div onClick="{{ tb.onClick }}" style="display:flex;align-items:center;gap:11px;padding:11px 13px;margin-bottom:7px;border-radius:8px;cursor:pointer;border:1px solid {{ tb.border }};background:{{ tb.bg }};">
-                <span style="width:15px;height:15px;border-radius:50%;flex:none;border:2px solid {{ tb.ring }};background:{{ tb.dot }};"></span>
-                <span style="flex:1;min-width:0;font-size:13px;color:#26302B;font-weight:{{ tb.weight }};">{{ tb.label }}</span>
-                <span style="flex:none;font-size:12px;font-family:'JetBrains Mono',monospace;color:#7A847E;">年化 {{ tb.costStr }}</span>
-              </div>
-            </sc-for>
-            <div style="margin-top:12px;padding:13px;background:#F2F3F2;border-radius:8px;font-size:12.5px;color:#26302B;line-height:1.7;">{{ stToolNote }}</div>
-          </div>
-          </sc-if>
-        </div>
-
-        <!-- 顯示設定 ＋ 帳號 -->
-        <div>
-          <div style="background:#fff;border:1px solid #E4E7E5;border-radius:10px;padding:22px 24px;margin-bottom:16px;">
-            <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">顯示</div>
-            <div style="font-size:12px;color:#7A847E;line-height:1.6;margin-bottom:16px;">只影響數字怎麼顯示，不影響計算。</div>
-            <div style="font-size:12px;color:#4A544E;font-weight:600;margin-bottom:8px;">計價單位</div>
-            <div style="display:flex;gap:7px;">
-              <sc-for list="{{ stUnitBtns }}" as="su" hint-placeholder-count="3">
-                <button onClick="{{ su.onClick }}" style="flex:1;cursor:pointer;font-family:inherit;font-size:12.5px;padding:9px 0;border-radius:7px;border:1px solid {{ su.border }};background:{{ su.bg }};color:{{ su.fg }};font-weight:{{ su.weight }};transition:all .15s;">{{ su.label }}</button>
-              </sc-for>
-            </div>
-            <div style="font-size:11.5px;color:#9AA39D;line-height:1.6;margin-top:10px;">台幣與 GLD 的換算使用目前的匯率與比例，套用在歷史價格上並非當時的真實匯率，僅供換算參考。</div>
-          </div>
-
-          <sc-if value="{{ authEnabled }}" hint-placeholder-val="{{ true }}">
-          <div style="background:#fff;border:1px solid #E4E7E5;border-radius:10px;padding:22px 24px;">
-            <div style="font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">帳號與資料</div>
-
-            <sc-if value="{{ isLoggedIn }}" hint-placeholder-val="{{ false }}">
-            <div>
-              <div style="font-size:12px;color:#7A847E;line-height:1.6;margin-bottom:16px;">設定會自動同步到雲端，換裝置也還在。</div>
-              <div style="display:flex;justify-content:space-between;font-size:12.5px;padding:6px 0;border-bottom:1px solid #F0F2F6;"><span style="color:#7A847E;">登入帳號</span><span style="color:#26302B;font-weight:500;word-break:break-all;">{{ authEmail }}</span></div>
-              <div style="display:flex;justify-content:space-between;font-size:12.5px;padding:6px 0;border-bottom:1px solid #F0F2F6;"><span style="color:#7A847E;">同步狀態</span><span style="color:#26302B;">{{ syncMsg }}</span></div>
-              <div onClick="{{ a.signOut }}" style="margin-top:16px;text-align:center;background:#F2F3F2;border:1px solid #E4E7E5;border-radius:7px;padding:10px;cursor:pointer;font-size:12.5px;color:#4A544E;">登出</div>
-            </div>
-            </sc-if>
-
-            <sc-if value="{{ isLoggedOut }}" hint-placeholder-val="{{ true }}">
-            <div style="font-size:12.5px;color:#7A847E;line-height:1.7;margin-top:8px;">目前未登入。設定只存在這台裝置的瀏覽器裡，換電腦或清除瀏覽資料就會不見。<br>從左下角登入後，設定會同步到雲端。</div>
-            </sc-if>
-          </div>
-          </sc-if>
         </div>
       </div>
     </div>
@@ -1207,7 +1135,6 @@ class Component extends DCLogic {
       touched: sv.touched || {},
       restored: !!(sv.sim || sv.prin),  // 這次是不是從舊設定還原的
       profile: sv.profile || 'balanced',   // 風險偏好
-      tool: sv.tool || 'comex',            // 避險工具（對應 backtest.json 的 cost.rows[].key）
       vf: null,                           // 成效驗證序列（verification.json）
       sig: null,                          // 顯著性檢定結果（significance.json）
       asmpOpen: false,                    // 「計算方式與假設」是否展開
@@ -1375,9 +1302,6 @@ class Component extends DCLogic {
     const out={sim:Object.assign({},this.state.sim)};
     if(prof){
       out.profile=prof.risk_profile;
-      // hedge_tool 是後來才加的欄位；還沒跑 supabase_hedge_tool.sql 的話讀不到，
-      // 這時就沿用本機設定，不要把它覆蓋成 undefined。
-      if(prof.hedge_tool) out.tool=prof.hedge_tool;
       out.sim.months=Number(prof.hedge_months);
       out.sim.vol=Number(prof.hedge_vol);
       out.sim.rate=Number(prof.hedge_rate);
@@ -1402,22 +1326,12 @@ class Component extends DCLogic {
       try{
         const st=this.state, uid=user.id;
         // 1:1 的兩張表直接 upsert
-        const prof={
+        const r1=await sb.from('profiles').upsert({
           user_id:uid, risk_profile:st.profile,
           hedge_months:this.num(st.sim.months,3),
           hedge_vol:this.num(st.sim.vol,18),
           hedge_rate:this.num(st.sim.rate,4.2)
-        };
-        // hedge_tool 需要先跑 supabase_hedge_tool.sql 才有這一欄。
-        // 還沒跑的話整筆 upsert 會失敗，連風險屬性、部位都同步不了，
-        // 所以第一次遇到「沒有這一欄」的錯誤就記下來，之後都不再送這個欄位。
-        if(!this._noHedgeTool) prof.hedge_tool=st.tool;
-        let r1=await sb.from('profiles').upsert(prof,{onConflict:'user_id'});
-        if(r1.error && /hedge_tool/.test(r1.error.message||'')){
-          this._noHedgeTool=true;
-          delete prof.hedge_tool;
-          r1=await sb.from('profiles').upsert(prof,{onConflict:'user_id'});
-        }
+        },{onConflict:'user_id'});
         if(r1.error) throw r1.error;
 
         const r2=await sb.from('ui_prefs').upsert({
@@ -1440,9 +1354,7 @@ class Component extends DCLogic {
         }else{
           await sb.from('positions').delete().eq('user_id',uid);
         }
-        this.setState({syncMsg: this._noHedgeTool
-          ? '已同步到雲端（避險工具僅存在這台裝置，需先執行 supabase_hedge_tool.sql）'
-          : '已同步到雲端'});
+        this.setState({syncMsg:'已同步到雲端'});
       }catch(e){ this.setState({syncMsg:'同步失敗：'+(e.message||e)}); }
     };
     clearTimeout(this._syncTimer);
@@ -1957,8 +1869,7 @@ class Component extends DCLogic {
       principles:['原理圖解','期貨 vs 期權','拖動參數，即時觀察兩種避險工具的損益曲線差異。'],
       backtest:['歷史驗證','回測結果','以 walk-forward 回測比較有避險與無避險的累積損益與回撤。'],
       model:['方法論','模型說明','LSTM 架構、輸入因子與相對基準線的表現比較。'],
-      verify:['事後驗證','成效驗證','挑一個歷史起始日與本金，用真實金價檢驗當時的預測與避險建議。'],
-      settings:['個人化','設定','風險屬性、避險工具與計價單位——這些設定會套用到全站的分析結果。'] };
+      verify:['事後驗證','成效驗證','挑一個歷史起始日與本金，用真實金價檢驗當時的預測與避險建議。'] };
     const tt=titles[st.page];
     // 每頁一行白話導引（新手老手皆宜，點到為止）
     const helps={
@@ -1968,8 +1879,7 @@ class Component extends DCLogic {
       backtest:'重點：把策略套回真實歷史。綠線（有避險）在大跌時較抗跌，代價是大漲時少賺一點——看回撤差距就懂避險值不值得。',
       // 這裡刻意不寫死結論數字（會跟表格脫節），只說明怎麼看；真正的結論由 modelVerdict 即時生成。
     model:'說明：模型用過去 '+((pred.meta&&pred.meta.lookback)||60)+' 天的 6 種數據，預測未來'+hzWord+'（'+hzDays+'）的走勢與下跌機率。下方表格比較三種模型的價格誤差(RMSE)與方向判斷力(AUC，要大於 0.5 才算有訊號)，結論寫在表格下方。',
-      verify:'用法：選一個過去的日期與本金，系統會用「當時就算得出來的訊號」模擬你照做的結果，再用真實金價驗證——預測準不準、避險有沒有幫你少賠。',
-      settings:'這裡改的設定會影響其他頁面的計算結果：風險屬性決定多早開始避險，避險工具決定成本假設。登入後會同步到雲端，換裝置也還在。'
+      verify:'用法：選一個過去的日期與本金，系統會用「當時就算得出來的訊號」模擬你照做的結果，再用真實金價驗證——預測準不準、避險有沒有幫你少賠。'
     };
 
     /* dashboard */
@@ -2219,17 +2129,11 @@ class Component extends DCLogic {
 
     // 避險成本：這份保險花了多少錢、值不值得
     const cst=bt.cost || null;
-    // 設定頁選的那一種工具要標出來，否則那個設定等於沒作用
-    const costRows=(cst && cst.rows ? cst.rows : []).map(r=>{
-      const mine=r.key===st.tool;
-      return { label:r.label, costStr:r.costStr, retStr:r.retStr, mddStr:r.mddStr,
-        ddGainStr:r.ddGainStr, giveupStr:r.giveupStr,
-        worthStr:r.worthStr||(r.worth?'划算':'不划算'),
-        worthColor:r.worth?'#1E8C66':'#C0473E',
-        rowBg:mine?'rgba(200,169,81,0.13)':'transparent',
-        rowWeight:mine?'600':'400',
-        mineStr:mine?'　你的設定':'' };
-    });
+    const costRows=(cst && cst.rows ? cst.rows : []).map(r=>({
+      label:r.label, costStr:r.costStr, retStr:r.retStr, mddStr:r.mddStr,
+      ddGainStr:r.ddGainStr, giveupStr:r.giveupStr,
+      worthStr:r.worthStr||(r.worth?'划算':'不划算'),
+      worthColor:r.worth?'#1E8C66':'#C0473E' }));
 
     const bm=bt.metrics;
     const maxAbs=Math.max.apply(null,bt.scenarios.map(s=>Math.max(Math.abs(s.unhedged_return),Math.abs(s.hedged_return))));
@@ -2565,39 +2469,6 @@ class Component extends DCLogic {
       {code:'VIX',name:'波動率指數（恐慌指標）',role:'風險',src:'Yahoo Finance · 每日'}
     ];
 
-    /* ---- 設定頁 ----
-       風險屬性與計價單位原本散在模擬器頁與總覽頁，沒有地方總覽；
-       避險工具是新的設定，影響回測的成本假設。三者集中在這一頁。 */
-    const segBtn=(on)=>({ bg:on?'#C8A951':'#FFFFFF', fg:on?'#26302B':'#7A847E',
-                          border:on?'#C8A951':'#E4E7E5', weight:on?'600':'400' });
-    const setTool=k=>{ this.savePrefs({tool:k}); this.setState({tool:k}); };
-
-    const stProfBtns=Object.keys(PROFILES).map(k=>Object.assign(
-      { key:k, label:PROFILES[k].label,
-        desc:'下跌機率超過 '+Math.round(PROFILES[k].threshold*100)+'% 才開始避險',
-        onClick:()=>setProfile(k) }, segBtn(k===st.profile)));
-    const stUnitBtns=this.unitDefs().options.map(o=>Object.assign(
-      { key:o.key, label:o.label, onClick:()=>setUnit(o.key) }, segBtn(o.key===st.unit)));
-
-    // 避險工具：直接用回測算好的成本情境，選哪個就看哪一列的結果
-    const toolRows=(bt.cost&&bt.cost.rows)?bt.cost.rows:[];
-    const stToolBtns=toolRows.map(r=>{
-      const on=r.key===st.tool;
-      return { key:r.key, label:r.label, costStr:r.costStr,
-               retStr:r.retStr, mddStr:r.mddStr, onClick:()=>setTool(r.key),
-               bg:on?'#F2EEDF':'#FFFFFF', border:on?'#C8A951':'#E4E7E5',
-               weight:on?'600':'400', dot:on?'#C8A951':'#E4E7E5',
-               ring:on?'#C8A951':'#C0C7C2' };
-    });
-    const curTool=toolRows.filter(r=>r.key===st.tool)[0]||null;
-    const stToolNote=curTool
-      ? ('以「'+curTool.label+'」的成本（年化 '+curTool.costStr+'）重算 '
-         +(bt.meta&&bt.meta.period||'')+' 的回測：總報酬 '+curTool.retStr
-         +'、最大回撤 '+curTool.mddStr+'、回撤改善 '+curTool.ddGainStr
-         +'。回測結果頁的「避險成本」會標出這一列。')
-      : '選一種你實際會用的避險工具，回測的成本假設就會跟著換。';
-    const stHasTool=toolRows.length>0;
-
     return {
       isLoading:!st.loaded,
       /* auth */
@@ -2609,21 +2480,18 @@ class Component extends DCLogic {
       acctName:isIn?(st.user.email||'').split('@')[0]:'',
       acctChev:st.authOpen?'⌄':'›',
       acctRowBg:st.authOpen?'#F2EEDF':'transparent',
+      acctProfileLabel:(PROFILES[st.profile]||PROFILES.balanced).label,
+      acctPosCount:((st.positions||[]).length)+' 筆',
+      acctPlogCount:((st.plog||[]).length)+' 筆',
       authTitle:st.authMode==='signup'?'註冊新帳號':'登入',
       authSubmitLabel:st.authBusy?'處理中…':(st.authMode==='signup'?'註冊':'登入'),
       authSwitchLabel:st.authMode==='signup'?'已經有帳號了？改用登入':'還沒有帳號？註冊一個',
       hasAuthMsg:!!st.authMsg, authMsg:st.authMsg,
       authMsgColor:st.authMsgKind==='ok'?'#1E8C66':'#C0473E',
       syncMsg:st.syncMsg||'設定會自動同步到雲端',
-      /* 設定頁 */
-      stProfBtns:stProfBtns, stUnitBtns:stUnitBtns, stToolBtns:stToolBtns,
-      stToolNote:stToolNote, stHasTool:stHasTool,
-      onGoSettings:()=>setPage('settings'),
-      navSetBg:st.page==='settings'?'#F2EEDF':'transparent',
-      navSetFg:st.page==='settings'?'#26302B':'#7A847E',
       navDecide:navDecide, navLearn:navLearn, pageKicker:tt[0], pageTitle:tt[1], pageSubtitle:tt[2], beginnerHelp:helps[st.page],
       updatedStr:'資料截至 '+(pred.data_as_of||pred.current.date),
-      isDashboard:st.page==='dashboard', isSim:st.page==='simulator', isPrin:st.page==='principles', isBacktest:st.page==='backtest', isModel:st.page==='model', isVerify:st.page==='verify', isSettings:st.page==='settings',
+      isDashboard:st.page==='dashboard', isSim:st.page==='simulator', isPrin:st.page==='principles', isBacktest:st.page==='backtest', isModel:st.page==='model', isVerify:st.page==='verify',
       /* 子頁旗標 */
       isBtPerf:activeSub==='perf', isBtCost:activeSub==='cost', isBtTools:activeSub==='tools',
       isVfLog:activeSub==='log',  isVfSim:activeSub==='sim',
