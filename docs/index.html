@@ -154,10 +154,31 @@
           <div style="font-size:13px;color:#26302B;margin-top:5px;word-break:break-all;font-weight:600;">{{ authEmail }}</div>
 
           <div style="margin-top:14px;padding-top:12px;border-top:1px solid #F0F2F6;">
-            <div style="font-size:10.5px;color:#7A847E;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;">個人化設定</div>
-            <div style="display:flex;justify-content:space-between;font-size:12px;padding:3px 0;"><span style="color:#7A847E;">風險屬性</span><span style="color:#26302B;font-weight:500;">{{ acctProfileLabel }}</span></div>
-            <div style="display:flex;justify-content:space-between;font-size:12px;padding:3px 0;"><span style="color:#7A847E;">持有部位</span><span style="color:#26302B;font-weight:500;">{{ acctPosCount }}</span></div>
-            <div style="display:flex;justify-content:space-between;font-size:12px;padding:3px 0;"><span style="color:#7A847E;">預測紀錄</span><span style="color:#26302B;font-weight:500;">{{ acctPlogCount }}</span></div>
+            <div style="font-size:10.5px;color:#7A847E;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:9px;">個人化設定</div>
+
+            <div style="font-size:11.5px;color:#7A847E;margin-bottom:6px;">風險屬性</div>
+            <div style="display:flex;gap:5px;margin-bottom:12px;">
+              <sc-for list="{{ acctProfBtns }}" as="pb" hint-placeholder-count="3">
+                <button onClick="{{ pb.onClick }}" style="flex:1;cursor:pointer;font-family:inherit;font-size:11.5px;padding:6px 0;border-radius:6px;border:1px solid {{ pb.border }};background:{{ pb.bg }};color:{{ pb.fg }};font-weight:{{ pb.weight }};transition:all .15s;">{{ pb.label }}</button>
+              </sc-for>
+            </div>
+
+            <div style="font-size:11.5px;color:#7A847E;margin-bottom:6px;">計價單位</div>
+            <div style="display:flex;gap:5px;">
+              <sc-for list="{{ acctUnitBtns }}" as="ub2" hint-placeholder-count="3">
+                <button onClick="{{ ub2.onClick }}" style="flex:1;cursor:pointer;font-family:inherit;font-size:11px;padding:6px 0;border-radius:6px;border:1px solid {{ ub2.border }};background:{{ ub2.bg }};color:{{ ub2.fg }};font-weight:{{ ub2.weight }};transition:all .15s;">{{ ub2.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="margin-top:14px;padding-top:12px;border-top:1px solid #F0F2F6;">
+            <div style="font-size:10.5px;color:#7A847E;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;">我的資料</div>
+            <sc-for list="{{ acctLinks }}" as="al" hint-placeholder-count="2">
+              <div onClick="{{ al.onClick }}" style="display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12.5px;padding:7px 6px;margin:0 -6px;border-radius:6px;cursor:pointer;">
+                <span style="color:#4A544E;">{{ al.label }}</span>
+                <span style="display:flex;align-items:center;gap:6px;"><span style="color:#26302B;font-weight:600;">{{ al.val }}</span><span style="color:#7A847E;font-size:12px;">›</span></span>
+              </div>
+            </sc-for>
           </div>
 
           <div style="font-size:11px;color:#7A847E;margin-top:12px;line-height:1.6;">{{ syncMsg }}</div>
@@ -2468,6 +2489,27 @@ class Component extends DCLogic {
       {code:'VIX',name:'波動率指數（恐慌指標）',role:'風險',src:'Yahoo Finance · 每日'}
     ];
 
+    /* ---- 帳號面板裡的個人化設定 ----
+       原本這三行只是唯讀文字，看得到卻改不了，使用者還得自己找到對應頁面去改。
+       改成在面板裡直接操作：風險屬性與計價單位就地切換，資料筆數點了跳到該頁。
+       切換沿用既有的 setProfile / setUnit，所以一樣會寫進 localStorage 並同步雲端。 */
+    const seg=(on)=>({ bg:on?'#C8A951':'#FFFFFF', fg:on?'#26302B':'#7A847E',
+                       border:on?'#C8A951':'#E4E7E5', weight:on?'600':'400' });
+    const acctProfBtns=Object.keys(PROFILES).map(k=>Object.assign(
+      { key:k, label:PROFILES[k].label, onClick:()=>setProfile(k) },
+      seg(k===st.profile)));
+    const acctUnitBtns=this.unitDefs().options.map(o=>Object.assign(
+      { key:o.key, label:o.label, onClick:()=>setUnit(o.key) },
+      seg(o.key===st.unit)));
+    // 點了先關面板再換頁，否則面板會浮在新頁面上
+    const navTo=(fn)=>()=>{ this.setState({authOpen:false}); fn(); };
+    const acctLinks=[
+      { label:'持有部位', val:((st.positions||[]).length)+' 筆',
+        onClick:navTo(()=>setPage('simulator')) },
+      { label:'預測紀錄', val:((st.plog||[]).length)+' 筆',
+        onClick:navTo(()=>this.setSub('verify','log')) }
+    ];
+
     return {
       isLoading:!st.loaded,
       /* auth */
@@ -2479,9 +2521,7 @@ class Component extends DCLogic {
       acctName:isIn?(st.user.email||'').split('@')[0]:'',
       acctChev:st.authOpen?'⌄':'›',
       acctRowBg:st.authOpen?'#F2EEDF':'transparent',
-      acctProfileLabel:(PROFILES[st.profile]||PROFILES.balanced).label,
-      acctPosCount:((st.positions||[]).length)+' 筆',
-      acctPlogCount:((st.plog||[]).length)+' 筆',
+      acctProfBtns:acctProfBtns, acctUnitBtns:acctUnitBtns, acctLinks:acctLinks,
       authTitle:st.authMode==='signup'?'註冊新帳號':'登入',
       authSubmitLabel:st.authBusy?'處理中…':(st.authMode==='signup'?'註冊':'登入'),
       authSwitchLabel:st.authMode==='signup'?'已經有帳號了？改用登入':'還沒有帳號？註冊一個',
