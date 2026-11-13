@@ -825,6 +825,34 @@
         <div style="font-size:11px;color:#9AA39D;margin-top:12px;line-height:1.65;">檢定方法：移動區塊自助法（moving block bootstrap）。避險效率定義為 1 − 避險後報酬變異數 ÷ 未避險報酬變異數，取自 Ederington (1979)。自助法的 p 值為近似值，衡量「在這段歷史的統計特性下，觀察到的結果有多容易單靠運氣出現」。</div>
       </div>
       </sc-if>
+
+      <!-- 計算方式與假設：預設收合。把定義與簡化假設攤開講，
+           橘色那幾條是會影響結果解讀的簡化，刻意標出來而不是藏在註解裡。 -->
+      <div style="background:#fff;border:1px solid #E4E7E5;border-radius:10px;margin-top:16px;overflow:hidden;">
+        <div onClick="{{ onToggleAsmp }}" style="display:flex;align-items:center;gap:10px;padding:18px 24px;cursor:pointer;">
+          <span style="flex:1;min-width:0;">
+            <span style="display:block;font-size:14px;font-weight:600;color:#26302B;">計算方式與假設</span>
+            <span style="display:block;font-size:12px;color:#7A847E;margin-top:3px;">每個數字怎麼算出來的，以及我們做了哪些簡化</span>
+          </span>
+          <span style="font-size:14px;color:#7A847E;flex:none;">{{ asmpChev }}</span>
+        </div>
+        <div style="display:{{ asmpDisplay }};padding:0 24px 22px;">
+          <sc-for list="{{ asmpSections }}" as="asec" hint-placeholder-count="6">
+            <div style="margin-top:16px;">
+              <div style="font-size:12.5px;font-weight:600;color:#26302B;margin-bottom:8px;">{{ asec.title }}</div>
+              <sc-for list="{{ asec.items }}" as="ai" hint-placeholder-count="4">
+                <div style="display:flex;gap:9px;padding:5px 0;font-size:12.5px;line-height:1.75;color:{{ ai.color }};">
+                  <span style="flex:none;color:{{ ai.dot }};">{{ ai.mark }}</span>
+                  <span style="flex:1;min-width:0;">{{ ai.t }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </sc-for>
+          <div style="margin-top:20px;padding-top:14px;border-top:1px solid #F0F2F6;font-size:11px;color:#9AA39D;line-height:1.7;">
+            指標定義參考 Ederington, L.H. (1979), “The Hedging Performance of the New Futures Markets”, <i>Journal of Finance</i> 34(1), 157–170；以及 World Gold Council《Gold as a Strategic Asset》的風險報酬表欄位。資料來源：Yahoo Finance、FRED（美國聖路易聯邦準備銀行）。
+          </div>
+        </div>
+      </div>
     </div>
     </sc-if>
 
@@ -1108,6 +1136,7 @@ class Component extends DCLogic {
       profile: sv.profile || 'balanced',   // 風險偏好
       vf: null,                           // 成效驗證序列（verification.json）
       sig: null,                          // 顯著性檢定結果（significance.json）
+      asmpOpen: false,                    // 「計算方式與假設」是否展開
       // 成效驗證的查詢條件：起始日、本金、持有的交易日數
       vq: sv.vq || { start:'', capital:1000000, hold:60 },
       sub: '',                            // 目前子頁（空字串＝該分頁的第一個子頁）
@@ -2291,6 +2320,63 @@ class Component extends DCLogic {
       {name:'LSTM 多因子',rmse:f3(mm.rmse),dacc:f1(mm.decline_acc),auc:f3(mm.auc),bg:'rgba(200,169,81,0.10)',weight:'600',daccColor:accCol(mm.decline_acc),aucColor:aucCol(mm.auc)}
     ];
 
+    /* ---- 計算方式與假設 ----
+       把原本只存在於程式註解裡的定義與簡化假設，誠實攤在網頁上。
+       數字一律從 JSON 的 meta 讀，不寫死，否則改了 config 就會跟實際跑的不一致。 */
+    const bmeta=bt.meta||{}, cstx=bt.cost||{};
+    const nz=(v,d)=>(v==null?d:v);
+    const _asmpMark=it=>Object.assign({}, it, {
+      mark: it.warn?'▲':'·',
+      dot:  it.warn?'#C8A951':'#C0C7C2',
+      color:it.warn?'#5A5238':'#4A544E'
+    });
+    const asmpSections=[
+      {title:'一、資料來源與處理', items:[
+        {t:'黃金價格：Yahoo Finance '+((pred.meta&&pred.meta.target_ticker)||'GC=F')
+           +'（COMEX 黃金連續期貨，美元/盎司），'+nz(bmeta.data_start,'2005-01-01')+' 起。'},
+        {t:'美元指數、標普 500、VIX：Yahoo Finance；10 年期公債殖利率、CPI：FRED。'},
+        {t:'CPI 是月頻資料且隔月才公布，一律按「實際公布日」對齊，避免模型用到當時還不存在的數字。'},
+        {t:'美國假日造成的缺值，以前一交易日數值填補。'}
+      ]},
+      {title:'二、模型與回測方式', items:[
+        {t:'多變量 LSTM，雙輸出（預測報酬 ＋ 下跌機率），回看 '+nz(bmeta.lookback,60)
+           +' 個交易日，預測未來 '+nz(bmeta.horizon,30)+' 個交易日。'},
+        {t:'Walk-forward：先用 '+nz(bmeta.initial_train,750)+' 個交易日訓練，之後每 '
+           +nz(bmeta.step,60)+' 個交易日，用「截至當下」的全部歷史重新訓練一次。'},
+        {t:'標準化（scaler）只用當下的訓練區間 fit，不碰測試期，避免資料洩漏。'},
+        {t:'回測為了速度，每次重訓 '+nz(bmeta.wf_epochs,20)+' 個 epoch；單次切分的評估用 '
+           +nz(bmeta.epochs,40)+' 個。這也是兩種評估的 AUC 不同的原因之一。'}
+      ]},
+      {title:'三、避險報酬怎麼算', items:[
+        {t:'避險比例 h：下跌機率超過門檻 '+nz(bmeta.hedge_threshold,0.5)
+           +' 之後線性放大，機率為 1 時全額避險。'},
+        {t:'當日淨報酬 ＝ 金價報酬 ×(1 − h) − 持有成本 − 調倉成本。'},
+        {t:'決策在收盤後做、隔日生效（第 t 日的下跌機率配 t→t+1 的報酬），不含前視偏誤。'},
+        {warn:true, t:'簡化假設：上式等於假設避險工具完全反向複製現貨、沒有基差風險，且避險比例 1:1。'
+           +'實務上期貨與現貨不會完全同步——黃金的相關性很高，但不是 1。'}
+      ]},
+      {title:'四、績效指標的定義', items:[
+        {t:'年化報酬 ＝ (1 ＋ 總報酬) ^ (252 ÷ 交易日數) − 1。'},
+        {t:'年化波動 ＝ 日報酬標準差 × √252。'},
+        {warn:true, t:'風險調整後報酬 ＝ 年化報酬 ÷ 年化波動。這不是 Sharpe——Sharpe 的分子要扣無風險利率，'
+           +'本站沒有扣。此定義取自 World Gold Council 的報表欄位。'},
+        {t:'最大回撤 ＝（淨值 ÷ 歷史高點 − 1）的最小值。'},
+        {t:'避險效率 HE ＝ 1 − 避險後報酬變異數 ÷ 未避險報酬變異數（Ederington, 1979）。'}
+      ]},
+      {title:'五、避險成本', items:[
+        {t:'持有成本按避險比例逐日計提（年化 '+nz(cstx.annualStr,'0.3%')+' ÷ 252）。'},
+        {t:'調倉成本按避險比例的變動量，單邊收取 '+nz(cstx.tcStr,'0.02%')+'。'},
+        {warn:true, t:'未計入：稅負、保證金追繳、流動性衝擊、大額成交的價格影響。'}
+      ]},
+      {title:'六、已知的限制', items:[
+        {warn:true, t:'預測期間是 '+nz(bmeta.horizon,30)+' 個交易日，但曝險每日調整，兩者的頻率並不一致。'},
+        {warn:true, t:'「台幣/公克」與「GLD 美元/股」的換算，使用的是目前的匯率與比例，'
+           +'套用在歷史價格上並不是當時的真實匯率，僅供換算參考。'},
+        {warn:true, t:'期貨／保護性賣權／Collar 的對決使用 Black–Scholes 定價，假設波動率固定、歐式履約。'},
+        {t:'這是單一市場、單一期間的回測結果，不代表未來；所有結論都限於上述期間與假設之下。'}
+      ]}
+    ].map(s=>({title:s.title, items:s.items.map(_asmpMark)}));
+
     /* ---- 顯著性檢定（walk-forward ＋ 移動區塊自助法）----
        上面那張表是「單次 80/20 切分」的結果，只測了最後約兩成的期間；
        這裡是 walk-forward 全期的結果，評估方式比較嚴格，也比較接近實際使用情形。
@@ -2468,6 +2554,10 @@ class Component extends DCLogic {
       metricsRows:metricsRows, factors:factors, modelVerdict:modelVerdict,
       /* 顯著性檢定 */
       sgHas:!!SG, sgRows:sgRows, sgDiffRows:sgDiffRows,
+      /* 計算方式與假設 */
+      asmpSections:asmpSections, asmpOpen:st.asmpOpen,
+      asmpDisplay:st.asmpOpen?'block':'none', asmpChev:st.asmpOpen?'⌄':'›',
+      onToggleAsmp:()=>this.setState({asmpOpen:!st.asmpOpen}),
       sgMethod:sgMethod, sgNote:sgNote, sgConstNote:sgConstNote,
       /* 成效驗證 */
       hasVerify:!!vfView, noVerify:!vfView, vfPresets:vfPresets, vfHoldBtns:vfHoldBtns,

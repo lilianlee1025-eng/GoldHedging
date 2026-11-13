@@ -3,7 +3,14 @@
     "method": "walk-forward",
     "hedge_threshold": 0.5,
     "period": "2008-02-19 ~ 2026-08-27",
-    "n_days": 4658
+    "n_days": 4658,
+    "lookback": 60,
+    "horizon": 30,
+    "initial_train": 750,
+    "step": 60,
+    "wf_epochs": 20,
+    "epochs": 40,
+    "data_start": "2005-01-01"
   },
   "equity_curve": {
     "dates": [
