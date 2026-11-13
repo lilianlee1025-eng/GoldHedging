@@ -154,12 +154,17 @@
           <div style="font-size:10.5px;color:#7A847E;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;">帳號</div>
           <div style="font-size:13px;color:#26302B;margin-top:5px;word-break:break-all;font-weight:600;">{{ authEmail }}</div>
 
-          <div style="margin-top:14px;padding-top:12px;border-top:1px solid #F0F2F6;">
-            <div style="font-size:10.5px;color:#7A847E;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;">個人化設定</div>
-            <div style="display:flex;justify-content:space-between;font-size:12px;padding:3px 0;"><span style="color:#7A847E;">風險屬性</span><span style="color:#26302B;font-weight:500;">{{ acctProfileLabel }}</span></div>
-            <div style="display:flex;justify-content:space-between;font-size:12px;padding:3px 0;"><span style="color:#7A847E;">持有部位</span><span style="color:#26302B;font-weight:500;">{{ acctPosCount }}</span></div>
-            <div style="display:flex;justify-content:space-between;font-size:12px;padding:3px 0;"><span style="color:#7A847E;">預測紀錄</span><span style="color:#26302B;font-weight:500;">{{ acctPlogCount }}</span></div>
+          <!-- 只在真的有事時才出現；沒事的話這整段不渲染 -->
+          <sc-if value="{{ hasAcctAlert }}" hint-placeholder-val="{{ true }}">
+          <div onClick="{{ acctAlert.onClick }}" style="display:flex;align-items:center;gap:10px;margin-top:14px;padding:11px 12px;border-radius:8px;cursor:pointer;background:{{ acctAlert.bg }};">
+            <span style="font-size:14px;flex:none;">{{ acctAlert.icon }}</span>
+            <span style="flex:1;min-width:0;">
+              <span style="display:block;font-size:12.5px;font-weight:600;color:{{ acctAlert.fg }};">{{ acctAlert.text }}</span>
+              <span style="display:block;font-size:11px;color:#7A847E;margin-top:2px;">{{ acctAlert.sub }}</span>
+            </span>
+            <span style="flex:none;font-size:13px;color:{{ acctAlert.fg }};">{{ acctAlert.chev }}</span>
           </div>
+          </sc-if>
 
           <div style="font-size:11px;color:#7A847E;margin-top:12px;line-height:1.6;">{{ syncMsg }}</div>
           <div onClick="{{ a.signOut }}" style="margin-top:12px;text-align:center;background:#F2F3F2;border:1px solid #E4E7E5;border-radius:7px;padding:9px;cursor:pointer;font-size:12.5px;color:#4A544E;">登出</div>
@@ -2280,7 +2285,7 @@ class Component extends DCLogic {
           onDel:()=>this.delPredLog(row.id) };
         if(!ready){
           const left=(i0>=0)?(row.horizon-(d.length-1-i0)):row.horizon;
-          return Object.assign(base,{ ready:false, pending:true,
+          return Object.assign(base,{ ready:false, pending:true, leftDays:Math.max(1,left),
             statusStr:'尚未到期', statusColor:'#7A847E', statusBg:'#F2F3F2',
             actualStr:'—', errStr:'—', pnlStr:'—', pnlColor:'#7A847E',
             detailStr:(i0<0?'等待資料更新':('還需 '+Math.max(1,left)+' 個交易日')) });
@@ -2469,6 +2474,34 @@ class Component extends DCLogic {
       {code:'VIX',name:'波動率指數（恐慌指標）',role:'風險',src:'Yahoo Finance · 每日'}
     ];
 
+    /* ---- 帳號面板的提醒 ----
+       原本面板放「預測紀錄 1 筆」這種統計數字，永遠都在、永遠不變，看了不能幹嘛。
+       改成只在「真的有事」時才出現一列：
+         · 有預測到期而且使用者還沒去看過 → 提醒去看結果
+         · 否則有預測快到期 → 顯示還要等幾天
+         · 兩者都沒有 → 整段不顯示
+       「看過沒」記在 localStorage，看過就不再重複提醒，否則又會變成永遠都在的裝飾。 */
+    const plogSeen=(this.loadPrefs().plogSeen)||[];
+    const plogReadyIds=plogRows.filter(r=>r.ready).map(r=>r.id);
+    const plogFresh=plogRows.filter(r=>r.ready && plogSeen.indexOf(r.id)<0);
+    const plogPend=plogRows.filter(r=>r.pending);
+    const goPlog=()=>{
+      this.savePrefs({plogSeen:plogReadyIds});
+      this.setState({authOpen:false});
+      this.setSub('verify','log');
+    };
+    let acctAlert=null;
+    if(plogFresh.length){
+      acctAlert={ icon:'✅', text:plogFresh.length+' 筆預測已到期',
+                  sub:'可以看驗證結果了', fg:'#1E8C66', bg:'#E2F0EA',
+                  onClick:goPlog, chev:'›' };
+    }else if(plogPend.length){
+      const soon=plogPend.slice().sort((a,b)=>a.leftDays-b.leftDays)[0];
+      acctAlert={ icon:'🔔', text:'預測還需 '+soon.leftDays+' 個交易日到期',
+                  sub:'到期日 '+soon.dueOn, fg:'#A98F3E', bg:'#FBF7EC',
+                  onClick:goPlog, chev:'›' };
+    }
+
     return {
       isLoading:!st.loaded,
       /* auth */
@@ -2480,9 +2513,7 @@ class Component extends DCLogic {
       acctName:isIn?(st.user.email||'').split('@')[0]:'',
       acctChev:st.authOpen?'⌄':'›',
       acctRowBg:st.authOpen?'#F2EEDF':'transparent',
-      acctProfileLabel:(PROFILES[st.profile]||PROFILES.balanced).label,
-      acctPosCount:((st.positions||[]).length)+' 筆',
-      acctPlogCount:((st.plog||[]).length)+' 筆',
+      hasAcctAlert:!!acctAlert, acctAlert:acctAlert||{},
       authTitle:st.authMode==='signup'?'註冊新帳號':'登入',
       authSubmitLabel:st.authBusy?'處理中…':(st.authMode==='signup'?'註冊':'登入'),
       authSwitchLabel:st.authMode==='signup'?'已經有帳號了？改用登入':'還沒有帳號？註冊一個',
