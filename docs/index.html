@@ -50,6 +50,8 @@
     .dctable{ min-width:460px; }
     /* sticky 參數面板取消固定（值含 sticky，不受冒號空格影響）*/
     div[style*="sticky"]{ position:static !important; top:auto !important; }
+    /* 側邊欄變頂部橫條後，帳號面板若還往上開會跑出畫面，改成內嵌往下展開 */
+    .acctpanel{ position:static !important; width:100% !important; box-shadow:none !important; margin-top:10px; }
   }
 </style>
 </helmet>
@@ -112,6 +114,75 @@
         </div>
       </sc-for>
     </nav>
+
+    <!-- ===== 帳號區：固定在側邊欄底部（nav 有 flex:1，會把這塊推到最下面）=====
+         未設定 Supabase 金鑰時整區不顯示，其餘功能照常運作。 -->
+    <sc-if value="{{ authEnabled }}" hint-placeholder-val="{{ true }}">
+    <div style="position:relative;margin-top:12px;padding-top:12px;border-top:1px solid #E4E7E5;">
+
+      <!-- 觸發列：已登入顯示頭像＋帳號，未登入顯示一顆登入鈕 -->
+      <sc-if value="{{ isLoggedIn }}" hint-placeholder-val="{{ false }}">
+      <div onClick="{{ a.togglePanel }}" style="display:flex;align-items:center;gap:10px;padding:8px;border-radius:8px;cursor:pointer;background:{{ acctRowBg }};">
+        <span style="width:28px;height:28px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;background:#1E8C66;color:#fff;font-size:12px;font-weight:600;font-family:'JetBrains Mono',monospace;">{{ acctInitial }}</span>
+        <span style="flex:1;min-width:0;">
+          <span style="display:block;font-size:12.5px;font-weight:500;color:#26302B;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ acctName }}</span>
+          <span style="display:block;font-size:10.5px;color:#7A847E;margin-top:1px;">個人資料與設定</span>
+        </span>
+        <span style="font-size:12px;color:#7A847E;flex:none;">{{ acctChev }}</span>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ isLoggedOut }}" hint-placeholder-val="{{ true }}">
+      <div onClick="{{ a.togglePanel }}" style="display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;cursor:pointer;border:1px solid #E4E7E5;background:{{ acctRowBg }};">
+        <span style="width:7px;height:7px;border-radius:50%;background:#C0C7C2;flex:none;"></span>
+        <span style="flex:1;min-width:0;">
+          <span style="display:block;font-size:12.5px;font-weight:600;color:#26302B;">登入 / 註冊</span>
+          <span style="display:block;font-size:10.5px;color:#7A847E;margin-top:1px;">同步設定與預測紀錄</span>
+        </span>
+        <span style="font-size:12px;color:#7A847E;flex:none;">{{ acctChev }}</span>
+      </div>
+      </sc-if>
+
+      <!-- 展開面板：桌機往上開（因為觸發列在最底部），窄螢幕改成直接往下展開 -->
+      <sc-if value="{{ authPanelOpen }}" hint-placeholder-val="{{ false }}">
+      <div class="acctpanel" style="position:absolute;left:0;bottom:calc(100% + 8px);z-index:60;width:272px;background:#fff;border:1px solid #E4E7E5;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,0.12);padding:16px;">
+
+        <!-- 已登入：個人資料 + 個人化設定摘要 + 登出 -->
+        <sc-if value="{{ isLoggedIn }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div style="font-size:10.5px;color:#7A847E;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;">帳號</div>
+          <div style="font-size:13px;color:#26302B;margin-top:5px;word-break:break-all;font-weight:600;">{{ authEmail }}</div>
+
+          <div style="margin-top:14px;padding-top:12px;border-top:1px solid #F0F2F6;">
+            <div style="font-size:10.5px;color:#7A847E;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;">個人化設定</div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;padding:3px 0;"><span style="color:#7A847E;">風險屬性</span><span style="color:#26302B;font-weight:500;">{{ acctProfileLabel }}</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;padding:3px 0;"><span style="color:#7A847E;">持有部位</span><span style="color:#26302B;font-weight:500;">{{ acctPosCount }}</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;padding:3px 0;"><span style="color:#7A847E;">預測紀錄</span><span style="color:#26302B;font-weight:500;">{{ acctPlogCount }}</span></div>
+          </div>
+
+          <div style="font-size:11px;color:#7A847E;margin-top:12px;line-height:1.6;">{{ syncMsg }}</div>
+          <div onClick="{{ a.signOut }}" style="margin-top:12px;text-align:center;background:#F2F3F2;border:1px solid #E4E7E5;border-radius:7px;padding:9px;cursor:pointer;font-size:12.5px;color:#4A544E;">登出</div>
+        </div>
+        </sc-if>
+
+        <!-- 未登入：Email + 密碼 -->
+        <sc-if value="{{ isLoggedOut }}" hint-placeholder-val="{{ true }}">
+        <div>
+          <div style="font-size:13px;font-weight:600;color:#26302B;margin-bottom:4px;">{{ authTitle }}</div>
+          <div style="font-size:11.5px;color:#7A847E;line-height:1.6;margin-bottom:12px;">登入後，部位設定與預測紀錄會同步到雲端，換手機或電腦都看得到。</div>
+          <input type="email" placeholder="Email" value="{{ auth.email }}" onChange="{{ a.email }}" style="width:100%;background:#F2F3F2;border:1px solid #E4E7E5;color:#26302B;padding:9px 11px;border-radius:6px;font-size:13px;margin-bottom:8px;">
+          <input type="password" placeholder="密碼（至少 6 碼）" value="{{ auth.pw }}" onChange="{{ a.pw }}" style="width:100%;background:#F2F3F2;border:1px solid #E4E7E5;color:#26302B;padding:9px 11px;border-radius:6px;font-size:13px;">
+          <sc-if value="{{ hasAuthMsg }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:11.5px;color:{{ authMsgColor }};margin-top:9px;line-height:1.55;">{{ authMsg }}</div>
+          </sc-if>
+          <div onClick="{{ a.submit }}" style="margin-top:12px;text-align:center;background:#C8A951;border-radius:7px;padding:10px;cursor:pointer;font-size:13px;font-weight:600;color:#26302B;">{{ authSubmitLabel }}</div>
+          <div onClick="{{ a.toggleMode }}" style="margin-top:10px;text-align:center;font-size:11.5px;color:#7A847E;cursor:pointer;text-decoration:underline;">{{ authSwitchLabel }}</div>
+        </div>
+        </sc-if>
+      </div>
+      </sc-if>
+    </div>
+    </sc-if>
   </aside>
 
   <main style="flex:1;min-width:0;padding:30px 38px 60px;">
@@ -126,45 +197,6 @@
           <span style="width:7px;height:7px;border-radius:50%;background:#1E8C66;"></span>
           <span style="font-size:11.5px;font-family:'JetBrains Mono',monospace;color:#7A847E;">{{ updatedStr }}</span>
         </div>
-
-        <!-- 會員登入：未設定 Supabase 金鑰時整區不顯示 -->
-        <sc-if value="{{ authEnabled }}" hint-placeholder-val="{{ true }}">
-        <div style="position:relative;">
-          <span onClick="{{ a.togglePanel }}" style="display:inline-flex;align-items:center;gap:7px;background:{{ authBtnBg }};border:1px solid {{ authBtnBorder }};border-radius:20px;padding:7px 14px;cursor:pointer;font-size:11.5px;font-family:'JetBrains Mono',monospace;color:{{ authBtnFg }};">
-            <span style="width:7px;height:7px;border-radius:50%;background:{{ authDotColor }};"></span>{{ authBtnLabel }}
-          </span>
-
-          <sc-if value="{{ authPanelOpen }}" hint-placeholder-val="{{ false }}">
-          <div style="position:absolute;right:0;top:40px;z-index:50;width:280px;background:#fff;border:1px solid #E4E7E5;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,0.10);padding:18px;">
-
-            <!-- 已登入 -->
-            <sc-if value="{{ isLoggedIn }}" hint-placeholder-val="{{ false }}">
-            <div>
-              <div style="font-size:11px;color:#7A847E;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.06em;">已登入</div>
-              <div style="font-size:13.5px;color:#26302B;margin-top:6px;word-break:break-all;font-weight:600;">{{ authEmail }}</div>
-              <div style="font-size:11.5px;color:#7A847E;margin-top:10px;line-height:1.6;">{{ syncMsg }}</div>
-              <div onClick="{{ a.signOut }}" style="margin-top:14px;text-align:center;background:#F2F3F2;border:1px solid #E4E7E5;border-radius:7px;padding:9px;cursor:pointer;font-size:12.5px;color:#4A544E;">登出</div>
-            </div>
-            </sc-if>
-
-            <!-- 未登入：Email + 密碼 -->
-            <sc-if value="{{ isLoggedOut }}" hint-placeholder-val="{{ true }}">
-            <div>
-              <div style="font-size:13px;font-weight:600;color:#26302B;margin-bottom:4px;">{{ authTitle }}</div>
-              <div style="font-size:11.5px;color:#7A847E;line-height:1.6;margin-bottom:12px;">登入後，部位設定會同步到雲端，換手機或電腦都看得到。</div>
-              <input type="email" placeholder="Email" value="{{ auth.email }}" onChange="{{ a.email }}" style="width:100%;background:#F2F3F2;border:1px solid #E4E7E5;color:#26302B;padding:9px 11px;border-radius:6px;font-size:13px;margin-bottom:8px;">
-              <input type="password" placeholder="密碼（至少 6 碼）" value="{{ auth.pw }}" onChange="{{ a.pw }}" style="width:100%;background:#F2F3F2;border:1px solid #E4E7E5;color:#26302B;padding:9px 11px;border-radius:6px;font-size:13px;">
-              <sc-if value="{{ hasAuthMsg }}" hint-placeholder-val="{{ false }}">
-                <div style="font-size:11.5px;color:{{ authMsgColor }};margin-top:9px;line-height:1.55;">{{ authMsg }}</div>
-              </sc-if>
-              <div onClick="{{ a.submit }}" style="margin-top:12px;text-align:center;background:#C8A951;border-radius:7px;padding:10px;cursor:pointer;font-size:13px;font-weight:600;color:#26302B;">{{ authSubmitLabel }}</div>
-              <div onClick="{{ a.toggleMode }}" style="margin-top:10px;text-align:center;font-size:11.5px;color:#7A847E;cursor:pointer;text-decoration:underline;">{{ authSwitchLabel }}</div>
-            </div>
-            </sc-if>
-          </div>
-          </sc-if>
-        </div>
-        </sc-if>
       </div>
     </header>
 
@@ -789,7 +821,7 @@
           </sc-if>
 
           <sc-if value="{{ noPlog }}" hint-placeholder-val="{{ false }}">
-          <div style="margin-top:16px;padding:16px;background:#F2F3F2;border-radius:8px;font-size:12.5px;color:#7A847E;line-height:1.7;">還沒有任何紀錄。<b style="color:#26302B;">登入後按右上角的「記錄這次預測」</b>（總覽 Dashboard 的預測卡片下方也有同一顆按鈕），記錄就會出現在這裡。</div>
+          <div style="margin-top:16px;padding:16px;background:#F2F3F2;border-radius:8px;font-size:12.5px;color:#7A847E;line-height:1.7;">還沒有任何紀錄。<b style="color:#26302B;">請先從左下角登入，再按右上角的「記錄這次預測」</b>（總覽 Dashboard 的預測卡片下方也有同一顆按鈕），記錄就會出現在這裡。</div>
           </sc-if>
 
           <sc-if value="{{ hasPlog }}" hint-placeholder-val="{{ true }}">
@@ -2241,11 +2273,14 @@ class Component extends DCLogic {
       authEnabled:authEnabled, authPanelOpen:st.authOpen,
       isLoggedIn:isIn, isLoggedOut:!isIn, a:a, auth:st.auth,
       authEmail:isIn?st.user.email:'',
-      authBtnLabel:isIn?(st.user.email||'').split('@')[0]:'登入',
-      authBtnBg:isIn?'#F0F5F2':'#fff',
-      authBtnFg:isIn?'#1E8C66':'#7A847E',
-      authBtnBorder:isIn?'rgba(30,140,102,0.35)':'#E4E7E5',
-      authDotColor:isIn?'#1E8C66':'#C0C7C2',
+      /* 側邊欄底部的帳號區（原本在右上角，改到左側當個人資料入口） */
+      acctInitial:isIn?((st.user.email||'?').charAt(0).toUpperCase()):'',
+      acctName:isIn?(st.user.email||'').split('@')[0]:'',
+      acctChev:st.authOpen?'⌄':'›',
+      acctRowBg:st.authOpen?'#F2EEDF':'transparent',
+      acctProfileLabel:(PROFILES[st.profile]||PROFILES.balanced).label,
+      acctPosCount:((st.positions||[]).length)+' 筆',
+      acctPlogCount:((st.plog||[]).length)+' 筆',
       authTitle:st.authMode==='signup'?'註冊新帳號':'登入',
       authSubmitLabel:st.authBusy?'處理中…':(st.authMode==='signup'?'註冊':'登入'),
       authSwitchLabel:st.authMode==='signup'?'已經有帳號了？改用登入':'還沒有帳號？註冊一個',
