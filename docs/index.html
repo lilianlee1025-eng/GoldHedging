@@ -282,9 +282,18 @@
           </div>
           <div style="display:flex;gap:16px;font-size:11.5px;font-family:'JetBrains Mono',monospace;color:#7A847E;margin-bottom:4px;">
             <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:2px;background:#3A443E;display:inline-block;"></span>價格</span>
+            <sc-if value="{{ showCtype }}" hint-placeholder-val="{{ true }}">
             <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:2px;background:#9AA39D;display:inline-block;"></span>模型擬合</span>
+            </sc-if>
+            <sc-if value="{{ showCtype }}" hint-placeholder-val="{{ true }}">
             <span style="display:flex;align-items:center;gap:6px;"><span style="width:14px;height:0;border-top:2px dashed #C8A951;display:inline-block;"></span>未來預測</span>
-            <span style="color:#AAB1AC;">（模型擬合/預測僅日線折線顯示）</span>
+            </sc-if>
+            <sc-if value="{{ showCtype }}" hint-placeholder-val="{{ true }}">
+            <span style="color:#AAB1AC;">（模型擬合/預測僅 1 個月、6 個月的折線圖顯示）</span>
+            </sc-if>
+            <sc-if value="{{ hasChartSub }}" hint-placeholder-val="{{ false }}">
+            <span style="color:#9AA39D;">{{ chartSubStr }}</span>
+            </sc-if>
           </div>
           <div style="margin-top:4px;">{{ dashChart }}</div>
         </div>
@@ -1505,6 +1514,12 @@ class Component extends DCLogic {
   fmtP(usd){ const o=this.curUnit(); const v=usd*o.factor; return o.symbol+v.toLocaleString('en-US',{minimumFractionDigits:o.decimals,maximumFractionDigits:o.decimals}); }
   // 圖表座標軸用的短字串
   fmtPShort(usd){ const o=this.curUnit(); const v=usd*o.factor; const a=Math.abs(v); return o.symbol+(a>=1000?(a/1000).toFixed(1)+'k':v.toFixed(o.decimals)); }
+  /* 座標軸刻度：縮寫成 $3.9k 在區間很窄時會讓三個刻度長一樣（盤中圖只有 1% 的波動），
+     所以依「區間占價格的比例」決定要不要縮寫。 */
+  fmtAxis(usd, span){ const o=this.curUnit(); const v=usd*o.factor;
+    const narrow = span!=null && Math.abs(v)>0 && (span*o.factor)/Math.abs(v) < 0.08;
+    return narrow ? o.symbol+v.toLocaleString('en-US',{minimumFractionDigits:o.decimals,maximumFractionDigits:o.decimals})
+                  : this.fmtPShort(usd); }
 
   /* ---------- generic SVG chart ---------- */
   chartEl(spec){
@@ -2062,9 +2077,11 @@ class Component extends DCLogic {
       // 盤中只有收盤價，畫不了 K 棒，一律折線
       if(st.ctype==='line'||isIntra) series.push({pts:closes,stroke:rCol,width:1.8,fill:rCol});
       if(overlay){ series.push({pts:modPts,stroke:'#9AA39D',width:1.3}); series.push({pts:futPts,stroke:'#C8A951',width:2.4,dash:'6 5'}); }
-      dashChart=this.chartEl({ w:920,h:300,pad:{l:46,r:16,t:16,b:26},
+      // 顯示完整價格時字比較寬，左側留白要跟著加大
+      const padL=((vmax-vmin)/((vmax+vmin)/2) < 0.08) ? 62 : 46;
+      dashChart=this.chartEl({ w:920,h:300,pad:{l:padL,r:16,t:16,b:26},
         xmin:0,xmax:xmaxC,ymin:vmin-vspan*0.08,ymax:vmax+vspan*0.08,
-        yticks:[vmin,(vmin+vmax)/2,vmax], yfmt:v=>this.fmtPShort(v),
+        yticks:[vmin,(vmin+vmax)/2,vmax], yfmt:v=>this.fmtAxis(v,vmax-vmin),
         candles: (st.ctype==='candle'&&!isIntra) ? cd.map((d,i)=>({x:i,o:d.o,h:d.h,l:d.l,c:d.c})) : null,
         series:series,
         // 參考線是「這段期間開始前的收盤」：當日＝昨收，五日＝五個交易日前的收盤
@@ -2718,6 +2735,12 @@ class Component extends DCLogic {
       showCtype:!isIntra, showIntraTime:isIntra,
       intraTimeStr:(ITD?('更新 '+ITD.generated_at):''),
       chartTitle:(isIntra?'黃金即時走勢 · ':'金價走勢 · ')+RG.label,
+      // 「當日」看不出是哪一天（例如週末顯示的是上週五的盤），把交易日標出來
+      chartSubStr:(isIntra&&ITD ? (st.tf==='D1'
+                    ? (ITD.d1.session+' 交易時段（台北 07:00 ～ 隔日 06:00）')
+                    : (ITD.d5.from+' ～ '+ITD.d5.to))
+                  : ''),
+      hasChartSub:!!(isIntra&&ITD),
       hasRangeChg:!!rangeChg, rangeChg:rangeChg||{},
       dataAsOf:pred.data_as_of||pred.current.date, generatedAt:pred.generated_at||'',
       dirText:dirDown?'下跌':'上漲', dirArrow:dirDown?'↓':'↑', dirColor:dirDown?'#C0473E':'#1E8C66',
