@@ -1154,6 +1154,7 @@ class Component extends DCLogic {
       profile: sv.profile || 'balanced',   // 風險偏好
       vf: null,                           // 成效驗證序列（verification.json）
       sig: null,                          // 顯著性檢定結果（significance.json）
+      hover: null,                        // 圖表游標：{id, i}＝哪張圖的第幾個點
       asmpOpen: false,                    // 「計算方式與假設」是否展開
       // 成效驗證的查詢條件：起始日、本金、持有的交易日數
       vq: sv.vq || { start:'', capital:1000000, hold:60 },
@@ -1531,6 +1532,53 @@ class Component extends DCLogic {
     (spec.markers||[]).forEach(mk=>{ const x=sx(mk.x); kids.push(ce('line',{key:K(),x1:x,y1:T,x2:x,y2:B,stroke:mk.color,strokeWidth:1,strokeDasharray:'3 3'})); if(mk.label) kids.push(ce('text',{key:K(),x:x+4,y:T+11,fontSize:9.5,fontFamily:MONO,fill:mk.color},mk.label)); });
     (spec.endDots||[]).forEach(dd=> kids.push(ce('circle',{key:K(),cx:sx(dd.x),cy:sy(dd.y),r:3.2,fill:dd.color})));
     (spec.xticks||[]).forEach(t=>{ const x=sx(t.x); kids.push(ce('text',{key:K(),x:x,y:B+16,textAnchor:'middle',fontSize:10,fontFamily:MONO,fill:'#7A847E'},t.label)); });
+
+    /* ---- 滑鼠/觸控查價：十字線 + 圓點 + 提示框 ----
+       spec.hover = { id, pts, labels, fmt, color }
+         id     這張圖的識別字串（state.hover 用它判斷要畫在哪張圖）
+         pts    要吸附的資料點 [[x,y],…]（通常就是收盤價那條線）
+         labels 每個點對應的文字（日期）
+       沒帶 spec.hover 的圖表完全不受影響。 */
+    if(spec.hover && spec.hover.pts && spec.hover.pts.length){
+      const HV=spec.hover, HP=HV.pts, HID=HV.id;
+      const hv=this.state.hover;
+      // 先畫提示框，感應區最後再疊上去，否則滑鼠事件會被圖形擋掉
+      if(hv && hv.id===HID && HP[hv.i]){
+        const pt=HP[hv.i], px=sx(pt[0]), py=sy(pt[1]);
+        kids.push(ce('line',{key:K(),x1:px,y1:T,x2:px,y2:B,stroke:'#9AA39D',strokeWidth:1,strokeDasharray:'3 3'}));
+        kids.push(ce('circle',{key:K(),cx:px,cy:py,r:4.2,fill:'#FFFFFF',stroke:HV.color||'#26302B',strokeWidth:2}));
+        const t1=HV.fmt?HV.fmt(pt[1]):String(pt[1]);
+        const t2=(HV.labels&&HV.labels[hv.i])||'';
+        // 等寬字型，用字元數估寬度就夠準；中文字算兩個字元
+        const wid=s=>{let n=0;for(let i=0;i<s.length;i++)n+=(s.charCodeAt(i)>255?2:1);return n;};
+        const tw=Math.max(wid(t1),wid(t2))*6.6+22, th=t2?40:25;
+        // 靠近右緣就翻到左邊、靠近上緣就翻到下面，避免被裁掉
+        let tx=px+12; if(tx+tw>R) tx=px-12-tw; if(tx<L) tx=L;
+        let ty=py-th-12; if(ty<T) ty=Math.min(py+12,B-th);
+        const box=[ce('rect',{key:'bx',x:tx,y:ty,width:tw,height:th,rx:6,fill:'#FFFFFF',stroke:'#D8DDD9',strokeWidth:1}),
+                   ce('text',{key:'t1',x:tx+11,y:ty+(t2?17:17),fontSize:12.5,fontFamily:MONO,fontWeight:600,fill:'#26302B'},t1)];
+        if(t2) box.push(ce('text',{key:'t2',x:tx+11,y:ty+32,fontSize:10.5,fontFamily:MONO,fill:'#7A847E'},t2));
+        kids.push(ce('g',{key:K()},box));
+      }
+      const atX=(e)=>{
+        const svg=e.currentTarget.ownerSVGElement||e.currentTarget;
+        const r=svg.getBoundingClientRect();
+        const cx=(e.touches&&e.touches[0])?e.touches[0].clientX:e.clientX;
+        return (cx-r.left)/(r.width||1)*w;          // 換算回 viewBox 座標
+      };
+      const onMove=(e)=>{
+        const dx=xmin+(atX(e)-L)/((R-L)||1)*((xmax-xmin)||1);
+        let best=0,bd=Infinity;
+        for(let i=0;i<HP.length;i++){const d=Math.abs(HP[i][0]-dx); if(d<bd){bd=d;best=i;}}
+        const cur=this.state.hover;
+        if(!cur||cur.id!==HID||cur.i!==best) this.setState({hover:{id:HID,i:best}});
+      };
+      const onOut=()=>{ if(this.state.hover) this.setState({hover:null}); };
+      kids.push(ce('rect',{key:K(),x:L,y:T,width:Math.max(0,R-L),height:Math.max(0,B-T),
+        fill:'transparent',style:{cursor:'crosshair'},
+        onMouseMove:onMove,onMouseLeave:onOut,
+        onTouchStart:onMove,onTouchMove:onMove,onTouchEnd:onOut}));
+    }
     return ce('svg',{viewBox:'0 0 '+w+' '+h,style:{width:'100%',height:'auto',display:'block'},preserveAspectRatio:'xMidYMid meet'},kids);
   }
 
@@ -1937,7 +1985,10 @@ class Component extends DCLogic {
         series:series,
         markers: overlay?[{x:cm-1,color:'rgba(200,169,81,0.45)',label:'今日'}]:[],
         endDots: overlay?[{x:xmaxC,y:Fu[Fu.length-1].price,color:'#C8A951'}]:[],
-        xticks:xticks });
+        xticks:xticks,
+        // 滑過（手機是點）圖表就顯示那一天的實際收盤價；K 棒模式也吸附收盤價
+        hover:{ id:'dash', pts:closes, labels:cd.map(d=>d.date),
+                fmt:v=>this.fmtP(v), color:'#26302B' } });
       chartLen=cm;
     } else {
       chartLen=0; dashChart=this.chartEl({w:920,h:300,xmin:0,xmax:1,ymin:0,ymax:1});
@@ -2112,7 +2163,11 @@ class Component extends DCLogic {
       xmin:0,xmax:en-1,ymin:emin-espan*0.06,ymax:emax+espan*0.06,
       yticks:[emin,100,emax].filter((v,i,a)=>a.indexOf(v)===i), yfmt:v=>v.toFixed(0),
       series:[ {pts:U.map((v,i)=>[i,v]),stroke:'#C0473E',width:1.8}, {pts:Hh.map((v,i)=>[i,v]),stroke:'#1E8C66',width:1.8} ],
-      xticks:eTickIdx.map(ix=>({x:ix,label:ec.dates[ix].slice(0,7)})) });
+      xticks:eTickIdx.map(ix=>({x:ix,label:ec.dates[ix].slice(0,7)})),
+      // 吸附「有避險」那條；提示框同時列出兩條的淨值，方便直接比較
+      hover:{ id:'equity', pts:Hh.map((v,i)=>[i,v]), color:'#1E8C66',
+              labels:ec.dates.map((d,i)=>d+'　無避險 '+U[i].toFixed(0)),
+              fmt:v=>'有避險 '+v.toFixed(0) } });
     // 期貨 vs 期權 對決
     const scd=bt.strategy_compare; let scChart=null, scStats=[], scConc='', scAssume='';
     if(scd && scd.curves){
