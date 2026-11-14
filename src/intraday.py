@@ -56,7 +56,8 @@ def _one_session(df: pd.DataFrame) -> dict:
         "session": str(last),
         # 參考線：上一個時段的收盤。沒有上一段資料時用本段第一筆，圖還是畫得出來。
         "prev_close": round(float(prev["c"].iloc[-1] if len(prev) else cur["c"].iloc[0]), 2),
-        "t": [ts.strftime("%H:%M") for ts in cur.index],
+        # 帶上日期：時段跨午夜，X 軸與查價提示框都需要知道是哪一天
+        "t": [ts.strftime("%m/%d %H:%M") for ts in cur.index],
         "c": [round(float(v), 2) for v in cur["c"]],
         "marks": [],
     }
