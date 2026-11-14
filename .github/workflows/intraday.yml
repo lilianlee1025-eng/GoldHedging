@@ -1,0 +1,54 @@
+# 盤中走勢（當日／五日）專用的輕量排程
+#
+# 為什麼不併進 daily-update.yml：
+#   那支一天只跑一次，而且要重抓資料、重算預測，比較重。
+#   盤中資料一天更新一次等於沒意義，所以獨立出來跑密一點。
+#   這支只做「抓盤中 K 線 → 寫 docs/intraday.json」，幾十秒就結束。
+#
+# 更新頻率：每小時。想再即時一點可以改成 "*/30 * * * *"，
+# 但每跑一次就是一個 commit ＋ 一次 Pages 重建，排太密會讓版本紀錄很吵。
+name: Intraday update
+
+on:
+  schedule:
+    - cron: "5 * * * *"      # 每小時第 5 分
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: intraday
+  cancel-in-progress: true   # 這支只關心最新一筆，排隊中的舊任務可以直接取消
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      # 只要 yfinance 跟 pandas，不裝 tensorflow 那一整包（快很多）
+      - name: 安裝套件
+        run: pip install "yfinance>=0.2" "pandas>=2.0,<2.3"
+
+      - name: 抓盤中資料
+        run: python -m src.intraday
+
+      - name: 有變動就 commit 並 push
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/intraday.json
+          if git diff --cached --quiet; then
+            echo "沒有變動，略過。"
+          else
+            git commit -m "盤中走勢更新 ($(TZ=Asia/Taipei date +%Y-%m-%d\ %H:%M))"
+            # 每日更新那支可能剛好也在推，先 rebase 再推，避免撞車
+            git pull --rebase
+            git push
+          fi

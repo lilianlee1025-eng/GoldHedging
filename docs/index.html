@@ -268,11 +268,16 @@
                   <button onClick="{{ t.onClick }}" style="cursor:pointer;border:1px solid {{ t.border }};background:{{ t.bg }};color:{{ t.fg }};font-size:12px;padding:5px 11px;border-radius:6px;font-family:'JetBrains Mono',monospace;">{{ t.label }}</button>
                 </sc-for>
               </div>
+              <sc-if value="{{ showCtype }}" hint-placeholder-val="{{ true }}">
               <div style="display:flex;gap:4px;">
                 <sc-for list="{{ ctypeBtns }}" as="c" hint-placeholder-count="2">
                   <button onClick="{{ c.onClick }}" style="cursor:pointer;border:1px solid {{ c.border }};background:{{ c.bg }};color:{{ c.fg }};font-size:12px;padding:5px 11px;border-radius:6px;font-family:inherit;">{{ c.label }}</button>
                 </sc-for>
               </div>
+              </sc-if>
+              <sc-if value="{{ showIntraTime }}" hint-placeholder-val="{{ false }}">
+              <span style="font-size:11px;color:#9AA39D;font-family:'JetBrains Mono',monospace;">{{ intraTimeStr }}</span>
+              </sc-if>
             </div>
           </div>
           <div style="display:flex;gap:16px;font-size:11.5px;font-family:'JetBrains Mono',monospace;color:#7A847E;margin-bottom:4px;">
@@ -298,7 +303,11 @@
               </div>
             </sc-for>
           </div>
-          <div style="margin-top:auto;padding-top:16px;font-size:12px;color:#7A847E;line-height:1.6;">{{ futLead }}<span style="color:#C8A951;font-family:'JetBrains Mono',monospace;">{{ declinePctStr }}</span>{{ futTail }}</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;font-size:12px;">
+            <span style="color:#7A847E;">預測區間</span>
+            <span style="font-family:'JetBrains Mono',monospace;color:#26302B;">{{ futRangeStr }}</span>
+          </div>
+          <div style="margin-top:auto;padding-top:12px;font-size:12px;color:#7A847E;line-height:1.6;">{{ futLead }}<span style="color:#C8A951;font-family:'JetBrains Mono',monospace;">{{ declinePctStr }}</span>{{ futTail }}</div>
           <!-- 雙輸出的分工說明：避免「機率高但幅度小」被誤讀成模型自相矛盾 -->
           <div style="margin-top:10px;padding:10px 12px;background:#F2F3F2;border-radius:7px;font-size:11px;color:#7A847E;line-height:1.6;">{{ headsNote }}</div>
           <!-- 把當下的預測存檔，到期後在「成效驗證」頁自動驗證 -->
@@ -1161,6 +1170,7 @@ class Component extends DCLogic {
       profile: sv.profile || 'balanced',   // 風險偏好
       vf: null,                           // 成效驗證序列（verification.json）
       sig: null,                          // 顯著性檢定結果（significance.json）
+      intra: null,                        // 盤中走勢（intraday.json，每小時更新）
       hover: null,                        // 圖表游標：{id, i}＝哪張圖的第幾個點
       asmpOpen: false,                    // 「計算方式與假設」是否展開
       // 成效驗證的查詢條件：起始日、本金、持有的交易日數
@@ -1425,8 +1435,10 @@ class Component extends DCLogic {
       // 成效驗證用的每日序列。這支是選用的：抓不到就隱藏該頁，不影響其他功能。
       fetch('./verification.json'+t).then(r=>r.json()).catch(()=>null),
       // 顯著性檢定結果。同樣是選用的：抓不到就不顯示那張卡，其餘照常。
-      fetch('./significance.json'+t).then(r=>r.json()).catch(()=>null)
-    ]).then(([p,b,v,sg])=>{
+      fetch('./significance.json'+t).then(r=>r.json()).catch(()=>null),
+      // 盤中走勢。抓不到就只是少了「當日／五日」兩個分頁，其餘照常。
+      fetch('./intraday.json'+t).then(r=>r.json()).catch(()=>null)
+    ]).then(([p,b,v,sg,itd])=>{
         const sv=this.loadPrefs(), tc=this.state.touched||{};
         // 計價單位：使用者選過就聽使用者的，否則用 JSON 給的預設
         const u=sv.unit||(p.units&&p.units.default)||'spot';
@@ -1444,7 +1456,7 @@ class Component extends DCLogic {
           if(!tc.prem) pf.prem=Math.round(S*0.03);
           prin=Object.assign({},prin,pf);
         }
-        this.setState({ pred:p, bt:b, vf:v, sig:sg, unit:u, sim, prin, loaded:true });
+        this.setState({ pred:p, bt:b, vf:v, sig:sg, intra:itd, unit:u, sim, prin, loaded:true });
       })
       .catch(()=>{ this.setState({ loaded:true }); });   // 失敗也解除動畫（用內建範例資料）
 
@@ -1506,6 +1518,10 @@ class Component extends DCLogic {
     const MONO='JetBrains Mono, monospace';
     (spec.yticks||[]).forEach(t=>{ const y=sy(t); kids.push(ce('line',{key:K(),x1:L,y1:y,x2:R,y2:y,stroke:'#E4E7E5',strokeWidth:1})); kids.push(ce('text',{key:K(),x:L-7,y:y+3.5,textAnchor:'end',fontSize:10,fontFamily:MONO,fill:'#7A847E'}, spec.yfmt?spec.yfmt(t):t)); });
     if(spec.zeroLine){ const y=sy(0); kids.push(ce('line',{key:K(),x1:L,y1:y,x2:R,y2:y,stroke:'#C9CFCB',strokeWidth:1.2})); }
+    // 水平參考線（盤中圖的「昨收」）
+    if(spec.hline){ const y=sy(spec.hline.y);
+      kids.push(ce('line',{key:K(),x1:L,y1:y,x2:R,y2:y,stroke:spec.hline.color||'#9AA39D',strokeWidth:1,strokeDasharray:'4 4'}));
+      if(spec.hline.label) kids.push(ce('text',{key:K(),x:R-3,y:y-5,textAnchor:'end',fontSize:9.5,fontFamily:MONO,fill:spec.hline.color||'#9AA39D'},spec.hline.label)); }
     (spec.series||[]).forEach(s=>{
       if(s.area==='signed' && s.pts.length){
         const y0=sy(0);
@@ -1973,7 +1989,11 @@ class Component extends DCLogic {
     /* 圖表：依時間單位(日/周/月/季)與類型(折線/K棒)切換 */
     /* 期間分頁：使用者選「要看多久」，一根 K 代表多久由系統決定。
        （原本是讓使用者選 日/周/月/季，等於要自己換算「120 根日線 ≈ 半年」。） */
+    const ITD=st.intra;
     const RANGES={
+      // 當日／五日讀 intraday.json（每小時更新）；抓不到就不顯示這兩個分頁
+      'D1': {label:'當日',    src:'intra',   key:'d1'},
+      'D5': {label:'五日',    src:'intra',   key:'d5'},
       '1M': {label:'1 個月',  src:'daily',   bars:22,  xfmt:'md'},
       '6M': {label:'6 個月',  src:'daily',   bars:120, xfmt:'md'},
       'YTD':{label:'今年以來',src:'daily',   bars:0,   xfmt:'m',  ytd:true},
@@ -1981,20 +2001,32 @@ class Component extends DCLogic {
       '5Y': {label:'5 年',    src:'weekly',  bars:260, xfmt:'y'},
       'MAX':{label:'10 年',   src:'monthly', bars:0,   xfmt:'y'}   // 資料只抓 10 年，不叫「最久」
     };
-    const RG=RANGES[st.tf]||RANGES['6M'];
-    let cd=(pred.candles&&pred.candles[RG.src])||[];
-    if(RG.ytd){
-      const y=(pred.data_as_of||'').slice(0,4);
-      cd=cd.filter(d=>d.date>=y+'-01-01');
-    }else if(RG.bars>0 && cd.length>RG.bars){
-      cd=cd.slice(cd.length-RG.bars);
+    if(!ITD){ delete RANGES.D1; delete RANGES.D5; }
+    let RG=RANGES[st.tf]||RANGES['6M'];
+    const isIntra = RG.src==='intra';
+    let cd=[];
+    if(isIntra){
+      // 盤中是平行陣列 {t:[...], c:[...]}，轉成跟 K 棒一樣的格式共用後面的繪圖流程。
+      // 只有收盤價，所以開高低都填同一個值（盤中分頁一律折線，不會畫成 K 棒）。
+      const S=ITD[RG.key]||{t:[],c:[]};
+      cd=S.c.map((v,i)=>({date:S.t[i], o:v, h:v, l:v, c:v}));
+    }else{
+      cd=(pred.candles&&pred.candles[RG.src])||[];
+      if(RG.ytd){
+        const y=(pred.data_as_of||'').slice(0,4);
+        cd=cd.filter(d=>d.date>=y+'-01-01');
+      }else if(RG.bars>0 && cd.length>RG.bars){
+        cd=cd.slice(cd.length-RG.bars);
+      }
     }
-    // 模型擬合與未來 30 天預測只在短期間疊上去；拉到 5 年、10 年那 30 天會縮到看不見
+    // 模型擬合與未來 30 天預測只在短期間疊上去；拉到 5 年、10 年那 30 天會縮到看不見，
+    // 盤中更是完全不適用（模型的單位是交易日，不是分鐘）
     const isDailyLine = (st.tf==='1M'||st.tf==='6M') && st.ctype==='line';
     // X 軸標籤格式跟著期間走：短期看月/日、中期看月份、長期看年份
-    const spanYears = cd.length ? (cd[0].date.slice(0,4)!==cd[cd.length-1].date.slice(0,4)) : false;
-    const xlab=(ds)=> RG.xfmt==='y' ? ds.slice(0,4)+'年'
-                    : RG.xfmt==='m' ? (spanYears ? ds.slice(2,4)+'/'+(+ds.slice(5,7)) : (+ds.slice(5,7))+'月')
+    const spanYears = (!isIntra && cd.length) ? (cd[0].date.slice(0,4)!==cd[cd.length-1].date.slice(0,4)) : false;
+    const xlab=(ds)=> isIntra        ? ds
+                    : RG.xfmt==='y'  ? ds.slice(0,4)+'年'
+                    : RG.xfmt==='m'  ? (spanYears ? ds.slice(2,4)+'/'+(+ds.slice(5,7)) : (+ds.slice(5,7))+'月')
                     : ds.slice(5).replace('-','/');
     let dashChart, chartLen, rangeChg=null;
     if(cd.length){
@@ -2013,29 +2045,42 @@ class Component extends DCLogic {
         vmin=Math.min(vmin,Math.min.apply(null,fp)); vmax=Math.max(vmax,Math.max.apply(null,fp));
         xmaxC=cm-1+Fu.length;
       }
+      // 盤中：昨收參考線要納入 Y 軸範圍，否則線跑到圖外看不到
+      const prevC=isIntra?((ITD[RG.key]||{}).prev_close):null;
+      if(prevC!=null){ vmin=Math.min(vmin,prevC); vmax=Math.max(vmax,prevC); }
       const vspan=(vmax-vmin)||1;
       const tickIdx=[0,Math.floor(cm*0.33),Math.floor(cm*0.66),cm-1,xmaxC].filter((v,i,a)=>a.indexOf(v)===i);
-      const xticks=tickIdx.map(ix=>({x:ix,label:xlab(ix<cm?cd[ix].date:Fu[ix-cm].date)}));
-      // 這段期間漲還是跌 → 決定線的顏色（沿用全站慣例：綠漲紅跌，不是台股的紅漲綠跌）
-      const rUp=cd[cm-1].c>=cd[0].c, rCol=rUp?'#1E8C66':'#C0473E';
+      // 五日圖用時段起點當刻度，比平均切更好讀（一個刻度＝一個交易日）
+      const smarks=isIntra?(((ITD[RG.key]||{}).marks)||[]):[];
+      const xticks = smarks.length
+        ? smarks.map(mk=>({x:mk.i,label:mk.date.slice(5).replace('-','/')}))
+        : tickIdx.map(ix=>({x:ix,label:xlab(ix<cm?cd[ix].date:Fu[ix-cm].date)}));
+      // 漲跌：盤中跟「昨收」比（看盤網站的慣例），其餘期間跟區間第一根比
+      const baseC = prevC!=null ? prevC : cd[0].c;
+      const rUp=cd[cm-1].c>=baseC, rCol=rUp?'#1E8C66':'#C0473E';
       const series=[];
-      if(st.ctype==='line') series.push({pts:closes,stroke:rCol,width:1.8,fill:rCol});
+      // 盤中只有收盤價，畫不了 K 棒，一律折線
+      if(st.ctype==='line'||isIntra) series.push({pts:closes,stroke:rCol,width:1.8,fill:rCol});
       if(overlay){ series.push({pts:modPts,stroke:'#9AA39D',width:1.3}); series.push({pts:futPts,stroke:'#C8A951',width:2.4,dash:'6 5'}); }
       dashChart=this.chartEl({ w:920,h:300,pad:{l:46,r:16,t:16,b:26},
         xmin:0,xmax:xmaxC,ymin:vmin-vspan*0.08,ymax:vmax+vspan*0.08,
         yticks:[vmin,(vmin+vmax)/2,vmax], yfmt:v=>this.fmtPShort(v),
-        candles: st.ctype==='candle' ? cd.map((d,i)=>({x:i,o:d.o,h:d.h,l:d.l,c:d.c})) : null,
+        candles: (st.ctype==='candle'&&!isIntra) ? cd.map((d,i)=>({x:i,o:d.o,h:d.h,l:d.l,c:d.c})) : null,
         series:series,
-        markers: overlay?[{x:cm-1,color:'rgba(200,169,81,0.45)',label:'今日'}]:[],
+        // 參考線是「這段期間開始前的收盤」：當日＝昨收，五日＝五個交易日前的收盤
+        hline: prevC!=null ? {y:prevC, color:'#9AA39D',
+                 label:(st.tf==='D1'?'昨收 ':'起點收盤 ')+this.fmtP(prevC)} : null,
+        markers: overlay?[{x:cm-1,color:'rgba(200,169,81,0.45)',label:'今日'}]
+                 : smarks.slice(1).map(mk=>({x:mk.i,color:'rgba(154,163,157,0.45)'})),
         endDots: overlay?[{x:xmaxC,y:Fu[Fu.length-1].price,color:'#C8A951'}]:[],
         xticks:xticks,
         // 滑過（手機是點）圖表就顯示那一天的實際收盤價；K 棒模式也吸附收盤價
         hover:{ id:'dash', pts:closes, labels:cd.map(d=>d.date),
                 fmt:v=>this.fmtP(v), color:'#26302B' } });
       chartLen=cm;
-      const rPct=(cd[cm-1].c/cd[0].c-1)*100;
+      const rPct=(cd[cm-1].c/baseC-1)*100;
       rangeChg={ pctStr:this.pct(rPct),
-                 absStr:(rPct>=0?'+':'−')+this.fmtP(Math.abs(cd[cm-1].c-cd[0].c)),
+                 absStr:(rPct>=0?'+':'−')+this.fmtP(Math.abs(cd[cm-1].c-baseC)),
                  color:rCol, label:RG.label, fromStr:cd[0].date, toStr:cd[cm-1].date };
     } else {
       chartLen=0; dashChart=this.chartEl({w:920,h:300,xmin:0,xmax:1,ymin:0,ymax:1});
@@ -2049,7 +2094,8 @@ class Component extends DCLogic {
       for(let k=0;k<n;k++){ const i=Math.round(k*step); if(!out.length||out[out.length-1][1]!==i) out.push([arr[i],i]); }
       return out;
     };
-    const futureRows=_pick(Fu,6).map(([d,i])=>{
+    // 只列 3 個時間點就夠：模型預測的路徑幾乎是平的，列 6 列只是佔版面
+    const futureRows=_pick(Fu,3).map(([d,i])=>{
       const dd=d.price-S0;
       return { date:this.dlabel(d.date), priceStr:this.fmtP(d.price),
                deltaStr:this.pct(dd/S0*100), color:dd>=0?'#1E8C66':'#C0473E' };
@@ -2065,6 +2111,8 @@ class Component extends DCLogic {
     const trendWord = futEndPct>0.3?'走升':(futEndPct<-0.3?'走弱':'大致持平');
     const dirSubtitle = '模型預期'+hzWord+'後'+trendWord+'（'+this.pct(futEndPct)+'）';
     const declineHigh = pred.decline_prob >= ((bt.meta&&bt.meta.hedge_threshold)||0.5);
+    const _fp=Fu.map(d=>d.price);
+    const futRangeStr=this.fmtP(Math.min.apply(null,_fp))+' ～ '+this.fmtP(Math.max.apply(null,_fp));
     const futLead = '未來'+hzWord+'預測'+trendWord+'，下跌機率 ';
     const futTail = declineHigh ? '，已超過門檻，建議啟動避險。' : '，仍低於門檻，可暫不避險。';
     /* 計價單位切換按鈕 */
@@ -2667,7 +2715,9 @@ class Component extends DCLogic {
       priceStr:this.fmtP(S0), deltaStr:this.pct(deltaPct), deltaColor:delta>=0?'#1E8C66':'#C0473E',
       unitBtns:unitBtns, unitLabel:this.curUnit().label,
       tfBtns:tfBtns, ctypeBtns:ctypeBtns,
-      chartTitle:'金價走勢 · '+RG.label,
+      showCtype:!isIntra, showIntraTime:isIntra,
+      intraTimeStr:(ITD?('更新 '+ITD.generated_at):''),
+      chartTitle:(isIntra?'黃金即時走勢 · ':'金價走勢 · ')+RG.label,
       hasRangeChg:!!rangeChg, rangeChg:rangeChg||{},
       dataAsOf:pred.data_as_of||pred.current.date, generatedAt:pred.generated_at||'',
       dirText:dirDown?'下跌':'上漲', dirArrow:dirDown?'↓':'↑', dirColor:dirDown?'#C0473E':'#1E8C66',
@@ -2675,6 +2725,7 @@ class Component extends DCLogic {
       recName:recObj.name, recStrength:recObj.strength, recLevelNote:recLevelNote, dashChart:dashChart, futureRows:futureRows, histLen:chartLen,
       dirSubtitle:dirSubtitle, futLead:futLead, futTail:futTail,
       futCardTitle:'未來'+hzWord+'預測', futCardSub:'LSTM horizon = '+hzDays,
+      futRangeStr:futRangeStr,
       headsNote:'模型有兩個輸出：分類頭給「下跌機率」（方向），迴歸頭給「預測價格」（幅度），兩者獨立，因此可能出現「機率高但幅度小」——也就是「很可能小跌」，並非自相矛盾。避險建議只採用下跌機率；價格線由模型預測的'+hzWord+'後目標價內插而成，中間各日為平滑推估，僅供參考。',
       modelOutLabel:'未來'+hzWord+'價格 + 下跌機率',
       /* simulator */
