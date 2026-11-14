@@ -227,7 +227,7 @@
           <div style="font-family:'JetBrains Mono',monospace;font-size:13px;margin-top:8px;color:{{ deltaColor }};">{{ deltaStr }} 較前日</div>
         </div>
         <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:18px 20px;">
-          <div style="font-size:11px;color:#7A847E;font-family:'JetBrains Mono',monospace;letter-spacing:0.06em;text-transform:uppercase;">預測漲跌方向 · 5日</div>
+          <div style="font-size:11px;color:#7A847E;font-family:'JetBrains Mono',monospace;letter-spacing:0.06em;text-transform:uppercase;">{{ dirCardTitle }}</div>
           <div style="font-size:28px;font-weight:600;margin-top:12px;color:{{ dirColor }};display:flex;align-items:baseline;gap:8px;"><span style="font-family:'JetBrains Mono',monospace;">{{ dirArrow }}</span><span>{{ dirText }}</span></div>
           <div style="font-size:12.5px;margin-top:9px;color:#7A847E;">{{ dirSubtitle }}</div>
         </div>
@@ -241,8 +241,17 @@
           <div style="font-size:21px;font-weight:600;margin-top:12px;color:#26302B;">{{ recName }}</div>
           <div style="display:inline-block;font-size:11.5px;margin-top:10px;color:#26302B;background:#C8A951;padding:3px 9px;border-radius:4px;font-weight:600;">{{ recStrength }}</div>
           <div style="font-size:11.5px;color:#7A847E;margin-top:9px;line-height:1.5;">{{ recLevelNote }}</div>
+          <sc-if value="{{ hasRecCaveat }}" hint-placeholder-val="{{ true }}">
+          <div style="font-size:10.5px;margin-top:8px;padding-top:8px;border-top:1px solid #F0F2F6;color:{{ recCaveatColor }};font-family:'JetBrains Mono',monospace;line-height:1.5;">⚠ {{ recCaveatShort }}</div>
+          </sc-if>
         </div>
       </div>
+
+      <!-- 首頁的建議是機械產生的；檢定結論必須在同一頁講清楚，
+           不能只寫在模型說明頁，否則兩邊互相矛盾。 -->
+      <sc-if value="{{ hasRecCaveat }}" hint-placeholder-val="{{ true }}">
+      <div style="background:#FBF7EC;border:1px solid #EADfBE;border-left:3px solid #C8A951;border-radius:10px;padding:13px 16px;margin-bottom:18px;font-size:12.5px;color:#5A5238;line-height:1.7;">{{ recCaveat }}</div>
+      </sc-if>
 
       <div style="display:grid;grid-template-columns:1fr 280px;gap:16px;">
         <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;">
@@ -452,7 +461,10 @@
 
       <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:22px 24px;margin-bottom:16px;">
         <div id="sec-prin-how" style="scroll-margin-top:20px;font-size:14px;font-weight:600;color:#26302B;margin-bottom:4px;">避險力道怎麼決定？</div>
-        <div style="font-size:12.5px;color:#7A847E;margin-bottom:16px;line-height:1.6;">系統依模型算出的「未來下跌機率」決定要不要避險、避多重。機率越高，保護做越重。觸發門檻 = <b style="color:#26302B;">50%</b>（超過才開始建議避險）。</div>
+        <div style="font-size:12.5px;color:#7A847E;margin-bottom:12px;line-height:1.6;">系統依模型算出的「未來下跌機率」決定要不要避險、避多重。機率越高，保護做越重。觸發門檻 = <b style="color:#26302B;">50%</b>（超過才開始建議避險）。</div>
+        <sc-if value="{{ hasRecCaveat }}" hint-placeholder-val="{{ true }}">
+        <div style="font-size:12px;color:#5A5238;background:#FBF7EC;border-radius:8px;padding:11px 13px;margin-bottom:16px;line-height:1.7;">{{ recCaveat }}</div>
+        </sc-if>
         <div style="display:flex;flex-direction:column;gap:10px;">
           <div style="display:flex;align-items:center;gap:14px;padding:11px 14px;background:#F2F3F2;border-radius:8px;">
             <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#26302B;background:#fff;border:1px solid #E4E7E5;padding:4px 10px;border-radius:5px;flex:none;width:80px;text-align:center;">&lt; 35%</span>
@@ -2449,7 +2461,7 @@ class Component extends DCLogic {
     modelVerdict+='方向判斷上，上表的多因子 AUC '+f3(mm.auc)+' 來自單次 80/20 切分，只測了最後約兩成的期間。';
     if(SG){
       const ok=SG.auc.verdict!=='none';
-      modelVerdict+='改用涵蓋全期、每 60 個交易日重新訓練一次的 walk-forward 評估後，AUC 為 '
+      modelVerdict+='改用涵蓋全期、每 '+((bt.meta&&bt.meta.step)||60)+' 個交易日重新訓練一次的 walk-forward 評估後，AUC 為 '
         +f3s(SG.auc.value)+'（95% 信賴區間 ['+f3s(SG.auc.ci_low)+', '+f3s(SG.auc.ci_high)+']），'
         +(ok?'未跨過 0.5，方向判斷力具統計顯著性。'
             :'跨過 0.5，因此不能宣稱模型的方向判斷優於隨機猜測。')
@@ -2502,6 +2514,26 @@ class Component extends DCLogic {
                   onClick:goPlog, chev:'›' };
     }
 
+    /* ---- 把顯著性檢定的結論帶回首頁 ----
+       檢定結果原本只寫在模型說明頁，但使用者（和老師）第一眼看到的是首頁那句
+       斬釘截鐵的「建議買進 Put」。兩頁對不起來，是整個網站最大的裂縫。
+       這裡不寫死結論——改由 significance.json 當下的結果決定要不要加但書，
+       哪天模型真的做到顯著，文案會自己跟著變。 */
+    let recCaveat='', recCaveatShort='', recCaveatColor='#7A847E';
+    if(SG && SG.auc){
+      const weak=SG.auc.verdict==='none';
+      recCaveatShort = weak?'訊號尚未達統計顯著':'訊號具統計顯著性';
+      recCaveatColor = weak?'#C0473E':'#1E8C66';
+      recCaveat = weak
+        ? ('提醒：本研究的顯著性檢定顯示，這個訊號的方向判斷尚未顯著優於隨機猜測'
+           +'（walk-forward AUC '+f3s(SG.auc.value)+'，95% 信賴區間 ['+f3s(SG.auc.ci_low)+', '
+           +f3s(SG.auc.ci_high)+'] 跨過 0.5），而且擇時的效果也沒有贏過「固定比例避險」。'
+           +'上面的建議是依模型訊號機械產生的，請當作參考而非投資依據——完整檢定見「模型說明」頁。')
+        : ('本研究的顯著性檢定顯示，這個訊號的方向判斷具統計顯著性'
+           +'（walk-forward AUC '+f3s(SG.auc.value)+'，95% 信賴區間 ['+f3s(SG.auc.ci_low)+', '
+           +f3s(SG.auc.ci_high)+']）。完整檢定見「模型說明」頁。');
+    }
+
     return {
       isLoading:!st.loaded,
       /* auth */
@@ -2520,6 +2552,9 @@ class Component extends DCLogic {
       hasAuthMsg:!!st.authMsg, authMsg:st.authMsg,
       authMsgColor:st.authMsgKind==='ok'?'#1E8C66':'#C0473E',
       syncMsg:st.syncMsg||'設定會自動同步到雲端',
+      dirCardTitle:'預測漲跌方向 · '+hzWord,
+      hasRecCaveat:!!recCaveat, recCaveat:recCaveat,
+      recCaveatShort:recCaveatShort, recCaveatColor:recCaveatColor,
       navDecide:navDecide, navLearn:navLearn, pageKicker:tt[0], pageTitle:tt[1], pageSubtitle:tt[2], beginnerHelp:helps[st.page],
       updatedStr:'資料截至 '+(pred.data_as_of||pred.current.date),
       isDashboard:st.page==='dashboard', isSim:st.page==='simulator', isPrin:st.page==='principles', isBacktest:st.page==='backtest', isModel:st.page==='model', isVerify:st.page==='verify',
