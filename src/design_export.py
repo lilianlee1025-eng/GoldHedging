@@ -109,11 +109,15 @@ def _build_candles(our_pred: dict) -> dict:
                  "l": round(float(r.l), 2), "c": round(float(r.c), 2)}
                 for idx, r in frame.iterrows()]
 
+    # 根數要足夠讓前端的「期間」分頁都切得出來：
+    #   1 個月 ≈ 22 根日線、6 個月 ≈ 120、今年以來與 1 年 ≈ 250（抓 400 保險）
+    #   5 年 ≈ 260 根週線、最久（10 年）≈ 120 根月線
+    # 季線前端已經不用了，但保留輸出，舊版前端或書面報告還可能引用。
     return {
-        "daily":     _rows(daily, 120),
-        "weekly":    _rows(daily.resample("W").agg(agg).dropna(), 104),
-        "monthly":   _rows(daily.resample("ME").agg(agg).dropna(), 72),
-        "quarterly": _rows(daily.resample("QE").agg(agg).dropna(), 40),
+        "daily":     _rows(daily, 400),
+        "weekly":    _rows(daily.resample("W").agg(agg).dropna(), 280),
+        "monthly":   _rows(daily.resample("ME").agg(agg).dropna(), 130),
+        "quarterly": _rows(daily.resample("QE").agg(agg).dropna(), 44),
     }
 
 

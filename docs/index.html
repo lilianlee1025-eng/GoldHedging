@@ -256,7 +256,12 @@
       <div style="display:grid;grid-template-columns:1fr 280px;gap:16px;">
         <div style="background:#FFFFFF;border:1px solid #E4E7E5;border-radius:10px;padding:20px 22px;">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:10px;">
-            <div id="sec-dash-chart" style="scroll-margin-top:20px;font-size:14px;font-weight:600;color:#26302B;">金價走勢 · 近 {{ histLen }} {{ tfUnit }}</div>
+            <div id="sec-dash-chart" style="scroll-margin-top:20px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;">
+              <span style="font-size:14px;font-weight:600;color:#26302B;">{{ chartTitle }}</span>
+              <sc-if value="{{ hasRangeChg }}" hint-placeholder-val="{{ true }}">
+              <span style="font-size:12.5px;font-family:'JetBrains Mono',monospace;color:{{ rangeChg.color }};">{{ rangeChg.pctStr }}　{{ rangeChg.absStr }}</span>
+              </sc-if>
+            </div>
             <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
               <div style="display:flex;gap:4px;">
                 <sc-for list="{{ tfBtns }}" as="t" hint-placeholder-count="4">
@@ -1142,7 +1147,9 @@ class Component extends DCLogic {
       page: 'dashboard',
       loaded: false,        // 資料是否載入完成（控制載入動畫）
       unit: sv.unit || 'spot',   // 計價單位：spot(美元/盎司) / twd(台幣/公克) / gld(GLD 美元/股)
-      tf: sv.tf || 'D',          // 時間單位：D日 / W周 / M月 / Q季
+      // 圖表期間（看多久），不是 K 棒週期——K 的粗細由期間自動決定。
+      // 舊版存的是 D/W/M/Q，認不得就退回預設，不要讓舊設定把圖弄壞。
+      tf: ({'1M':1,'6M':1,'YTD':1,'1Y':1,'5Y':1,'MAX':1}[sv.tf] ? sv.tf : '6M'),
       ctype: sv.ctype || 'line', // 圖表類型：line 折線 / candle K棒
       pred: this.fallbackPred(),
       bt: this.fallbackBt(),
@@ -1527,6 +1534,18 @@ class Component extends DCLogic {
       if(!s.pts.length) return;
       let d='M '+sx(s.pts[0][0]).toFixed(1)+' '+sy(s.pts[0][1]).toFixed(1)+' ';
       for(let i=1;i<s.pts.length;i++) d+='L '+sx(s.pts[i][0]).toFixed(1)+' '+sy(s.pts[i][1]).toFixed(1)+' ';
+      // s.fill：線下方加一層由上而下淡出的漸層（純裝飾，不影響讀值）
+      if(s.fill){
+        const gid='g'+(k++);
+        kids.push(ce('defs',{key:K()},
+          ce('linearGradient',{id:gid,x1:'0',y1:'0',x2:'0',y2:'1'},[
+            ce('stop',{key:'s0',offset:'0%',stopColor:s.fill,stopOpacity:0.22}),
+            ce('stop',{key:'s1',offset:'100%',stopColor:s.fill,stopOpacity:0})])));
+        kids.push(ce('path',{key:K(),
+          d:d+'L '+sx(s.pts[s.pts.length-1][0]).toFixed(1)+' '+B.toFixed(1)
+            +' L '+sx(s.pts[0][0]).toFixed(1)+' '+B.toFixed(1)+' Z',
+          fill:'url(#'+gid+')',stroke:'none'}));
+      }
       kids.push(ce('path',{key:K(),d:d,fill:'none',stroke:s.stroke,strokeWidth:s.width||1.6,strokeDasharray:s.dash||'none',strokeLinejoin:'round',strokeLinecap:'round'}));
     });
     (spec.markers||[]).forEach(mk=>{ const x=sx(mk.x); kids.push(ce('line',{key:K(),x1:x,y1:T,x2:x,y2:B,stroke:mk.color,strokeWidth:1,strokeDasharray:'3 3'})); if(mk.label) kids.push(ce('text',{key:K(),x:x+4,y:T+11,fontSize:9.5,fontFamily:MONO,fill:mk.color},mk.label)); });
@@ -1952,11 +1971,32 @@ class Component extends DCLogic {
     const S0=H[n-1].price, prevP=H[n-2]?H[n-2].price:S0, delta=S0-prevP, deltaPct=delta/prevP*100;
 
     /* 圖表：依時間單位(日/周/月/季)與類型(折線/K棒)切換 */
-    const tfMap={D:'daily',W:'weekly',M:'monthly',Q:'quarterly'};
-    const tfName={D:'日',W:'周',M:'月',Q:'季'};
-    const cd=(pred.candles&&pred.candles[tfMap[st.tf]])||[];
-    const isDailyLine = st.tf==='D' && st.ctype==='line';
-    let dashChart, chartLen;
+    /* 期間分頁：使用者選「要看多久」，一根 K 代表多久由系統決定。
+       （原本是讓使用者選 日/周/月/季，等於要自己換算「120 根日線 ≈ 半年」。） */
+    const RANGES={
+      '1M': {label:'1 個月',  src:'daily',   bars:22,  xfmt:'md'},
+      '6M': {label:'6 個月',  src:'daily',   bars:120, xfmt:'md'},
+      'YTD':{label:'今年以來',src:'daily',   bars:0,   xfmt:'m',  ytd:true},
+      '1Y': {label:'1 年',    src:'daily',   bars:250, xfmt:'m'},
+      '5Y': {label:'5 年',    src:'weekly',  bars:260, xfmt:'y'},
+      'MAX':{label:'10 年',   src:'monthly', bars:0,   xfmt:'y'}   // 資料只抓 10 年，不叫「最久」
+    };
+    const RG=RANGES[st.tf]||RANGES['6M'];
+    let cd=(pred.candles&&pred.candles[RG.src])||[];
+    if(RG.ytd){
+      const y=(pred.data_as_of||'').slice(0,4);
+      cd=cd.filter(d=>d.date>=y+'-01-01');
+    }else if(RG.bars>0 && cd.length>RG.bars){
+      cd=cd.slice(cd.length-RG.bars);
+    }
+    // 模型擬合與未來 30 天預測只在短期間疊上去；拉到 5 年、10 年那 30 天會縮到看不見
+    const isDailyLine = (st.tf==='1M'||st.tf==='6M') && st.ctype==='line';
+    // X 軸標籤格式跟著期間走：短期看月/日、中期看月份、長期看年份
+    const spanYears = cd.length ? (cd[0].date.slice(0,4)!==cd[cd.length-1].date.slice(0,4)) : false;
+    const xlab=(ds)=> RG.xfmt==='y' ? ds.slice(0,4)+'年'
+                    : RG.xfmt==='m' ? (spanYears ? ds.slice(2,4)+'/'+(+ds.slice(5,7)) : (+ds.slice(5,7))+'月')
+                    : ds.slice(5).replace('-','/');
+    let dashChart, chartLen, rangeChg=null;
     if(cd.length){
       // K 棒資料存在 → 用它畫；日線+折線時額外疊上模型擬合與未來預測
       const cm=cd.length, overlay=isDailyLine;
@@ -1966,7 +2006,8 @@ class Component extends DCLogic {
       let xmaxC=cm-1;
       let futPts=null, modPts=null;
       if(overlay){
-        modPts=Mn.map((d,i)=>[cm-n+i,d.price]);     // 模型擬合對齊歷史尾段
+        // 模型擬合對齊歷史尾段；期間短於擬合長度時（例如 1 個月）前面會跑出左邊界，先裁掉
+        modPts=Mn.map((d,i)=>[cm-n+i,d.price]).filter(pt=>pt[0]>=0);
         futPts=[[cm-1,S0]].concat(Fu.map((d,i)=>[cm+i,d.price]));
         const fp=Fu.map(d=>d.price);
         vmin=Math.min(vmin,Math.min.apply(null,fp)); vmax=Math.max(vmax,Math.max.apply(null,fp));
@@ -1974,9 +2015,11 @@ class Component extends DCLogic {
       }
       const vspan=(vmax-vmin)||1;
       const tickIdx=[0,Math.floor(cm*0.33),Math.floor(cm*0.66),cm-1,xmaxC].filter((v,i,a)=>a.indexOf(v)===i);
-      const xticks=tickIdx.map(ix=>({x:ix,label:this.dlabel(ix<cm?cd[ix].date:Fu[ix-cm].date)}));
+      const xticks=tickIdx.map(ix=>({x:ix,label:xlab(ix<cm?cd[ix].date:Fu[ix-cm].date)}));
+      // 這段期間漲還是跌 → 決定線的顏色（沿用全站慣例：綠漲紅跌，不是台股的紅漲綠跌）
+      const rUp=cd[cm-1].c>=cd[0].c, rCol=rUp?'#1E8C66':'#C0473E';
       const series=[];
-      if(st.ctype==='line') series.push({pts:closes,stroke:'#3A443E',width:1.7});
+      if(st.ctype==='line') series.push({pts:closes,stroke:rCol,width:1.8,fill:rCol});
       if(overlay){ series.push({pts:modPts,stroke:'#9AA39D',width:1.3}); series.push({pts:futPts,stroke:'#C8A951',width:2.4,dash:'6 5'}); }
       dashChart=this.chartEl({ w:920,h:300,pad:{l:46,r:16,t:16,b:26},
         xmin:0,xmax:xmaxC,ymin:vmin-vspan*0.08,ymax:vmax+vspan*0.08,
@@ -1990,6 +2033,10 @@ class Component extends DCLogic {
         hover:{ id:'dash', pts:closes, labels:cd.map(d=>d.date),
                 fmt:v=>this.fmtP(v), color:'#26302B' } });
       chartLen=cm;
+      const rPct=(cd[cm-1].c/cd[0].c-1)*100;
+      rangeChg={ pctStr:this.pct(rPct),
+                 absStr:(rPct>=0?'+':'−')+this.fmtP(Math.abs(cd[cm-1].c-cd[0].c)),
+                 color:rCol, label:RG.label, fromStr:cd[0].date, toStr:cd[cm-1].date };
     } else {
       chartLen=0; dashChart=this.chartEl({w:920,h:300,xmin:0,xmax:1,ymin:0,ymax:1});
     }
@@ -2029,8 +2076,8 @@ class Component extends DCLogic {
     /* 時間單位(日/周/月/季) 與 圖表類型(折線/K棒) 切換 */
     const setTf=t=>{ this.savePrefs({tf:t}); this.setState({tf:t}); };
     const setCtype=t=>{ this.savePrefs({ctype:t}); this.setState({ctype:t}); };
-    const tfBtns=[['D','日'],['W','周'],['M','月'],['Q','季']].map(a=>({ key:a[0], label:a[1], onClick:()=>setTf(a[0]),
-      bg:st.tf===a[0]?'#3A443E':'#FFFFFF', fg:st.tf===a[0]?'#FFFFFF':'#7A847E', border:st.tf===a[0]?'#3A443E':'#E4E7E5' }));
+    const tfBtns=Object.keys(RANGES).map(kk=>({ key:kk, label:RANGES[kk].label, onClick:()=>setTf(kk),
+      bg:st.tf===kk?'#3A443E':'#FFFFFF', fg:st.tf===kk?'#FFFFFF':'#7A847E', border:st.tf===kk?'#3A443E':'#E4E7E5' }));
     const ctypeBtns=[['line','折線'],['candle','K棒']].map(a=>({ key:a[0], label:a[1], onClick:()=>setCtype(a[0]),
       bg:st.ctype===a[0]?'#3A443E':'#FFFFFF', fg:st.ctype===a[0]?'#FFFFFF':'#7A847E', border:st.ctype===a[0]?'#3A443E':'#E4E7E5' }));
 
@@ -2619,7 +2666,9 @@ class Component extends DCLogic {
       /* dashboard */
       priceStr:this.fmtP(S0), deltaStr:this.pct(deltaPct), deltaColor:delta>=0?'#1E8C66':'#C0473E',
       unitBtns:unitBtns, unitLabel:this.curUnit().label,
-      tfBtns:tfBtns, ctypeBtns:ctypeBtns, tfUnit:tfName[st.tf],
+      tfBtns:tfBtns, ctypeBtns:ctypeBtns,
+      chartTitle:'金價走勢 · '+RG.label,
+      hasRangeChg:!!rangeChg, rangeChg:rangeChg||{},
       dataAsOf:pred.data_as_of||pred.current.date, generatedAt:pred.generated_at||'',
       dirText:dirDown?'下跌':'上漲', dirArrow:dirDown?'↓':'↑', dirColor:dirDown?'#C0473E':'#1E8C66',
       declinePctStr:(pred.decline_prob*100).toFixed(0)+'%', threshStr:(bt.meta.hedge_threshold*100).toFixed(0)+'%',
