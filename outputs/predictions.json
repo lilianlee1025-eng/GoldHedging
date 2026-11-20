@@ -13,25 +13,25 @@
       "SP500",
       "VIX"
     ],
-    "generated_from": "2005-02-15 ~ 2026-11-19"
+    "generated_from": "2005-02-15 ~ 2026-11-20"
   },
   "metrics": {
     "naive": {
-      "rmse": 239.86988830566406,
-      "mae": 172.43496704101562
+      "rmse": 240.77273559570312,
+      "mae": 173.01296997070312
     },
     "lstm_single": {
-      "rmse": 257.5240478515625,
-      "mae": 187.23805236816406,
-      "decline_acc": 0.3543233082706767,
-      "auc": 0.5514693106923192
+      "rmse": 292.8894958496094,
+      "mae": 205.6656494140625,
+      "decline_acc": 0.35526315789473684,
+      "auc": 0.5514465423357552
     },
     "lstm_multi": {
-      "rmse": 257.3922424316406,
-      "mae": 185.9806365966797,
-      "decline_acc": 0.3543233082706767,
-      "auc": 0.5794192255568554,
-      "base_rate_acc": 0.6456767320632935
+      "rmse": 243.96861267089844,
+      "mae": 169.6518096923828,
+      "decline_acc": 0.5451127819548872,
+      "auc": 0.6168687429620374,
+      "base_rate_acc": 0.6447368860244751
     }
   },
   "history": [
@@ -21901,6410 +21901,6414 @@
     },
     {
       "date": "2026-11-19",
-      "price": 3678.8
+      "price": 3685.5
+    },
+    {
+      "date": "2026-11-20",
+      "price": 3529.0
     }
   ],
   "test_predictions": [
     {
-      "date": "2022-07-14",
-      "actual": 1771.4,
-      "predicted": 1686.051,
-      "prob_down": 0.6971
-    },
-    {
       "date": "2022-07-15",
       "actual": 1749.8,
-      "predicted": 1684.01,
-      "prob_down": 0.6963
+      "predicted": 1713.633,
+      "prob_down": 0.5506
     },
     {
       "date": "2022-07-18",
       "actual": 1749.7,
-      "predicted": 1690.646,
-      "prob_down": 0.6956
+      "predicted": 1721.02,
+      "prob_down": 0.5412
     },
     {
       "date": "2022-07-19",
       "actual": 1736.3,
-      "predicted": 1691.232,
-      "prob_down": 0.695
+      "predicted": 1722.315,
+      "prob_down": 0.5315
     },
     {
       "date": "2022-07-20",
       "actual": 1726.2,
-      "predicted": 1680.934,
-      "prob_down": 0.6943
+      "predicted": 1712.897,
+      "prob_down": 0.5203
     },
     {
       "date": "2022-07-21",
       "actual": 1709.3,
-      "predicted": 1694.024,
-      "prob_down": 0.6939
+      "predicted": 1728.242,
+      "prob_down": 0.5107
     },
     {
       "date": "2022-07-22",
       "actual": 1722.6,
-      "predicted": 1707.847,
-      "prob_down": 0.6937
+      "predicted": 1745.074,
+      "prob_down": 0.5005
     },
     {
       "date": "2022-07-25",
       "actual": 1712.9,
-      "predicted": 1699.604,
-      "prob_down": 0.6937
+      "predicted": 1739.394,
+      "prob_down": 0.4921
     },
     {
       "date": "2022-07-26",
       "actual": 1727.8,
-      "predicted": 1698.188,
-      "prob_down": 0.6937
+      "predicted": 1740.527,
+      "prob_down": 0.4843
     },
     {
       "date": "2022-07-27",
       "actual": 1720.2,
-      "predicted": 1699.523,
-      "prob_down": 0.6939
+      "predicted": 1744.867,
+      "prob_down": 0.4753
     },
     {
       "date": "2022-07-28",
       "actual": 1728.6,
-      "predicted": 1730.264,
-      "prob_down": 0.6944
+      "predicted": 1779.257,
+      "prob_down": 0.4674
     },
     {
       "date": "2022-07-29",
       "actual": 1740.6,
-      "predicted": 1742.568,
-      "prob_down": 0.695
+      "predicted": 1794.596,
+      "prob_down": 0.4603
     },
     {
       "date": "2022-08-01",
       "actual": 1717.4,
-      "predicted": 1766.877,
-      "prob_down": 0.696
+      "predicted": 1822.009,
+      "prob_down": 0.4546
     },
     {
       "date": "2022-08-02",
       "actual": 1709.1,
-      "predicted": 1768.671,
-      "prob_down": 0.697
+      "predicted": 1826.413,
+      "prob_down": 0.4481
     },
     {
       "date": "2022-08-03",
       "actual": 1677.3,
-      "predicted": 1755.357,
-      "prob_down": 0.698
+      "predicted": 1815.106,
+      "prob_down": 0.4416
     },
     {
       "date": "2022-08-04",
       "actual": 1683.5,
-      "predicted": 1785.295,
-      "prob_down": 0.6991
+      "predicted": 1848.626,
+      "prob_down": 0.4349
     },
     {
       "date": "2022-08-05",
       "actual": 1678.2,
-      "predicted": 1769.62,
-      "prob_down": 0.7
+      "predicted": 1834.627,
+      "prob_down": 0.4286
     },
     {
       "date": "2022-08-08",
       "actual": 1671.1,
-      "predicted": 1783.295,
-      "prob_down": 0.701
+      "predicted": 1850.631,
+      "prob_down": 0.4229
     },
     {
       "date": "2022-08-09",
       "actual": 1675.7,
-      "predicted": 1790.166,
-      "prob_down": 0.7019
+      "predicted": 1859.07,
+      "prob_down": 0.4181
     },
     {
       "date": "2022-08-10",
       "actual": 1681.1,
-      "predicted": 1791.391,
-      "prob_down": 0.7027
+      "predicted": 1861.474,
+      "prob_down": 0.414
     },
     {
       "date": "2022-08-11",
       "actual": 1655.6,
-      "predicted": 1784.826,
-      "prob_down": 0.7035
+      "predicted": 1855.664,
+      "prob_down": 0.4101
     },
     {
       "date": "2022-08-12",
       "actual": 1633.4,
-      "predicted": 1792.886,
-      "prob_down": 0.7042
+      "predicted": 1865.0,
+      "prob_down": 0.4064
     },
     {
       "date": "2022-08-15",
       "actual": 1636.2,
-      "predicted": 1775.588,
-      "prob_down": 0.7049
+      "predicted": 1848.053,
+      "prob_down": 0.402
     },
     {
       "date": "2022-08-16",
       "actual": 1670.0,
-      "predicted": 1767.205,
-      "prob_down": 0.7054
+      "predicted": 1840.23,
+      "prob_down": 0.3974
     },
     {
       "date": "2022-08-17",
       "actual": 1668.6,
-      "predicted": 1754.32,
-      "prob_down": 0.7058
+      "predicted": 1827.603,
+      "prob_down": 0.393
     },
     {
       "date": "2022-08-18",
       "actual": 1672.0,
-      "predicted": 1748.879,
-      "prob_down": 0.706
+      "predicted": 1822.633,
+      "prob_down": 0.3886
     },
     {
       "date": "2022-08-19",
       "actual": 1702.0,
-      "predicted": 1740.731,
-      "prob_down": 0.7059
+      "predicted": 1814.905,
+      "prob_down": 0.3837
     },
     {
       "date": "2022-08-22",
       "actual": 1730.5,
-      "predicted": 1726.536,
-      "prob_down": 0.7057
+      "predicted": 1800.879,
+      "prob_down": 0.3788
     },
     {
       "date": "2022-08-23",
       "actual": 1720.8,
-      "predicted": 1739.339,
-      "prob_down": 0.7052
+      "predicted": 1814.944,
+      "prob_down": 0.3738
     },
     {
       "date": "2022-08-24",
       "actual": 1720.8,
-      "predicted": 1739.815,
-      "prob_down": 0.7046
+      "predicted": 1816.132,
+      "prob_down": 0.3688
     },
     {
       "date": "2022-08-25",
       "actual": 1709.3,
-      "predicted": 1749.748,
-      "prob_down": 0.704
+      "predicted": 1827.346,
+      "prob_down": 0.3647
     },
     {
       "date": "2022-08-26",
       "actual": 1675.2,
-      "predicted": 1728.578,
-      "prob_down": 0.7034
+      "predicted": 1806.063,
+      "prob_down": 0.3614
     },
     {
       "date": "2022-08-29",
       "actual": 1686.0,
-      "predicted": 1728.673,
-      "prob_down": 0.7026
+      "predicted": 1806.96,
+      "prob_down": 0.3581
     },
     {
       "date": "2022-08-30",
       "actual": 1677.5,
-      "predicted": 1715.637,
-      "prob_down": 0.7017
+      "predicted": 1794.108,
+      "prob_down": 0.3547
     },
     {
       "date": "2022-08-31",
       "actual": 1677.0,
-      "predicted": 1705.869,
-      "prob_down": 0.7006
+      "predicted": 1784.632,
+      "prob_down": 0.3513
     },
     {
       "date": "2022-09-01",
       "actual": 1648.9,
-      "predicted": 1689.415,
-      "prob_down": 0.6994
+      "predicted": 1767.417,
+      "prob_down": 0.3486
     },
     {
       "date": "2022-09-02",
       "actual": 1664.0,
-      "predicted": 1702.818,
-      "prob_down": 0.6981
+      "predicted": 1781.33,
+      "prob_down": 0.3458
     },
     {
       "date": "2022-09-06",
       "actual": 1655.8,
-      "predicted": 1693.533,
-      "prob_down": 0.6966
+      "predicted": 1771.36,
+      "prob_down": 0.343
     },
     {
       "date": "2022-09-07",
       "actual": 1634.2,
-      "predicted": 1708.544,
-      "prob_down": 0.6952
+      "predicted": 1786.727,
+      "prob_down": 0.3399
     },
     {
       "date": "2022-09-08",
       "actual": 1636.8,
-      "predicted": 1701.267,
-      "prob_down": 0.6937
+      "predicted": 1778.724,
+      "prob_down": 0.3367
     },
     {
       "date": "2022-09-09",
       "actual": 1656.3,
-      "predicted": 1709.765,
-      "prob_down": 0.6923
+      "predicted": 1787.108,
+      "prob_down": 0.3338
     },
     {
       "date": "2022-09-12",
       "actual": 1654.1,
-      "predicted": 1721.775,
-      "prob_down": 0.691
+      "predicted": 1799.049,
+      "prob_down": 0.3313
     },
     {
       "date": "2022-09-13",
       "actual": 1658.0,
-      "predicted": 1698.999,
-      "prob_down": 0.6897
+      "predicted": 1774.975,
+      "prob_down": 0.3285
     },
     {
       "date": "2022-09-14",
       "actual": 1669.2,
-      "predicted": 1690.988,
-      "prob_down": 0.6883
+      "predicted": 1767.116,
+      "prob_down": 0.3237
     },
     {
       "date": "2022-09-15",
       "actual": 1665.6,
-      "predicted": 1659.724,
-      "prob_down": 0.6867
+      "predicted": 1735.577,
+      "prob_down": 0.3166
     },
     {
       "date": "2022-09-16",
       "actual": 1644.8,
-      "predicted": 1666.051,
-      "prob_down": 0.685
+      "predicted": 1743.604,
+      "prob_down": 0.3083
     },
     {
       "date": "2022-09-19",
       "actual": 1640.7,
-      "predicted": 1661.001,
-      "prob_down": 0.6832
+      "predicted": 1739.514,
+      "prob_down": 0.3002
     },
     {
       "date": "2022-09-20",
       "actual": 1649.7,
-      "predicted": 1654.198,
-      "prob_down": 0.6812
+      "predicted": 1733.21,
+      "prob_down": 0.2911
     },
     {
       "date": "2022-09-21",
       "actual": 1650.0,
-      "predicted": 1659.0,
-      "prob_down": 0.6793
+      "predicted": 1738.417,
+      "prob_down": 0.2781
     },
     {
       "date": "2022-09-22",
       "actual": 1630.9,
-      "predicted": 1664.638,
-      "prob_down": 0.6771
+      "predicted": 1744.14,
+      "prob_down": 0.2643
     },
     {
       "date": "2022-09-23",
       "actual": 1676.6,
-      "predicted": 1639.755,
-      "prob_down": 0.6747
+      "predicted": 1718.9,
+      "prob_down": 0.2478
     },
     {
       "date": "2022-09-26",
       "actual": 1680.5,
-      "predicted": 1618.245,
-      "prob_down": 0.6718
+      "predicted": 1699.641,
+      "prob_down": 0.2268
     },
     {
       "date": "2022-09-27",
       "actual": 1716.0,
-      "predicted": 1621.617,
-      "prob_down": 0.6685
+      "predicted": 1706.208,
+      "prob_down": 0.2052
     },
     {
       "date": "2022-09-28",
       "actual": 1713.7,
-      "predicted": 1655.658,
-      "prob_down": 0.6654
+      "predicted": 1744.484,
+      "prob_down": 0.1837
     },
     {
       "date": "2022-09-29",
       "actual": 1753.7,
-      "predicted": 1654.783,
-      "prob_down": 0.6623
+      "predicted": 1744.277,
+      "prob_down": 0.1615
     },
     {
       "date": "2022-09-30",
       "actual": 1769.4,
-      "predicted": 1658.666,
-      "prob_down": 0.6591
+      "predicted": 1750.79,
+      "prob_down": 0.142
     },
     {
       "date": "2022-10-03",
       "actual": 1776.9,
-      "predicted": 1688.873,
-      "prob_down": 0.6563
+      "predicted": 1783.713,
+      "prob_down": 0.1246
     },
     {
       "date": "2022-10-04",
       "actual": 1776.8,
-      "predicted": 1717.48,
-      "prob_down": 0.6539
+      "predicted": 1814.145,
+      "prob_down": 0.1114
     },
     {
       "date": "2022-10-05",
       "actual": 1775.8,
-      "predicted": 1708.153,
-      "prob_down": 0.6517
+      "predicted": 1804.096,
+      "prob_down": 0.1015
     },
     {
       "date": "2022-10-06",
       "actual": 1763.0,
-      "predicted": 1708.537,
-      "prob_down": 0.6496
+      "predicted": 1804.11,
+      "prob_down": 0.0939
     },
     {
       "date": "2022-10-07",
       "actual": 1754.4,
-      "predicted": 1697.555,
-      "prob_down": 0.6474
+      "predicted": 1792.16,
+      "prob_down": 0.0882
     },
     {
       "date": "2022-10-10",
       "actual": 1739.6,
-      "predicted": 1664.185,
-      "prob_down": 0.645
+      "predicted": 1757.406,
+      "prob_down": 0.0841
     },
     {
       "date": "2022-10-11",
       "actual": 1739.9,
-      "predicted": 1675.475,
-      "prob_down": 0.6425
+      "predicted": 1770.752,
+      "prob_down": 0.0811
     },
     {
       "date": "2022-10-12",
       "actual": 1745.6,
-      "predicted": 1667.631,
-      "prob_down": 0.6397
+      "predicted": 1763.868,
+      "prob_down": 0.0789
     },
     {
       "date": "2022-10-13",
       "actual": 1754.0,
-      "predicted": 1667.75,
-      "prob_down": 0.6368
+      "predicted": 1765.261,
+      "prob_down": 0.0774
     },
     {
       "date": "2022-10-14",
       "actual": 1740.3,
-      "predicted": 1640.465,
-      "prob_down": 0.6336
+      "predicted": 1737.613,
+      "prob_down": 0.0765
     },
     {
       "date": "2022-10-17",
       "actual": 1748.4,
-      "predicted": 1656.169,
-      "prob_down": 0.6304
+      "predicted": 1755.466,
+      "prob_down": 0.0761
     },
     {
       "date": "2022-10-18",
       "actual": 1746.0,
-      "predicted": 1648.504,
-      "prob_down": 0.6267
+      "predicted": 1748.584,
+      "prob_down": 0.0761
     },
     {
       "date": "2022-10-19",
       "actual": 1815.2,
-      "predicted": 1627.516,
-      "prob_down": 0.6227
+      "predicted": 1727.4,
+      "prob_down": 0.0763
     },
     {
       "date": "2022-10-20",
       "actual": 1809.6,
-      "predicted": 1630.677,
-      "prob_down": 0.6183
+      "predicted": 1731.688,
+      "prob_down": 0.0767
     },
     {
       "date": "2022-10-21",
       "actual": 1781.3,
-      "predicted": 1650.676,
-      "prob_down": 0.6143
+      "predicted": 1753.728,
+      "prob_down": 0.0775
     },
     {
       "date": "2022-10-24",
       "actual": 1782.4,
-      "predicted": 1649.113,
-      "prob_down": 0.6103
+      "predicted": 1752.66,
+      "prob_down": 0.0785
     },
     {
       "date": "2022-10-25",
       "actual": 1798.0,
-      "predicted": 1653.537,
-      "prob_down": 0.6064
+      "predicted": 1757.826,
+      "prob_down": 0.0797
     },
     {
       "date": "2022-10-26",
       "actual": 1801.5,
-      "predicted": 1665.196,
-      "prob_down": 0.6028
+      "predicted": 1770.535,
+      "prob_down": 0.0812
     },
     {
       "date": "2022-10-27",
       "actual": 1810.7,
-      "predicted": 1662.389,
-      "prob_down": 0.5991
+      "predicted": 1767.136,
+      "prob_down": 0.0828
     },
     {
       "date": "2022-10-28",
       "actual": 1792.3,
-      "predicted": 1642.489,
-      "prob_down": 0.5956
+      "predicted": 1745.194,
+      "prob_down": 0.0846
     },
     {
       "date": "2022-10-31",
       "actual": 1825.5,
-      "predicted": 1639.24,
-      "prob_down": 0.5922
+      "predicted": 1740.771,
+      "prob_down": 0.0865
     },
     {
       "date": "2022-11-01",
       "actual": 1818.7,
-      "predicted": 1648.929,
-      "prob_down": 0.5888
+      "predicted": 1750.077,
+      "prob_down": 0.0885
     },
     {
       "date": "2022-11-02",
       "actual": 1787.8,
-      "predicted": 1649.978,
-      "prob_down": 0.5852
+      "predicted": 1750.039,
+      "prob_down": 0.0905
     },
     {
       "date": "2022-11-03",
       "actual": 1800.2,
-      "predicted": 1631.665,
-      "prob_down": 0.5813
+      "predicted": 1729.284,
+      "prob_down": 0.0923
     },
     {
       "date": "2022-11-04",
       "actual": 1797.7,
-      "predicted": 1678.207,
-      "prob_down": 0.5776
+      "predicted": 1777.189,
+      "prob_down": 0.0944
     },
     {
       "date": "2022-11-07",
       "actual": 1825.4,
-      "predicted": 1682.914,
-      "prob_down": 0.574
+      "predicted": 1780.489,
+      "prob_down": 0.0966
     },
     {
       "date": "2022-11-08",
       "actual": 1825.4,
-      "predicted": 1719.227,
-      "prob_down": 0.5709
+      "predicted": 1817.098,
+      "prob_down": 0.0988
     },
     {
       "date": "2022-11-09",
       "actual": 1795.3,
-      "predicted": 1717.509,
-      "prob_down": 0.5678
+      "predicted": 1813.696,
+      "prob_down": 0.1008
     },
     {
       "date": "2022-11-10",
       "actual": 1804.2,
-      "predicted": 1757.949,
-      "prob_down": 0.566
+      "predicted": 1854.794,
+      "prob_down": 0.1031
     },
     {
       "date": "2022-11-11",
       "actual": 1823.1,
-      "predicted": 1773.843,
-      "prob_down": 0.5655
+      "predicted": 1869.938,
+      "prob_down": 0.1057
     },
     {
       "date": "2022-11-14",
       "actual": 1815.8,
-      "predicted": 1781.35,
-      "prob_down": 0.5661
+      "predicted": 1876.314,
+      "prob_down": 0.1084
     },
     {
       "date": "2022-11-15",
       "actual": 1826.0,
-      "predicted": 1781.063,
-      "prob_down": 0.568
+      "predicted": 1874.586,
+      "prob_down": 0.1111
     },
     {
       "date": "2022-11-16",
       "actual": 1826.2,
-      "predicted": 1779.642,
-      "prob_down": 0.5712
+      "predicted": 1871.96,
+      "prob_down": 0.1138
     },
     {
       "date": "2022-11-17",
       "actual": 1846.1,
-      "predicted": 1766.269,
-      "prob_down": 0.5751
+      "predicted": 1856.684,
+      "prob_down": 0.1165
     },
     {
       "date": "2022-11-18",
       "actual": 1859.0,
-      "predicted": 1757.057,
-      "prob_down": 0.5795
+      "predicted": 1845.479,
+      "prob_down": 0.1193
     },
     {
       "date": "2022-11-21",
       "actual": 1840.6,
-      "predicted": 1741.357,
-      "prob_down": 0.5841
+      "predicted": 1827.556,
+      "prob_down": 0.1219
     },
     {
       "date": "2022-11-22",
       "actual": 1869.7,
-      "predicted": 1740.638,
-      "prob_down": 0.589
+      "predicted": 1825.172,
+      "prob_down": 0.1247
     },
     {
       "date": "2022-11-23",
       "actual": 1877.8,
-      "predicted": 1745.074,
-      "prob_down": 0.5948
+      "predicted": 1828.055,
+      "prob_down": 0.1279
     },
     {
       "date": "2022-11-25",
       "actual": 1876.5,
-      "predicted": 1752.005,
-      "prob_down": 0.6005
+      "predicted": 1833.368,
+      "prob_down": 0.1314
     },
     {
       "date": "2022-11-28",
       "actual": 1878.9,
-      "predicted": 1736.81,
-      "prob_down": 0.6061
+      "predicted": 1815.336,
+      "prob_down": 0.1353
     },
     {
       "date": "2022-11-29",
       "actual": 1898.8,
-      "predicted": 1743.518,
-      "prob_down": 0.6114
+      "predicted": 1820.12,
+      "prob_down": 0.1396
     },
     {
       "date": "2022-11-30",
       "actual": 1921.7,
-      "predicted": 1740.266,
-      "prob_down": 0.6162
+      "predicted": 1813.913,
+      "prob_down": 0.1449
     },
     {
       "date": "2022-12-01",
       "actual": 1909.9,
-      "predicted": 1808.417,
-      "prob_down": 0.6216
+      "predicted": 1881.468,
+      "prob_down": 0.1517
     },
     {
       "date": "2022-12-02",
       "actual": 1907.0,
-      "predicted": 1801.696,
-      "prob_down": 0.6266
+      "predicted": 1870.937,
+      "prob_down": 0.1602
     },
     {
       "date": "2022-12-05",
       "actual": 1923.9,
-      "predicted": 1772.38,
-      "prob_down": 0.6314
+      "predicted": 1836.782,
+      "prob_down": 0.1707
     },
     {
       "date": "2022-12-06",
       "actual": 1928.2,
-      "predicted": 1772.395,
-      "prob_down": 0.636
+      "predicted": 1833.175,
+      "prob_down": 0.183
     },
     {
       "date": "2022-12-07",
       "actual": 1928.6,
-      "predicted": 1786.83,
-      "prob_down": 0.6406
+      "predicted": 1845.866,
+      "prob_down": 0.196
     },
     {
       "date": "2022-12-08",
       "actual": 1935.4,
-      "predicted": 1789.297,
-      "prob_down": 0.6451
+      "predicted": 1847.635,
+      "prob_down": 0.2131
     },
     {
       "date": "2022-12-09",
       "actual": 1942.6,
-      "predicted": 1797.497,
-      "prob_down": 0.6493
+      "predicted": 1855.877,
+      "prob_down": 0.2349
     },
     {
       "date": "2022-12-12",
       "actual": 1930.0,
-      "predicted": 1778.421,
-      "prob_down": 0.6531
+      "predicted": 1837.084,
+      "prob_down": 0.2641
     },
     {
       "date": "2022-12-13",
       "actual": 1929.4,
-      "predicted": 1810.567,
-      "prob_down": 0.6567
+      "predicted": 1869.958,
+      "prob_down": 0.2992
     },
     {
       "date": "2022-12-14",
       "actual": 1922.9,
-      "predicted": 1803.056,
-      "prob_down": 0.6602
+      "predicted": 1861.483,
+      "prob_down": 0.3287
     },
     {
       "date": "2022-12-15",
       "actual": 1929.5,
-      "predicted": 1771.752,
-      "prob_down": 0.6634
+      "predicted": 1830.999,
+      "prob_down": 0.3506
     },
     {
       "date": "2022-12-16",
       "actual": 1942.8,
-      "predicted": 1783.444,
-      "prob_down": 0.6664
+      "predicted": 1844.273,
+      "prob_down": 0.3614
     },
     {
       "date": "2022-12-19",
       "actual": 1930.8,
-      "predicted": 1780.475,
-      "prob_down": 0.6689
+      "predicted": 1844.608,
+      "prob_down": 0.3622
     },
     {
       "date": "2022-12-20",
       "actual": 1876.6,
-      "predicted": 1807.49,
-      "prob_down": 0.6712
+      "predicted": 1875.124,
+      "prob_down": 0.3623
     },
     {
       "date": "2022-12-21",
       "actual": 1879.5,
-      "predicted": 1807.122,
-      "prob_down": 0.6732
+      "predicted": 1876.678,
+      "prob_down": 0.3624
     },
     {
       "date": "2022-12-22",
       "actual": 1884.8,
-      "predicted": 1777.052,
-      "prob_down": 0.6748
+      "predicted": 1847.139,
+      "prob_down": 0.363
     },
     {
       "date": "2022-12-23",
       "actual": 1890.7,
-      "predicted": 1785.652,
-      "prob_down": 0.6761
+      "predicted": 1857.163,
+      "prob_down": 0.3631
     },
     {
       "date": "2022-12-27",
       "actual": 1878.5,
-      "predicted": 1804.2,
-      "prob_down": 0.6771
+      "predicted": 1877.192,
+      "prob_down": 0.3633
     },
     {
       "date": "2022-12-28",
       "actual": 1874.5,
-      "predicted": 1796.885,
-      "prob_down": 0.6777
+      "predicted": 1870.125,
+      "prob_down": 0.3637
     },
     {
       "date": "2022-12-29",
       "actual": 1863.5,
-      "predicted": 1806.909,
-      "prob_down": 0.6782
+      "predicted": 1880.948,
+      "prob_down": 0.364
     },
     {
       "date": "2022-12-30",
       "actual": 1865.4,
-      "predicted": 1807.049,
-      "prob_down": 0.6786
+      "predicted": 1881.285,
+      "prob_down": 0.3645
     },
     {
       "date": "2023-01-03",
       "actual": 1845.3,
-      "predicted": 1826.685,
-      "prob_down": 0.6791
+      "predicted": 1901.753,
+      "prob_down": 0.3646
     },
     {
       "date": "2023-01-04",
       "actual": 1851.8,
-      "predicted": 1839.365,
-      "prob_down": 0.6796
+      "predicted": 1914.931,
+      "prob_down": 0.3644
     },
     {
       "date": "2023-01-05",
       "actual": 1850.2,
-      "predicted": 1821.088,
-      "prob_down": 0.6801
+      "predicted": 1895.816,
+      "prob_down": 0.3642
     },
     {
       "date": "2023-01-06",
       "actual": 1842.5,
-      "predicted": 1849.746,
-      "prob_down": 0.6808
+      "predicted": 1925.611,
+      "prob_down": 0.3637
     },
     {
       "date": "2023-01-09",
       "actual": 1841.5,
-      "predicted": 1857.573,
-      "prob_down": 0.6817
+      "predicted": 1933.768,
+      "prob_down": 0.3633
     },
     {
       "date": "2023-01-10",
       "actual": 1826.8,
-      "predicted": 1856.087,
-      "prob_down": 0.6826
+      "predicted": 1932.275,
+      "prob_down": 0.3633
     },
     {
       "date": "2023-01-11",
       "actual": 1817.1,
-      "predicted": 1858.238,
-      "prob_down": 0.6837
+      "predicted": 1934.619,
+      "prob_down": 0.3634
     },
     {
       "date": "2023-01-12",
       "actual": 1824.9,
-      "predicted": 1877.63,
-      "prob_down": 0.685
+      "predicted": 1955.067,
+      "prob_down": 0.3636
     },
     {
       "date": "2023-01-13",
       "actual": 1836.7,
-      "predicted": 1899.949,
-      "prob_down": 0.6865
+      "predicted": 1978.671,
+      "prob_down": 0.364
     },
     {
       "date": "2023-01-17",
       "actual": 1845.4,
-      "predicted": 1887.968,
-      "prob_down": 0.688
+      "predicted": 1966.593,
+      "prob_down": 0.3646
     },
     {
       "date": "2023-01-18",
       "actual": 1840.5,
-      "predicted": 1884.779,
-      "prob_down": 0.6896
+      "predicted": 1963.744,
+      "prob_down": 0.3653
     },
     {
       "date": "2023-01-19",
       "actual": 1854.6,
-      "predicted": 1901.166,
-      "prob_down": 0.6913
+      "predicted": 1981.317,
+      "prob_down": 0.366
     },
     {
       "date": "2023-01-20",
       "actual": 1854.6,
-      "predicted": 1905.125,
-      "prob_down": 0.6929
+      "predicted": 1985.94,
+      "prob_down": 0.3668
     },
     {
       "date": "2023-01-23",
       "actual": 1820.0,
-      "predicted": 1905.259,
-      "prob_down": 0.6944
+      "predicted": 1986.57,
+      "prob_down": 0.3677
     },
     {
       "date": "2023-01-24",
       "actual": 1818.6,
-      "predicted": 1911.716,
-      "prob_down": 0.6958
+      "predicted": 1993.819,
+      "prob_down": 0.3686
     },
     {
       "date": "2023-01-25",
       "actual": 1834.6,
-      "predicted": 1918.57,
-      "prob_down": 0.6973
+      "predicted": 2001.485,
+      "prob_down": 0.3694
     },
     {
       "date": "2023-01-26",
       "actual": 1867.2,
-      "predicted": 1905.896,
-      "prob_down": 0.6986
+      "predicted": 1988.749,
+      "prob_down": 0.3704
     },
     {
       "date": "2023-01-27",
       "actual": 1916.5,
-      "predicted": 1905.103,
-      "prob_down": 0.6998
+      "predicted": 1987.891,
+      "prob_down": 0.3719
     },
     {
       "date": "2023-01-30",
       "actual": 1910.9,
-      "predicted": 1898.531,
-      "prob_down": 0.7008
+      "predicted": 1980.903,
+      "prob_down": 0.3733
     },
     {
       "date": "2023-01-31",
       "actual": 1931.3,
-      "predicted": 1904.917,
-      "prob_down": 0.7018
+      "predicted": 1987.459,
+      "prob_down": 0.3744
     },
     {
       "date": "2023-02-01",
       "actual": 1923.0,
-      "predicted": 1917.881,
-      "prob_down": 0.7028
+      "predicted": 2000.927,
+      "prob_down": 0.3754
     },
     {
       "date": "2023-02-02",
       "actual": 1973.5,
-      "predicted": 1905.878,
-      "prob_down": 0.7037
+      "predicted": 1988.434,
+      "prob_down": 0.3772
     },
     {
       "date": "2023-02-03",
       "actual": 1982.8,
-      "predicted": 1852.298,
-      "prob_down": 0.7044
+      "predicted": 1932.543,
+      "prob_down": 0.3788
     },
     {
       "date": "2023-02-06",
       "actual": 1941.1,
-      "predicted": 1855.162,
-      "prob_down": 0.7047
+      "predicted": 1935.489,
+      "prob_down": 0.3798
     },
     {
       "date": "2023-02-07",
       "actual": 1949.6,
-      "predicted": 1860.44,
-      "prob_down": 0.7048
+      "predicted": 1940.961,
+      "prob_down": 0.3802
     },
     {
       "date": "2023-02-08",
       "actual": 1995.9,
-      "predicted": 1866.327,
-      "prob_down": 0.7048
+      "predicted": 1946.915,
+      "prob_down": 0.381
     },
     {
       "date": "2023-02-09",
       "actual": 1983.8,
-      "predicted": 1854.377,
-      "prob_down": 0.7047
+      "predicted": 1934.193,
+      "prob_down": 0.3817
     },
     {
       "date": "2023-02-10",
       "actual": 1953.8,
-      "predicted": 1850.558,
-      "prob_down": 0.7044
+      "predicted": 1929.989,
+      "prob_down": 0.3819
     },
     {
       "date": "2023-02-13",
       "actual": 1973.5,
-      "predicted": 1839.838,
-      "prob_down": 0.7039
+      "predicted": 1918.624,
+      "prob_down": 0.3817
     },
     {
       "date": "2023-02-14",
       "actual": 1966.9,
-      "predicted": 1841.853,
-      "prob_down": 0.7033
+      "predicted": 1920.57,
+      "prob_down": 0.3813
     },
     {
       "date": "2023-02-15",
       "actual": 1980.3,
-      "predicted": 1822.163,
-      "prob_down": 0.7026
+      "predicted": 1899.943,
+      "prob_down": 0.3807
     },
     {
       "date": "2023-02-16",
       "actual": 1969.0,
-      "predicted": 1828.758,
-      "prob_down": 0.7018
+      "predicted": 1906.662,
+      "prob_down": 0.3801
     },
     {
       "date": "2023-02-17",
       "actual": 2000.4,
-      "predicted": 1827.353,
-      "prob_down": 0.701
+      "predicted": 1905.04,
+      "prob_down": 0.3796
     },
     {
       "date": "2023-02-21",
       "actual": 2038.2,
-      "predicted": 1819.966,
-      "prob_down": 0.7
+      "predicted": 1897.039,
+      "prob_down": 0.3793
     },
     {
       "date": "2023-02-22",
       "actual": 2035.6,
-      "predicted": 1819.216,
-      "prob_down": 0.6989
+      "predicted": 1895.941,
+      "prob_down": 0.3789
     },
     {
       "date": "2023-02-23",
       "actual": 2026.4,
-      "predicted": 1804.926,
-      "prob_down": 0.6978
+      "predicted": 1880.824,
+      "prob_down": 0.3781
     },
     {
       "date": "2023-02-24",
       "actual": 2003.8,
-      "predicted": 1795.591,
-      "prob_down": 0.6965
+      "predicted": 1871.033,
+      "prob_down": 0.3774
     },
     {
       "date": "2023-02-27",
       "actual": 2019.0,
-      "predicted": 1803.534,
-      "prob_down": 0.6952
+      "predicted": 1879.291,
+      "prob_down": 0.3765
     },
     {
       "date": "2023-02-28",
       "actual": 2024.9,
-      "predicted": 1815.411,
-      "prob_down": 0.694
+      "predicted": 1891.588,
+      "prob_down": 0.3758
     },
     {
       "date": "2023-03-01",
       "actual": 2055.3,
-      "predicted": 1824.214,
-      "prob_down": 0.6927
+      "predicted": 1900.677,
+      "prob_down": 0.375
     },
     {
       "date": "2023-03-02",
       "actual": 2015.8,
-      "predicted": 1819.575,
-      "prob_down": 0.6914
+      "predicted": 1895.745,
+      "prob_down": 0.3743
     },
     {
       "date": "2023-03-03",
       "actual": 2007.0,
-      "predicted": 1833.672,
-      "prob_down": 0.6902
+      "predicted": 1910.487,
+      "prob_down": 0.3731
     },
     {
       "date": "2023-03-06",
       "actual": 2019.7,
-      "predicted": 1833.795,
-      "prob_down": 0.6892
+      "predicted": 1910.763,
+      "prob_down": 0.3717
     },
     {
       "date": "2023-03-07",
       "actual": 2007.3,
-      "predicted": 1799.716,
-      "prob_down": 0.6881
+      "predicted": 1875.443,
+      "prob_down": 0.3703
     },
     {
       "date": "2023-03-08",
       "actual": 2019.1,
-      "predicted": 1798.478,
-      "prob_down": 0.687
+      "predicted": 1873.945,
+      "prob_down": 0.3693
     },
     {
       "date": "2023-03-09",
       "actual": 1990.5,
-      "predicted": 1814.446,
-      "prob_down": 0.686
+      "predicted": 1890.309,
+      "prob_down": 0.3683
     },
     {
       "date": "2023-03-10",
       "actual": 1999.8,
-      "predicted": 1846.776,
-      "prob_down": 0.6855
+      "predicted": 1923.757,
+      "prob_down": 0.3673
     },
     {
       "date": "2023-03-13",
       "actual": 2004.5,
-      "predicted": 1895.534,
-      "prob_down": 0.6855
+      "predicted": 1974.309,
+      "prob_down": 0.3666
     },
     {
       "date": "2023-03-14",
       "actual": 1996.0,
-      "predicted": 1889.938,
-      "prob_down": 0.6857
+      "predicted": 1968.26,
+      "prob_down": 0.3662
     },
     {
       "date": "2023-03-15",
       "actual": 1999.0,
-      "predicted": 1910.0,
-      "prob_down": 0.6863
+      "predicted": 1988.997,
+      "prob_down": 0.3658
     },
     {
       "date": "2023-03-16",
       "actual": 1999.1,
-      "predicted": 1901.64,
-      "prob_down": 0.6871
+      "predicted": 1980.192,
+      "prob_down": 0.3654
     },
     {
       "date": "2023-03-17",
       "actual": 1992.2,
-      "predicted": 1951.333,
-      "prob_down": 0.6884
+      "predicted": 2031.918,
+      "prob_down": 0.3652
     },
     {
       "date": "2023-03-20",
       "actual": 2023.3,
-      "predicted": 1960.237,
-      "prob_down": 0.6898
+      "predicted": 2041.208,
+      "prob_down": 0.3652
     },
     {
       "date": "2023-03-21",
       "actual": 2037.0,
-      "predicted": 1918.728,
-      "prob_down": 0.6912
+      "predicted": 1998.014,
+      "prob_down": 0.3656
     },
     {
       "date": "2023-03-22",
       "actual": 2055.7,
-      "predicted": 1926.818,
-      "prob_down": 0.6926
+      "predicted": 2006.544,
+      "prob_down": 0.3661
     },
     {
       "date": "2023-03-23",
       "actual": 2024.8,
-      "predicted": 1972.22,
-      "prob_down": 0.6944
+      "predicted": 2054.002,
+      "prob_down": 0.3669
     },
     {
       "date": "2023-03-24",
       "actual": 2033.2,
-      "predicted": 1959.911,
-      "prob_down": 0.6961
+      "predicted": 2041.441,
+      "prob_down": 0.3677
     },
     {
       "date": "2023-03-27",
       "actual": 2042.9,
-      "predicted": 1929.97,
-      "prob_down": 0.6976
+      "predicted": 2010.526,
+      "prob_down": 0.3685
     },
     {
       "date": "2023-03-28",
       "actual": 2037.1,
-      "predicted": 1949.146,
-      "prob_down": 0.699
+      "predicted": 2030.791,
+      "prob_down": 0.3696
     },
     {
       "date": "2023-03-29",
       "actual": 2020.5,
-      "predicted": 1942.374,
-      "prob_down": 0.7002
+      "predicted": 2024.069,
+      "prob_down": 0.3707
     },
     {
       "date": "2023-03-30",
       "actual": 2019.8,
-      "predicted": 1955.359,
-      "prob_down": 0.7015
+      "predicted": 2038.003,
+      "prob_down": 0.3717
     },
     {
       "date": "2023-03-31",
       "actual": 2022.7,
-      "predicted": 1943.965,
-      "prob_down": 0.7027
+      "predicted": 2026.617,
+      "prob_down": 0.3728
     },
     {
       "date": "2023-04-03",
       "actual": 1993.0,
-      "predicted": 1974.712,
-      "prob_down": 0.7039
+      "predicted": 2059.261,
+      "prob_down": 0.3737
     },
     {
       "date": "2023-04-04",
       "actual": 1984.9,
-      "predicted": 2011.729,
-      "prob_down": 0.7054
+      "predicted": 2098.141,
+      "prob_down": 0.3752
     },
     {
       "date": "2023-04-05",
       "actual": 1959.8,
-      "predicted": 2008.854,
-      "prob_down": 0.7069
+      "predicted": 2095.257,
+      "prob_down": 0.3768
     },
     {
       "date": "2023-04-06",
       "actual": 1981.6,
-      "predicted": 1999.476,
-      "prob_down": 0.7084
+      "predicted": 2085.53,
+      "prob_down": 0.3786
     },
     {
       "date": "2023-04-10",
       "actual": 1977.2,
-      "predicted": 1976.945,
-      "prob_down": 0.7097
+      "predicted": 2062.143,
+      "prob_down": 0.3821
     },
     {
       "date": "2023-04-11",
       "actual": 1974.5,
-      "predicted": 1991.744,
-      "prob_down": 0.7109
+      "predicted": 2077.533,
+      "prob_down": 0.3858
     },
     {
       "date": "2023-04-12",
       "actual": 1964.6,
-      "predicted": 1997.377,
-      "prob_down": 0.712
+      "predicted": 2083.261,
+      "prob_down": 0.3893
     },
     {
       "date": "2023-04-13",
       "actual": 1943.7,
-      "predicted": 2027.172,
-      "prob_down": 0.7131
+      "predicted": 2114.142,
+      "prob_down": 0.3926
     },
     {
       "date": "2023-04-14",
       "actual": 1944.3,
-      "predicted": 1988.059,
-      "prob_down": 0.7139
+      "predicted": 2073.391,
+      "prob_down": 0.395
     },
     {
       "date": "2023-04-17",
       "actual": 1958.0,
-      "predicted": 1979.285,
-      "prob_down": 0.7145
+      "predicted": 2064.437,
+      "prob_down": 0.3965
     },
     {
       "date": "2023-04-18",
       "actual": 1963.9,
-      "predicted": 1991.734,
-      "prob_down": 0.7151
+      "predicted": 2077.49,
+      "prob_down": 0.398
     },
     {
       "date": "2023-04-19",
       "actual": 1995.5,
-      "predicted": 1979.456,
-      "prob_down": 0.7154
+      "predicted": 2064.549,
+      "prob_down": 0.3991
     },
     {
       "date": "2023-04-20",
       "actual": 1969.6,
-      "predicted": 1991.047,
-      "prob_down": 0.7158
+      "predicted": 2076.402,
+      "prob_down": 0.4001
     },
     {
       "date": "2023-04-21",
       "actual": 1974.3,
-      "predicted": 1962.826,
-      "prob_down": 0.716
+      "predicted": 2046.731,
+      "prob_down": 0.401
     },
     {
       "date": "2023-04-24",
       "actual": 1981.5,
-      "predicted": 1971.976,
-      "prob_down": 0.7161
+      "predicted": 2056.005,
+      "prob_down": 0.402
     },
     {
       "date": "2023-04-25",
       "actual": 1958.4,
-      "predicted": 1976.584,
-      "prob_down": 0.7164
+      "predicted": 2060.514,
+      "prob_down": 0.403
     },
     {
       "date": "2023-04-26",
       "actual": 1978.6,
-      "predicted": 1968.188,
-      "prob_down": 0.7166
+      "predicted": 2051.492,
+      "prob_down": 0.4039
     },
     {
       "date": "2023-04-27",
       "actual": 1977.2,
-      "predicted": 1971.148,
-      "prob_down": 0.7167
+      "predicted": 2054.276,
+      "prob_down": 0.4048
     },
     {
       "date": "2023-04-28",
       "actual": 1969.7,
-      "predicted": 1971.226,
-      "prob_down": 0.7168
+      "predicted": 2054.062,
+      "prob_down": 0.4059
     },
     {
       "date": "2023-05-01",
       "actual": 1958.6,
-      "predicted": 1964.432,
-      "prob_down": 0.7168
+      "predicted": 2046.645,
+      "prob_down": 0.4071
     },
     {
       "date": "2023-05-02",
       "actual": 1968.9,
-      "predicted": 1995.085,
-      "prob_down": 0.717
+      "predicted": 2078.196,
+      "prob_down": 0.4084
     },
     {
       "date": "2023-05-03",
       "actual": 1970.7,
-      "predicted": 2008.549,
-      "prob_down": 0.7173
+      "predicted": 2091.891,
+      "prob_down": 0.4097
     },
     {
       "date": "2023-05-04",
       "actual": 1971.2,
-      "predicted": 2026.931,
-      "prob_down": 0.7177
+      "predicted": 2110.569,
+      "prob_down": 0.4115
     },
     {
       "date": "2023-05-05",
       "actual": 1947.7,
-      "predicted": 1996.41,
-      "prob_down": 0.718
+      "predicted": 2078.451,
+      "prob_down": 0.4128
     },
     {
       "date": "2023-05-08",
       "actual": 1944.9,
-      "predicted": 2004.649,
-      "prob_down": 0.7183
+      "predicted": 2086.758,
+      "prob_down": 0.4138
     },
     {
       "date": "2023-05-09",
       "actual": 1923.7,
-      "predicted": 2014.178,
-      "prob_down": 0.7185
+      "predicted": 2096.37,
+      "prob_down": 0.4149
     },
     {
       "date": "2023-05-10",
       "actual": 1929.6,
-      "predicted": 2008.407,
-      "prob_down": 0.7188
+      "predicted": 2090.076,
+      "prob_down": 0.416
     },
     {
       "date": "2023-05-11",
       "actual": 1933.8,
-      "predicted": 1991.995,
-      "prob_down": 0.719
+      "predicted": 2072.691,
+      "prob_down": 0.4173
     },
     {
       "date": "2023-05-12",
       "actual": 1923.8,
-      "predicted": 1991.29,
-      "prob_down": 0.7192
+      "predicted": 2071.573,
+      "prob_down": 0.4186
     },
     {
       "date": "2023-05-15",
       "actual": 1922.2,
-      "predicted": 1994.155,
-      "prob_down": 0.7193
+      "predicted": 2074.363,
+      "prob_down": 0.419
     },
     {
       "date": "2023-05-16",
       "actual": 1917.9,
-      "predicted": 1964.915,
-      "prob_down": 0.7192
+      "predicted": 2043.758,
+      "prob_down": 0.4193
     },
     {
       "date": "2023-05-17",
       "actual": 1929.4,
-      "predicted": 1957.001,
-      "prob_down": 0.719
+      "predicted": 2035.659,
+      "prob_down": 0.4182
     },
     {
       "date": "2023-05-18",
       "actual": 1929.5,
-      "predicted": 1932.367,
-      "prob_down": 0.7186
+      "predicted": 2010.199,
+      "prob_down": 0.4169
     },
     {
       "date": "2023-05-19",
       "actual": 1927.1,
-      "predicted": 1953.992,
-      "prob_down": 0.7181
+      "predicted": 2032.775,
+      "prob_down": 0.4157
     },
     {
       "date": "2023-05-22",
       "actual": 1915.4,
-      "predicted": 1949.794,
-      "prob_down": 0.7175
+      "predicted": 2028.588,
+      "prob_down": 0.4141
     },
     {
       "date": "2023-05-23",
       "actual": 1932.5,
-      "predicted": 1947.282,
-      "prob_down": 0.7169
+      "predicted": 2026.129,
+      "prob_down": 0.4126
     },
     {
       "date": "2023-05-24",
       "actual": 1931.0,
-      "predicted": 1937.697,
-      "prob_down": 0.7162
+      "predicted": 2016.299,
+      "prob_down": 0.4111
     },
     {
       "date": "2023-05-25",
       "actual": 1937.1,
-      "predicted": 1917.298,
-      "prob_down": 0.7153
+      "predicted": 1995.273,
+      "prob_down": 0.4091
     },
     {
       "date": "2023-05-26",
       "actual": 1961.7,
-      "predicted": 1918.102,
-      "prob_down": 0.7144
+      "predicted": 1996.349,
+      "prob_down": 0.407
     },
     {
       "date": "2023-05-30",
       "actual": 1963.8,
-      "predicted": 1931.787,
-      "prob_down": 0.7135
+      "predicted": 2010.866,
+      "prob_down": 0.405
     },
     {
       "date": "2023-05-31",
       "actual": 1964.4,
-      "predicted": 1937.744,
-      "prob_down": 0.7128
+      "predicted": 2017.389,
+      "prob_down": 0.403
     },
     {
       "date": "2023-06-01",
       "actual": 1956.4,
-      "predicted": 1968.993,
-      "prob_down": 0.7123
+      "predicted": 2050.365,
+      "prob_down": 0.4008
     },
     {
       "date": "2023-06-02",
       "actual": 1980.8,
-      "predicted": 1943.488,
-      "prob_down": 0.7117
+      "predicted": 2024.306,
+      "prob_down": 0.3986
     },
     {
       "date": "2023-06-05",
       "actual": 1980.8,
-      "predicted": 1948.158,
-      "prob_down": 0.7113
+      "predicted": 2029.809,
+      "prob_down": 0.3959
     },
     {
       "date": "2023-06-06",
       "actual": 1970.9,
-      "predicted": 1955.279,
-      "prob_down": 0.7109
+      "predicted": 2037.708,
+      "prob_down": 0.3926
     },
     {
       "date": "2023-06-07",
       "actual": 1966.6,
-      "predicted": 1932.517,
-      "prob_down": 0.7104
+      "predicted": 2014.466,
+      "prob_down": 0.3893
     },
     {
       "date": "2023-06-08",
       "actual": 1962.2,
-      "predicted": 1952.459,
-      "prob_down": 0.71
+      "predicted": 2035.679,
+      "prob_down": 0.3864
     },
     {
       "date": "2023-06-09",
       "actual": 1963.7,
-      "predicted": 1951.081,
-      "prob_down": 0.7097
+      "predicted": 2034.864,
+      "prob_down": 0.3833
     },
     {
       "date": "2023-06-12",
       "actual": 1970.1,
-      "predicted": 1943.688,
-      "prob_down": 0.7094
+      "predicted": 2027.798,
+      "prob_down": 0.3804
     },
     {
       "date": "2023-06-13",
       "actual": 1945.7,
-      "predicted": 1932.763,
-      "prob_down": 0.7091
+      "predicted": 2017.063,
+      "prob_down": 0.3774
     },
     {
       "date": "2023-06-14",
       "actual": 1960.4,
-      "predicted": 1942.948,
-      "prob_down": 0.7088
+      "predicted": 2028.281,
+      "prob_down": 0.3747
     },
     {
       "date": "2023-06-15",
       "actual": 1970.5,
-      "predicted": 1944.71,
-      "prob_down": 0.7087
+      "predicted": 2030.617,
+      "prob_down": 0.3726
     },
     {
       "date": "2023-06-16",
       "actual": 1978.8,
-      "predicted": 1945.177,
-      "prob_down": 0.7086
+      "predicted": 2031.622,
+      "prob_down": 0.3706
     },
     {
       "date": "2023-06-20",
       "actual": 1975.0,
-      "predicted": 1921.965,
-      "prob_down": 0.7085
+      "predicted": 2007.868,
+      "prob_down": 0.3687
     },
     {
       "date": "2023-06-21",
       "actual": 1968.8,
-      "predicted": 1919.176,
-      "prob_down": 0.7084
+      "predicted": 2005.384,
+      "prob_down": 0.3671
     },
     {
       "date": "2023-06-22",
       "actual": 1976.1,
-      "predicted": 1898.261,
-      "prob_down": 0.7082
+      "predicted": 1983.899,
+      "prob_down": 0.3656
     },
     {
       "date": "2023-06-23",
       "actual": 1970.0,
-      "predicted": 1904.099,
-      "prob_down": 0.708
+      "predicted": 1990.367,
+      "prob_down": 0.3644
     },
     {
       "date": "2023-06-26",
       "actual": 1959.9,
-      "predicted": 1908.265,
-      "prob_down": 0.7079
+      "predicted": 1995.017,
+      "prob_down": 0.3633
     },
     {
       "date": "2023-06-27",
       "actual": 1950.6,
-      "predicted": 1898.434,
-      "prob_down": 0.7077
+      "predicted": 1985.015,
+      "prob_down": 0.3623
     },
     {
       "date": "2023-06-28",
       "actual": 1948.9,
-      "predicted": 1896.888,
-      "prob_down": 0.7075
+      "predicted": 1983.666,
+      "prob_down": 0.3613
     },
     {
       "date": "2023-06-29",
       "actual": 1946.6,
-      "predicted": 1892.712,
-      "prob_down": 0.7072
+      "predicted": 1979.528,
+      "prob_down": 0.3604
     },
     {
       "date": "2023-06-30",
       "actual": 1944.0,
-      "predicted": 1904.122,
-      "prob_down": 0.707
+      "predicted": 1991.72,
+      "prob_down": 0.3593
     },
     {
       "date": "2023-07-03",
       "actual": 1935.2,
-      "predicted": 1904.283,
-      "prob_down": 0.7067
+      "predicted": 1992.136,
+      "prob_down": 0.3583
     },
     {
       "date": "2023-07-05",
       "actual": 1928.3,
-      "predicted": 1902.001,
-      "prob_down": 0.7063
+      "predicted": 1989.94,
+      "prob_down": 0.3574
     },
     {
       "date": "2023-07-06",
       "actual": 1915.2,
-      "predicted": 1890.576,
-      "prob_down": 0.7058
+      "predicted": 1978.125,
+      "prob_down": 0.3566
     },
     {
       "date": "2023-07-07",
       "actual": 1916.5,
-      "predicted": 1907.574,
-      "prob_down": 0.7053
+      "predicted": 1996.039,
+      "prob_down": 0.3557
     },
     {
       "date": "2023-07-10",
       "actual": 1923.0,
-      "predicted": 1906.193,
-      "prob_down": 0.7048
+      "predicted": 1994.743,
+      "prob_down": 0.3549
     },
     {
       "date": "2023-07-11",
       "actual": 1926.0,
-      "predicted": 1912.291,
-      "prob_down": 0.7044
+      "predicted": 2001.271,
+      "prob_down": 0.3541
     },
     {
       "date": "2023-07-12",
       "actual": 1948.1,
-      "predicted": 1936.573,
-      "prob_down": 0.7042
+      "predicted": 2026.877,
+      "prob_down": 0.3533
     },
     {
       "date": "2023-07-13",
       "actual": 1947.1,
-      "predicted": 1938.568,
-      "prob_down": 0.7043
+      "predicted": 2029.201,
+      "prob_down": 0.3527
     },
     {
       "date": "2023-07-14",
       "actual": 1939.9,
-      "predicted": 1939.056,
-      "prob_down": 0.7046
+      "predicted": 2029.93,
+      "prob_down": 0.3522
     },
     {
       "date": "2023-07-17",
       "actual": 1946.8,
-      "predicted": 1931.042,
-      "prob_down": 0.7049
+      "predicted": 2021.739,
+      "prob_down": 0.3519
     },
     {
       "date": "2023-07-18",
       "actual": 1965.1,
-      "predicted": 1954.991,
-      "prob_down": 0.7054
+      "predicted": 2047.017,
+      "prob_down": 0.3516
     },
     {
       "date": "2023-07-19",
       "actual": 1973.0,
-      "predicted": 1954.844,
-      "prob_down": 0.7061
+      "predicted": 2047.053,
+      "prob_down": 0.3514
     },
     {
       "date": "2023-07-20",
       "actual": 1965.9,
-      "predicted": 1944.962,
-      "prob_down": 0.7066
+      "predicted": 2036.837,
+      "prob_down": 0.3513
     },
     {
       "date": "2023-07-21",
       "actual": 1967.1,
-      "predicted": 1940.63,
-      "prob_down": 0.7071
+      "predicted": 2032.446,
+      "prob_down": 0.3511
     },
     {
       "date": "2023-07-24",
       "actual": 1952.6,
-      "predicted": 1936.229,
-      "prob_down": 0.7076
+      "predicted": 2027.966,
+      "prob_down": 0.3508
     },
     {
       "date": "2023-07-25",
       "actual": 1944.2,
-      "predicted": 1937.677,
-      "prob_down": 0.7079
+      "predicted": 2029.552,
+      "prob_down": 0.3507
     },
     {
       "date": "2023-07-26",
       "actual": 1942.5,
-      "predicted": 1943.952,
-      "prob_down": 0.7082
+      "predicted": 2036.176,
+      "prob_down": 0.3505
     },
     {
       "date": "2023-07-27",
       "actual": 1942.7,
-      "predicted": 1919.892,
-      "prob_down": 0.7083
+      "predicted": 2010.981,
+      "prob_down": 0.3505
     },
     {
       "date": "2023-07-28",
       "actual": 1947.2,
-      "predicted": 1934.422,
-      "prob_down": 0.7084
+      "predicted": 2026.259,
+      "prob_down": 0.3502
     },
     {
       "date": "2023-07-31",
       "actual": 1935.1,
-      "predicted": 1944.417,
-      "prob_down": 0.7084
+      "predicted": 2036.805,
+      "prob_down": 0.3499
     },
     {
       "date": "2023-08-01",
       "actual": 1932.5,
-      "predicted": 1952.654,
-      "prob_down": 0.7083
+      "predicted": 2045.515,
+      "prob_down": 0.3494
     },
     {
       "date": "2023-08-02",
       "actual": 1932.8,
-      "predicted": 1948.979,
-      "prob_down": 0.7082
+      "predicted": 2041.644,
+      "prob_down": 0.3493
     },
     {
       "date": "2023-08-03",
       "actual": 1946.2,
-      "predicted": 1942.978,
-      "prob_down": 0.7079
+      "predicted": 2035.302,
+      "prob_down": 0.3491
     },
     {
       "date": "2023-08-04",
       "actual": 1953.4,
-      "predicted": 1950.28,
-      "prob_down": 0.7076
+      "predicted": 2042.935,
+      "prob_down": 0.3488
     },
     {
       "date": "2023-08-07",
       "actual": 1953.7,
-      "predicted": 1944.354,
-      "prob_down": 0.7073
+      "predicted": 2036.735,
+      "prob_down": 0.3485
     },
     {
       "date": "2023-08-08",
       "actual": 1967.1,
-      "predicted": 1934.467,
-      "prob_down": 0.707
+      "predicted": 2026.432,
+      "prob_down": 0.3482
     },
     {
       "date": "2023-08-09",
       "actual": 1939.6,
-      "predicted": 1925.362,
-      "prob_down": 0.7066
+      "predicted": 2016.979,
+      "prob_down": 0.3478
     },
     {
       "date": "2023-08-10",
       "actual": 1945.6,
-      "predicted": 1923.773,
-      "prob_down": 0.7062
+      "predicted": 2015.387,
+      "prob_down": 0.3474
     },
     {
       "date": "2023-08-11",
       "actual": 1936.6,
-      "predicted": 1921.606,
-      "prob_down": 0.7057
+      "predicted": 2013.203,
+      "prob_down": 0.3469
     },
     {
       "date": "2023-08-14",
       "actual": 1919.8,
-      "predicted": 1919.158,
-      "prob_down": 0.705
+      "predicted": 2010.707,
+      "prob_down": 0.3464
     },
     {
       "date": "2023-08-15",
       "actual": 1890.9,
-      "predicted": 1910.607,
-      "prob_down": 0.7043
+      "predicted": 2001.775,
+      "prob_down": 0.3461
     },
     {
       "date": "2023-08-16",
       "actual": 1878.6,
-      "predicted": 1903.962,
-      "prob_down": 0.7035
+      "predicted": 1994.735,
+      "prob_down": 0.3457
     },
     {
       "date": "2023-08-17",
       "actual": 1866.1,
-      "predicted": 1891.222,
-      "prob_down": 0.7026
+      "predicted": 1981.155,
+      "prob_down": 0.3455
     },
     {
       "date": "2023-08-18",
       "actual": 1847.2,
-      "predicted": 1892.701,
-      "prob_down": 0.7016
+      "predicted": 1982.484,
+      "prob_down": 0.3452
     },
     {
       "date": "2023-08-21",
       "actual": 1841.5,
-      "predicted": 1899.321,
-      "prob_down": 0.7006
+      "predicted": 1989.187,
+      "prob_down": 0.3447
     },
     {
       "date": "2023-08-22",
       "actual": 1834.8,
-      "predicted": 1902.477,
-      "prob_down": 0.6995
+      "predicted": 1992.249,
+      "prob_down": 0.3443
     },
     {
       "date": "2023-08-23",
       "actual": 1831.8,
-      "predicted": 1924.443,
-      "prob_down": 0.6987
+      "predicted": 2015.076,
+      "prob_down": 0.3439
     },
     {
       "date": "2023-08-24",
       "actual": 1845.2,
-      "predicted": 1923.573,
-      "prob_down": 0.6979
+      "predicted": 2013.985,
+      "prob_down": 0.3435
     },
     {
       "date": "2023-08-25",
       "actual": 1864.3,
-      "predicted": 1916.568,
-      "prob_down": 0.6972
+      "predicted": 2006.493,
+      "prob_down": 0.3431
     },
     {
       "date": "2023-08-28",
       "actual": 1875.3,
-      "predicted": 1923.461,
-      "prob_down": 0.6965
+      "predicted": 2013.591,
+      "prob_down": 0.3426
     },
     {
       "date": "2023-08-29",
       "actual": 1887.3,
-      "predicted": 1941.561,
-      "prob_down": 0.6961
+      "predicted": 2032.495,
+      "prob_down": 0.3422
     },
     {
       "date": "2023-08-30",
       "actual": 1883.0,
-      "predicted": 1949.334,
-      "prob_down": 0.6959
+      "predicted": 2040.663,
+      "prob_down": 0.3418
     },
     {
       "date": "2023-08-31",
       "actual": 1941.5,
-      "predicted": 1942.257,
-      "prob_down": 0.6959
+      "predicted": 2033.346,
+      "prob_down": 0.3415
     },
     {
       "date": "2023-09-01",
       "actual": 1934.3,
-      "predicted": 1943.392,
-      "prob_down": 0.6958
+      "predicted": 2034.634,
+      "prob_down": 0.3412
     },
     {
       "date": "2023-09-05",
       "actual": 1935.7,
-      "predicted": 1929.057,
-      "prob_down": 0.6956
+      "predicted": 2019.681,
+      "prob_down": 0.3411
     },
     {
       "date": "2023-09-06",
       "actual": 1968.3,
-      "predicted": 1920.787,
-      "prob_down": 0.6953
+      "predicted": 2011.033,
+      "prob_down": 0.3409
     },
     {
       "date": "2023-09-07",
       "actual": 1980.5,
-      "predicted": 1919.156,
-      "prob_down": 0.695
+      "predicted": 2009.324,
+      "prob_down": 0.3408
     },
     {
       "date": "2023-09-08",
       "actual": 1994.4,
-      "predicted": 1919.412,
-      "prob_down": 0.6946
+      "predicted": 2009.59,
+      "prob_down": 0.3406
     },
     {
       "date": "2023-09-11",
       "actual": 1987.8,
-      "predicted": 1923.917,
-      "prob_down": 0.6942
+      "predicted": 2014.3,
+      "prob_down": 0.3404
     },
     {
       "date": "2023-09-12",
       "actual": 1986.1,
-      "predicted": 1912.02,
-      "prob_down": 0.6938
+      "predicted": 2001.839,
+      "prob_down": 0.3402
     },
     {
       "date": "2023-09-13",
       "actual": 1994.9,
-      "predicted": 1909.507,
-      "prob_down": 0.6934
+      "predicted": 1999.214,
+      "prob_down": 0.34
     },
     {
       "date": "2023-09-14",
       "actual": 1997.4,
-      "predicted": 1909.87,
-      "prob_down": 0.6929
+      "predicted": 1999.604,
+      "prob_down": 0.3398
     },
     {
       "date": "2023-09-15",
       "actual": 1998.5,
-      "predicted": 1923.184,
-      "prob_down": 0.6924
+      "predicted": 2013.527,
+      "prob_down": 0.3396
     },
     {
       "date": "2023-09-18",
       "actual": 2005.6,
-      "predicted": 1930.367,
-      "prob_down": 0.692
+      "predicted": 2021.026,
+      "prob_down": 0.3394
     },
     {
       "date": "2023-09-19",
       "actual": 1994.3,
-      "predicted": 1930.735,
-      "prob_down": 0.6916
+      "predicted": 2021.372,
+      "prob_down": 0.3393
     },
     {
       "date": "2023-09-20",
       "actual": 1987.5,
-      "predicted": 1944.043,
-      "prob_down": 0.6912
+      "predicted": 2035.247,
+      "prob_down": 0.3391
     },
     {
       "date": "2023-09-21",
       "actual": 1993.5,
-      "predicted": 1916.983,
-      "prob_down": 0.6907
+      "predicted": 2006.746,
+      "prob_down": 0.3392
     },
     {
       "date": "2023-09-22",
       "actual": 1999.2,
-      "predicted": 1923.05,
-      "prob_down": 0.6901
+      "predicted": 2012.885,
+      "prob_down": 0.3392
     },
     {
       "date": "2023-09-25",
       "actual": 1988.6,
-      "predicted": 1914.329,
-      "prob_down": 0.6893
+      "predicted": 2003.482,
+      "prob_down": 0.3392
     },
     {
       "date": "2023-09-26",
       "actual": 1973.5,
-      "predicted": 1897.932,
-      "prob_down": 0.6883
+      "predicted": 1985.966,
+      "prob_down": 0.3393
     },
     {
       "date": "2023-09-27",
       "actual": 1957.8,
-      "predicted": 1869.619,
-      "prob_down": 0.6871
+      "predicted": 1955.918,
+      "prob_down": 0.3392
     },
     {
       "date": "2023-09-28",
       "actual": 1969.8,
-      "predicted": 1857.728,
-      "prob_down": 0.6857
+      "predicted": 1943.029,
+      "prob_down": 0.339
     },
     {
       "date": "2023-09-29",
       "actual": 1937.7,
-      "predicted": 1845.646,
-      "prob_down": 0.6842
+      "predicted": 1929.914,
+      "prob_down": 0.3387
     },
     {
       "date": "2023-10-02",
       "actual": 1950.2,
-      "predicted": 1827.273,
-      "prob_down": 0.6824
+      "predicted": 1910.149,
+      "prob_down": 0.3383
     },
     {
       "date": "2023-10-03",
       "actual": 1966.5,
-      "predicted": 1822.011,
-      "prob_down": 0.6804
+      "predicted": 1903.956,
+      "prob_down": 0.3381
     },
     {
       "date": "2023-10-04",
       "actual": 1964.3,
-      "predicted": 1815.768,
-      "prob_down": 0.6782
+      "predicted": 1896.686,
+      "prob_down": 0.3377
     },
     {
       "date": "2023-10-05",
       "actual": 1987.3,
-      "predicted": 1813.18,
-      "prob_down": 0.676
+      "predicted": 1893.187,
+      "prob_down": 0.3373
     },
     {
       "date": "2023-10-06",
       "actual": 1984.7,
-      "predicted": 1826.814,
-      "prob_down": 0.6738
+      "predicted": 1906.578,
+      "prob_down": 0.337
     },
     {
       "date": "2023-10-09",
       "actual": 1980.3,
-      "predicted": 1846.07,
-      "prob_down": 0.6717
+      "predicted": 1925.799,
+      "prob_down": 0.3367
     },
     {
       "date": "2023-10-10",
       "actual": 2001.6,
-      "predicted": 1857.247,
-      "prob_down": 0.6699
+      "predicted": 1936.629,
+      "prob_down": 0.3364
     },
     {
       "date": "2023-10-11",
       "actual": 1992.8,
-      "predicted": 1869.344,
-      "prob_down": 0.6684
+      "predicted": 1948.498,
+      "prob_down": 0.3362
     },
     {
       "date": "2023-10-12",
       "actual": 2003.0,
-      "predicted": 1865.28,
-      "prob_down": 0.6669
+      "predicted": 1943.595,
+      "prob_down": 0.3361
     },
     {
       "date": "2023-10-13",
       "actual": 2012.4,
-      "predicted": 1923.4,
-      "prob_down": 0.6659
+      "predicted": 2003.923,
+      "prob_down": 0.335
     },
     {
       "date": "2023-10-16",
       "actual": 2040.0,
-      "predicted": 1916.4,
-      "prob_down": 0.665
+      "predicted": 1996.682,
+      "prob_down": 0.3333
     },
     {
       "date": "2023-10-17",
       "actual": 2047.1,
-      "predicted": 1917.915,
-      "prob_down": 0.6642
+      "predicted": 1998.486,
+      "prob_down": 0.3312
     },
     {
       "date": "2023-10-18",
       "actual": 2038.1,
-      "predicted": 1950.346,
-      "prob_down": 0.6635
+      "predicted": 2032.454,
+      "prob_down": 0.3293
     },
     {
       "date": "2023-10-19",
       "actual": 2089.7,
-      "predicted": 1962.582,
-      "prob_down": 0.6628
+      "predicted": 2045.307,
+      "prob_down": 0.3276
     },
     {
       "date": "2023-10-20",
       "actual": 2042.2,
-      "predicted": 1976.495,
-      "prob_down": 0.6621
+      "predicted": 2059.926,
+      "prob_down": 0.3257
     },
     {
       "date": "2023-10-23",
       "actual": 2036.3,
-      "predicted": 1970.058,
-      "prob_down": 0.6616
+      "predicted": 2053.372,
+      "prob_down": 0.3239
     },
     {
       "date": "2023-10-24",
       "actual": 2047.9,
-      "predicted": 1968.45,
-      "prob_down": 0.6611
+      "predicted": 2051.839,
+      "prob_down": 0.3222
     },
     {
       "date": "2023-10-25",
       "actual": 2046.4,
-      "predicted": 1977.262,
-      "prob_down": 0.6606
+      "predicted": 2061.152,
+      "prob_down": 0.3203
     },
     {
       "date": "2023-10-26",
       "actual": 2014.5,
-      "predicted": 1979.824,
-      "prob_down": 0.6601
+      "predicted": 2063.982,
+      "prob_down": 0.3182
     },
     {
       "date": "2023-10-27",
       "actual": 1993.7,
-      "predicted": 1980.996,
-      "prob_down": 0.6596
+      "predicted": 2065.343,
+      "prob_down": 0.3159
     },
     {
       "date": "2023-10-30",
       "actual": 1993.2,
-      "predicted": 1988.105,
-      "prob_down": 0.6592
+      "predicted": 2072.757,
+      "prob_down": 0.313
     },
     {
       "date": "2023-10-31",
       "actual": 1997.3,
-      "predicted": 1976.966,
-      "prob_down": 0.6587
+      "predicted": 2060.853,
+      "prob_down": 0.3086
     },
     {
       "date": "2023-11-01",
       "actual": 2044.9,
-      "predicted": 1970.251,
-      "prob_down": 0.6583
+      "predicted": 2053.539,
+      "prob_down": 0.3045
     },
     {
       "date": "2023-11-02",
       "actual": 2035.7,
-      "predicted": 1976.15,
-      "prob_down": 0.6582
+      "predicted": 2059.38,
+      "prob_down": 0.301
     },
     {
       "date": "2023-11-03",
       "actual": 2040.5,
-      "predicted": 1981.649,
-      "prob_down": 0.6584
+      "predicted": 2065.039,
+      "prob_down": 0.2987
     },
     {
       "date": "2023-11-06",
       "actual": 2052.1,
-      "predicted": 1970.963,
-      "prob_down": 0.6588
+      "predicted": 2053.901,
+      "prob_down": 0.2976
     },
     {
       "date": "2023-11-07",
       "actual": 2047.7,
-      "predicted": 1955.788,
-      "prob_down": 0.6593
+      "predicted": 2038.047,
+      "prob_down": 0.2975
     },
     {
       "date": "2023-11-08",
       "actual": 2051.3,
-      "predicted": 1939.994,
-      "prob_down": 0.6601
+      "predicted": 2021.537,
+      "prob_down": 0.298
     },
     {
       "date": "2023-11-09",
       "actual": 2069.1,
-      "predicted": 1951.673,
-      "prob_down": 0.6608
+      "predicted": 2033.592,
+      "prob_down": 0.299
     },
     {
       "date": "2023-11-10",
       "actual": 2069.8,
-      "predicted": 1919.695,
-      "prob_down": 0.6615
+      "predicted": 2000.228,
+      "prob_down": 0.3004
     },
     {
       "date": "2023-11-13",
       "actual": 2093.1,
-      "predicted": 1931.92,
-      "prob_down": 0.6622
+      "predicted": 2012.881,
+      "prob_down": 0.3026
     },
     {
       "date": "2023-11-14",
       "actual": 2083.5,
-      "predicted": 1947.838,
-      "prob_down": 0.6632
+      "predicted": 2029.604,
+      "prob_down": 0.3061
     },
     {
       "date": "2023-11-15",
       "actual": 2071.8,
-      "predicted": 1945.418,
-      "prob_down": 0.6643
+      "predicted": 2027.404,
+      "prob_down": 0.3108
     },
     {
       "date": "2023-11-16",
       "actual": 2073.4,
-      "predicted": 1967.914,
-      "prob_down": 0.6656
+      "predicted": 2051.271,
+      "prob_down": 0.3172
     },
     {
       "date": "2023-11-17",
       "actual": 2042.8,
-      "predicted": 1965.027,
-      "prob_down": 0.6671
+      "predicted": 2048.609,
+      "prob_down": 0.3237
     },
     {
       "date": "2023-11-20",
       "actual": 2050.0,
-      "predicted": 1960.338,
-      "prob_down": 0.6687
+      "predicted": 2043.67,
+      "prob_down": 0.3285
     },
     {
       "date": "2023-11-21",
       "actual": 2049.8,
-      "predicted": 1981.067,
-      "prob_down": 0.6704
+      "predicted": 2065.087,
+      "prob_down": 0.3341
     },
     {
       "date": "2023-11-22",
       "actual": 2033.5,
-      "predicted": 1972.01,
-      "prob_down": 0.6721
+      "predicted": 2055.24,
+      "prob_down": 0.3404
     },
     {
       "date": "2023-11-24",
       "actual": 2033.0,
-      "predicted": 1981.763,
-      "prob_down": 0.6738
+      "predicted": 2064.732,
+      "prob_down": 0.3471
     },
     {
       "date": "2023-11-27",
       "actual": 2027.8,
-      "predicted": 1990.709,
-      "prob_down": 0.6756
+      "predicted": 2074.117,
+      "prob_down": 0.3514
     },
     {
       "date": "2023-11-28",
       "actual": 2019.2,
-      "predicted": 2017.626,
-      "prob_down": 0.6775
+      "predicted": 2103.89,
+      "prob_down": 0.3515
     },
     {
       "date": "2023-11-29",
       "actual": 2051.6,
-      "predicted": 2024.24,
-      "prob_down": 0.6796
+      "predicted": 2112.531,
+      "prob_down": 0.3511
     },
     {
       "date": "2023-11-30",
       "actual": 2030.2,
-      "predicted": 2014.974,
-      "prob_down": 0.6816
+      "predicted": 2104.335,
+      "prob_down": 0.3506
     },
     {
       "date": "2023-12-01",
       "actual": 2006.5,
-      "predicted": 2065.576,
-      "prob_down": 0.6838
+      "predicted": 2158.542,
+      "prob_down": 0.3501
     },
     {
       "date": "2023-12-04",
       "actual": 2021.6,
-      "predicted": 2018.261,
-      "prob_down": 0.6858
+      "predicted": 2110.216,
+      "prob_down": 0.3497
     },
     {
       "date": "2023-12-05",
       "actual": 2029.3,
-      "predicted": 2012.096,
-      "prob_down": 0.6877
+      "predicted": 2104.712,
+      "prob_down": 0.3494
     },
     {
       "date": "2023-12-06",
       "actual": 2022.2,
-      "predicted": 2023.236,
-      "prob_down": 0.6896
+      "predicted": 2117.158,
+      "prob_down": 0.3492
     },
     {
       "date": "2023-12-07",
       "actual": 2025.8,
-      "predicted": 2021.454,
-      "prob_down": 0.6913
+      "predicted": 2115.938,
+      "prob_down": 0.3491
     },
     {
       "date": "2023-12-08",
       "actual": 2016.0,
-      "predicted": 1989.708,
-      "prob_down": 0.6928
+      "predicted": 2083.184,
+      "prob_down": 0.3492
     },
     {
       "date": "2023-12-11",
       "actual": 2017.8,
-      "predicted": 1968.989,
-      "prob_down": 0.6941
+      "predicted": 2061.811,
+      "prob_down": 0.3494
     },
     {
       "date": "2023-12-12",
       "actual": 2017.3,
-      "predicted": 1968.351,
-      "prob_down": 0.6951
+      "predicted": 2061.001,
+      "prob_down": 0.3499
     },
     {
       "date": "2023-12-13",
       "actual": 2025.4,
-      "predicted": 1972.235,
-      "prob_down": 0.6962
+      "predicted": 2064.985,
+      "prob_down": 0.3504
     },
     {
       "date": "2023-12-14",
       "actual": 2031.5,
-      "predicted": 2019.007,
-      "prob_down": 0.6976
+      "predicted": 2113.947,
+      "prob_down": 0.3507
     },
     {
       "date": "2023-12-15",
       "actual": 2048.4,
-      "predicted": 2009.678,
-      "prob_down": 0.699
+      "predicted": 2104.299,
+      "prob_down": 0.3507
     },
     {
       "date": "2023-12-18",
       "actual": 2071.1,
-      "predicted": 2014.182,
-      "prob_down": 0.7004
+      "predicted": 2109.077,
+      "prob_down": 0.3509
     },
     {
       "date": "2023-12-19",
       "actual": 2053.7,
-      "predicted": 2025.393,
-      "prob_down": 0.7019
+      "predicted": 2120.847,
+      "prob_down": 0.3512
     },
     {
       "date": "2023-12-20",
       "actual": 2042.9,
-      "predicted": 2020.815,
-      "prob_down": 0.7034
+      "predicted": 2116.139,
+      "prob_down": 0.3513
     },
     {
       "date": "2023-12-21",
       "actual": 2051.4,
-      "predicted": 2024.151,
-      "prob_down": 0.7048
+      "predicted": 2119.646,
+      "prob_down": 0.3515
     },
     {
       "date": "2023-12-22",
       "actual": 2051.7,
-      "predicted": 2041.501,
-      "prob_down": 0.7062
+      "predicted": 2137.763,
+      "prob_down": 0.3519
     },
     {
       "date": "2023-12-26",
       "actual": 2047.9,
-      "predicted": 2041.98,
-      "prob_down": 0.7076
+      "predicted": 2138.209,
+      "prob_down": 0.3524
     },
     {
       "date": "2023-12-27",
       "actual": 2038.7,
-      "predicted": 2064.722,
-      "prob_down": 0.7091
+      "predicted": 2162.0,
+      "prob_down": 0.3527
     },
     {
       "date": "2023-12-28",
       "actual": 2033.0,
-      "predicted": 2055.023,
-      "prob_down": 0.7105
+      "predicted": 2151.92,
+      "prob_down": 0.3528
     },
     {
       "date": "2023-12-29",
       "actual": 2007.2,
-      "predicted": 2043.287,
-      "prob_down": 0.7117
+      "predicted": 2139.605,
+      "prob_down": 0.3532
     },
     {
       "date": "2024-01-02",
       "actual": 2004.3,
-      "predicted": 2044.729,
-      "prob_down": 0.7128
+      "predicted": 2141.041,
+      "prob_down": 0.3536
     },
     {
       "date": "2024-01-03",
       "actual": 2014.9,
-      "predicted": 2014.47,
-      "prob_down": 0.7136
+      "predicted": 2109.247,
+      "prob_down": 0.3541
     },
     {
       "date": "2024-01-04",
       "actual": 2024.1,
-      "predicted": 2021.543,
-      "prob_down": 0.7142
+      "predicted": 2116.526,
+      "prob_down": 0.3544
     },
     {
       "date": "2024-01-05",
       "actual": 2039.8,
-      "predicted": 2021.356,
-      "prob_down": 0.7146
+      "predicted": 2116.179,
+      "prob_down": 0.3548
     },
     {
       "date": "2024-01-08",
       "actual": 2034.3,
-      "predicted": 2005.308,
-      "prob_down": 0.7149
+      "predicted": 2099.259,
+      "prob_down": 0.3551
     },
     {
       "date": "2024-01-09",
       "actual": 2030.7,
-      "predicted": 2004.854,
-      "prob_down": 0.715
+      "predicted": 2098.764,
+      "prob_down": 0.3551
     },
     {
       "date": "2024-01-10",
       "actual": 2049.4,
-      "predicted": 1999.776,
-      "prob_down": 0.715
+      "predicted": 2093.552,
+      "prob_down": 0.3548
     },
     {
       "date": "2024-01-11",
       "actual": 2038.9,
-      "predicted": 1991.338,
-      "prob_down": 0.715
+      "predicted": 2084.818,
+      "prob_down": 0.3545
     },
     {
       "date": "2024-01-12",
       "actual": 2044.1,
-      "predicted": 2023.319,
-      "prob_down": 0.715
+      "predicted": 2118.466,
+      "prob_down": 0.3539
     },
     {
       "date": "2024-01-16",
       "actual": 2042.7,
-      "predicted": 2002.281,
-      "prob_down": 0.7149
+      "predicted": 2096.644,
+      "prob_down": 0.3533
     },
     {
       "date": "2024-01-17",
       "actual": 2054.7,
-      "predicted": 1979.016,
-      "prob_down": 0.7146
+      "predicted": 2072.54,
+      "prob_down": 0.3524
     },
     {
       "date": "2024-01-18",
       "actual": 2095.7,
-      "predicted": 1994.039,
-      "prob_down": 0.7143
+      "predicted": 2088.559,
+      "prob_down": 0.3514
     },
     {
       "date": "2024-01-19",
       "actual": 2126.3,
-      "predicted": 2001.756,
-      "prob_down": 0.7139
+      "predicted": 2096.921,
+      "prob_down": 0.3503
     },
     {
       "date": "2024-01-22",
       "actual": 2141.9,
-      "predicted": 1994.855,
-      "prob_down": 0.7136
+      "predicted": 2089.958,
+      "prob_down": 0.3494
     },
     {
       "date": "2024-01-23",
       "actual": 2158.2,
-      "predicted": 1998.502,
-      "prob_down": 0.7132
+      "predicted": 2094.117,
+      "prob_down": 0.3482
     },
     {
       "date": "2024-01-24",
       "actual": 2165.2,
-      "predicted": 1988.928,
-      "prob_down": 0.7127
+      "predicted": 2084.405,
+      "prob_down": 0.3471
     },
     {
       "date": "2024-01-25",
       "actual": 2185.5,
-      "predicted": 1990.793,
-      "prob_down": 0.7123
+      "predicted": 2086.7,
+      "prob_down": 0.346
     },
     {
       "date": "2024-01-26",
       "actual": 2188.6,
-      "predicted": 1990.382,
-      "prob_down": 0.7119
+      "predicted": 2086.569,
+      "prob_down": 0.3449
     },
     {
       "date": "2024-01-29",
       "actual": 2166.1,
-      "predicted": 1998.436,
-      "prob_down": 0.7117
+      "predicted": 2095.29,
+      "prob_down": 0.344
     },
     {
       "date": "2024-01-30",
       "actual": 2180.8,
-      "predicted": 2004.491,
-      "prob_down": 0.7115
+      "predicted": 2101.879,
+      "prob_down": 0.3433
     },
     {
       "date": "2024-01-31",
       "actual": 2167.5,
-      "predicted": 2021.166,
-      "prob_down": 0.7114
+      "predicted": 2119.549,
+      "prob_down": 0.3427
     },
     {
       "date": "2024-02-01",
       "actual": 2161.5,
-      "predicted": 2043.51,
-      "prob_down": 0.7117
+      "predicted": 2143.185,
+      "prob_down": 0.3422
     },
     {
       "date": "2024-02-02",
       "actual": 2164.3,
-      "predicted": 2026.31,
-      "prob_down": 0.7118
+      "predicted": 2125.32,
+      "prob_down": 0.3417
     },
     {
       "date": "2024-02-05",
       "actual": 2159.7,
-      "predicted": 2015.665,
-      "prob_down": 0.7119
+      "predicted": 2114.254,
+      "prob_down": 0.3414
     },
     {
       "date": "2024-02-06",
       "actual": 2161.0,
-      "predicted": 2024.055,
-      "prob_down": 0.7119
+      "predicted": 2123.152,
+      "prob_down": 0.341
     },
     {
       "date": "2024-02-07",
       "actual": 2184.7,
-      "predicted": 2024.348,
-      "prob_down": 0.7119
+      "predicted": 2123.599,
+      "prob_down": 0.3406
     },
     {
       "date": "2024-02-08",
       "actual": 2160.0,
-      "predicted": 2020.606,
-      "prob_down": 0.7119
+      "predicted": 2119.763,
+      "prob_down": 0.3402
     },
     {
       "date": "2024-02-09",
       "actual": 2176.4,
-      "predicted": 2011.547,
-      "prob_down": 0.7118
+      "predicted": 2110.356,
+      "prob_down": 0.3398
     },
     {
       "date": "2024-02-12",
       "actual": 2177.2,
-      "predicted": 2005.957,
-      "prob_down": 0.7117
+      "predicted": 2104.548,
+      "prob_down": 0.3396
     },
     {
       "date": "2024-02-13",
       "actual": 2190.6,
-      "predicted": 1980.603,
-      "prob_down": 0.7114
+      "predicted": 2077.94,
+      "prob_down": 0.3394
     },
     {
       "date": "2024-02-14",
       "actual": 2217.4,
-      "predicted": 1977.864,
-      "prob_down": 0.7109
+      "predicted": 2075.096,
+      "prob_down": 0.3391
     },
     {
       "date": "2024-02-15",
       "actual": 2257.1,
-      "predicted": 1988.436,
-      "prob_down": 0.7105
+      "predicted": 2086.25,
+      "prob_down": 0.3387
     },
     {
       "date": "2024-02-16",
       "actual": 2281.8,
-      "predicted": 1997.622,
-      "prob_down": 0.7101
+      "predicted": 2095.842,
+      "prob_down": 0.3384
     },
     {
       "date": "2024-02-20",
       "actual": 2315.0,
-      "predicted": 2013.205,
-      "prob_down": 0.7097
+      "predicted": 2112.138,
+      "prob_down": 0.3382
     },
     {
       "date": "2024-02-21",
       "actual": 2308.5,
-      "predicted": 2007.864,
-      "prob_down": 0.7093
+      "predicted": 2106.474,
+      "prob_down": 0.338
     },
     {
       "date": "2024-02-22",
       "actual": 2345.4,
-      "predicted": 2004.391,
-      "prob_down": 0.709
+      "predicted": 2102.803,
+      "prob_down": 0.3377
     },
     {
       "date": "2024-02-23",
       "actual": 2351.0,
-      "predicted": 2022.886,
-      "prob_down": 0.7087
+      "predicted": 2122.235,
+      "prob_down": 0.3374
     },
     {
       "date": "2024-02-26",
       "actual": 2362.4,
-      "predicted": 2012.541,
-      "prob_down": 0.7085
+      "predicted": 2111.422,
+      "prob_down": 0.3371
     },
     {
       "date": "2024-02-27",
       "actual": 2348.4,
-      "predicted": 2017.686,
-      "prob_down": 0.7083
+      "predicted": 2116.86,
+      "prob_down": 0.3368
     },
     {
       "date": "2024-02-28",
       "actual": 2372.7,
-      "predicted": 2016.305,
-      "prob_down": 0.7082
+      "predicted": 2115.459,
+      "prob_down": 0.3366
     },
     {
       "date": "2024-02-29",
       "actual": 2374.1,
-      "predicted": 2028.14,
-      "prob_down": 0.7082
+      "predicted": 2127.939,
+      "prob_down": 0.3364
     },
     {
       "date": "2024-03-01",
       "actual": 2383.0,
-      "predicted": 2068.551,
-      "prob_down": 0.7084
+      "predicted": 2170.449,
+      "prob_down": 0.336
     },
     {
       "date": "2024-03-04",
       "actual": 2407.8,
-      "predicted": 2098.657,
-      "prob_down": 0.7087
+      "predicted": 2202.155,
+      "prob_down": 0.3358
     },
     {
       "date": "2024-03-05",
       "actual": 2388.4,
-      "predicted": 2113.91,
-      "prob_down": 0.7093
+      "predicted": 2218.302,
+      "prob_down": 0.3357
     },
     {
       "date": "2024-03-06",
       "actual": 2398.0,
-      "predicted": 2129.819,
-      "prob_down": 0.7101
+      "predicted": 2235.158,
+      "prob_down": 0.3355
     },
     {
       "date": "2024-03-07",
       "actual": 2413.8,
-      "predicted": 2136.516,
-      "prob_down": 0.711
+      "predicted": 2242.369,
+      "prob_down": 0.3355
     },
     {
       "date": "2024-03-08",
       "actual": 2346.4,
-      "predicted": 2156.307,
-      "prob_down": 0.7121
+      "predicted": 2263.323,
+      "prob_down": 0.3355
     },
     {
       "date": "2024-03-11",
       "actual": 2342.1,
-      "predicted": 2159.125,
-      "prob_down": 0.7132
+      "predicted": 2266.44,
+      "prob_down": 0.3357
     },
     {
       "date": "2024-03-12",
       "actual": 2338.4,
-      "predicted": 2136.716,
-      "prob_down": 0.7142
+      "predicted": 2242.959,
+      "prob_down": 0.336
     },
     {
       "date": "2024-03-13",
       "actual": 2342.5,
-      "predicted": 2151.017,
-      "prob_down": 0.7151
+      "predicted": 2257.885,
+      "prob_down": 0.3364
     },
     {
       "date": "2024-03-14",
       "actual": 2347.2,
-      "predicted": 2137.755,
-      "prob_down": 0.7159
+      "predicted": 2243.815,
+      "prob_down": 0.3369
     },
     {
       "date": "2024-03-15",
       "actual": 2357.7,
-      "predicted": 2131.739,
-      "prob_down": 0.7165
+      "predicted": 2237.335,
+      "prob_down": 0.3375
     },
     {
       "date": "2024-03-18",
       "actual": 2302.9,
-      "predicted": 2134.441,
-      "prob_down": 0.717
+      "predicted": 2240.008,
+      "prob_down": 0.338
     },
     {
       "date": "2024-03-19",
       "actual": 2311.0,
-      "predicted": 2129.859,
-      "prob_down": 0.7173
+      "predicted": 2235.095,
+      "prob_down": 0.3383
     },
     {
       "date": "2024-03-20",
       "actual": 2309.6,
-      "predicted": 2131.092,
-      "prob_down": 0.7176
+      "predicted": 2236.33,
+      "prob_down": 0.3386
     },
     {
       "date": "2024-03-21",
       "actual": 2308.6,
-      "predicted": 2154.409,
-      "prob_down": 0.718
+      "predicted": 2260.76,
+      "prob_down": 0.3387
     },
     {
       "date": "2024-03-22",
       "actual": 2331.2,
-      "predicted": 2130.002,
-      "prob_down": 0.7182
+      "predicted": 2235.143,
+      "prob_down": 0.3389
     },
     {
       "date": "2024-03-25",
       "actual": 2324.2,
-      "predicted": 2146.133,
-      "prob_down": 0.7185
+      "predicted": 2252.041,
+      "prob_down": 0.3391
     },
     {
       "date": "2024-03-26",
       "actual": 2322.3,
-      "predicted": 2146.883,
-      "prob_down": 0.7187
+      "predicted": 2252.798,
+      "prob_down": 0.3392
     },
     {
       "date": "2024-03-27",
       "actual": 2340.3,
-      "predicted": 2160.047,
-      "prob_down": 0.719
+      "predicted": 2266.61,
+      "prob_down": 0.3393
     },
     {
       "date": "2024-03-28",
       "actual": 2375.0,
-      "predicted": 2186.409,
-      "prob_down": 0.7193
+      "predicted": 2294.271,
+      "prob_down": 0.3393
     },
     {
       "date": "2024-04-01",
       "actual": 2343.0,
-      "predicted": 2225.5,
-      "prob_down": 0.7197
+      "predicted": 2335.224,
+      "prob_down": 0.3394
     },
     {
       "date": "2024-04-02",
       "actual": 2359.9,
-      "predicted": 2249.793,
-      "prob_down": 0.7202
+      "predicted": 2360.597,
+      "prob_down": 0.3397
     },
     {
       "date": "2024-04-03",
       "actual": 2394.9,
-      "predicted": 2282.434,
-      "prob_down": 0.7207
+      "predicted": 2394.707,
+      "prob_down": 0.3399
     },
     {
       "date": "2024-04-04",
       "actual": 2385.5,
-      "predicted": 2275.913,
-      "prob_down": 0.7214
+      "predicted": 2387.683,
+      "prob_down": 0.3404
     },
     {
       "date": "2024-04-05",
       "actual": 2417.4,
-      "predicted": 2312.182,
-      "prob_down": 0.722
+      "predicted": 2425.524,
+      "prob_down": 0.3409
     },
     {
       "date": "2024-04-08",
       "actual": 2438.5,
-      "predicted": 2317.575,
-      "prob_down": 0.7227
+      "predicted": 2430.973,
+      "prob_down": 0.3414
     },
     {
       "date": "2024-04-09",
       "actual": 2425.9,
-      "predicted": 2328.656,
-      "prob_down": 0.7234
+      "predicted": 2442.41,
+      "prob_down": 0.342
     },
     {
       "date": "2024-04-10",
       "actual": 2392.9,
-      "predicted": 2314.761,
-      "prob_down": 0.724
+      "predicted": 2427.583,
+      "prob_down": 0.3427
     },
     {
       "date": "2024-04-11",
       "actual": 2337.2,
-      "predicted": 2338.638,
-      "prob_down": 0.7245
+      "predicted": 2452.385,
+      "prob_down": 0.3434
     },
     {
       "date": "2024-04-12",
       "actual": 2334.5,
-      "predicted": 2339.959,
-      "prob_down": 0.7249
+      "predicted": 2453.529,
+      "prob_down": 0.3441
     },
     {
       "date": "2024-04-15",
       "actual": 2356.5,
-      "predicted": 2348.735,
-      "prob_down": 0.7252
+      "predicted": 2462.404,
+      "prob_down": 0.3449
     },
     {
       "date": "2024-04-16",
       "actual": 2341.2,
-      "predicted": 2373.201,
-      "prob_down": 0.7255
+      "predicted": 2487.727,
+      "prob_down": 0.3456
     },
     {
       "date": "2024-04-17",
       "actual": 2342.9,
-      "predicted": 2354.083,
-      "prob_down": 0.7257
+      "predicted": 2467.422,
+      "prob_down": 0.3462
     },
     {
       "date": "2024-04-18",
       "actual": 2322.9,
-      "predicted": 2363.556,
-      "prob_down": 0.7259
+      "predicted": 2477.095,
+      "prob_down": 0.3469
     },
     {
       "date": "2024-04-19",
       "actual": 2369.3,
-      "predicted": 2379.128,
-      "prob_down": 0.726
+      "predicted": 2493.168,
+      "prob_down": 0.3475
     },
     {
       "date": "2024-04-22",
       "actual": 2347.4,
-      "predicted": 2312.705,
-      "prob_down": 0.726
+      "predicted": 2423.413,
+      "prob_down": 0.348
     },
     {
       "date": "2024-04-23",
       "actual": 2375.5,
-      "predicted": 2308.475,
-      "prob_down": 0.7258
+      "predicted": 2418.902,
+      "prob_down": 0.3483
     },
     {
       "date": "2024-04-24",
       "actual": 2390.9,
-      "predicted": 2304.846,
-      "prob_down": 0.7256
+      "predicted": 2415.026,
+      "prob_down": 0.3486
     },
     {
       "date": "2024-04-25",
       "actual": 2325.0,
-      "predicted": 2308.91,
-      "prob_down": 0.7253
+      "predicted": 2419.198,
+      "prob_down": 0.3489
     },
     {
       "date": "2024-04-26",
       "actual": 2327.0,
-      "predicted": 2313.565,
-      "prob_down": 0.7251
+      "predicted": 2424.048,
+      "prob_down": 0.3491
     },
     {
       "date": "2024-04-29",
       "actual": 2326.6,
-      "predicted": 2323.913,
-      "prob_down": 0.7248
+      "predicted": 2434.863,
+      "prob_down": 0.3493
     },
     {
       "date": "2024-04-30",
       "actual": 2354.8,
-      "predicted": 2269.936,
-      "prob_down": 0.7244
+      "predicted": 2378.242,
+      "prob_down": 0.3497
     },
     {
       "date": "2024-05-01",
       "actual": 2318.0,
-      "predicted": 2277.966,
-      "prob_down": 0.7241
+      "predicted": 2386.589,
+      "prob_down": 0.35
     },
     {
       "date": "2024-05-02",
       "actual": 2349.1,
-      "predicted": 2276.616,
-      "prob_down": 0.7237
+      "predicted": 2385.129,
+      "prob_down": 0.3503
     },
     {
       "date": "2024-05-03",
       "actual": 2329.0,
-      "predicted": 2275.624,
-      "prob_down": 0.7235
+      "predicted": 2384.094,
+      "prob_down": 0.3505
     },
     {
       "date": "2024-05-06",
       "actual": 2346.9,
-      "predicted": 2297.863,
-      "prob_down": 0.7234
+      "predicted": 2407.404,
+      "prob_down": 0.3507
     },
     {
       "date": "2024-05-07",
       "actual": 2369.0,
-      "predicted": 2290.907,
-      "prob_down": 0.7234
+      "predicted": 2400.125,
+      "prob_down": 0.351
     },
     {
       "date": "2024-05-08",
       "actual": 2331.2,
-      "predicted": 2288.977,
-      "prob_down": 0.7234
+      "predicted": 2398.104,
+      "prob_down": 0.3513
     },
     {
       "date": "2024-05-09",
       "actual": 2344.4,
-      "predicted": 2306.643,
-      "prob_down": 0.7235
+      "predicted": 2416.641,
+      "prob_down": 0.3514
     },
     {
       "date": "2024-05-10",
       "actual": 2330.8,
-      "predicted": 2340.753,
-      "prob_down": 0.7237
+      "predicted": 2452.305,
+      "prob_down": 0.3518
     },
     {
       "date": "2024-05-13",
       "actual": 2313.2,
-      "predicted": 2309.128,
-      "prob_down": 0.724
+      "predicted": 2419.048,
+      "prob_down": 0.3523
     },
     {
       "date": "2024-05-14",
       "actual": 2336.6,
-      "predicted": 2325.693,
-      "prob_down": 0.7243
+      "predicted": 2436.271,
+      "prob_down": 0.3527
     },
     {
       "date": "2024-05-15",
       "actual": 2339.6,
-      "predicted": 2360.039,
-      "prob_down": 0.7249
+      "predicted": 2472.176,
+      "prob_down": 0.353
     },
     {
       "date": "2024-05-16",
       "actual": 2338.9,
-      "predicted": 2350.609,
-      "prob_down": 0.7255
+      "predicted": 2462.234,
+      "prob_down": 0.3537
     },
     {
       "date": "2024-05-17",
       "actual": 2333.4,
-      "predicted": 2381.864,
-      "prob_down": 0.7261
+      "predicted": 2494.833,
+      "prob_down": 0.3549
     },
     {
       "date": "2024-05-20",
       "actual": 2369.4,
-      "predicted": 2402.466,
-      "prob_down": 0.7269
+      "predicted": 2516.197,
+      "prob_down": 0.3563
     },
     {
       "date": "2024-05-21",
       "actual": 2397.7,
-      "predicted": 2389.863,
-      "prob_down": 0.7276
+      "predicted": 2502.776,
+      "prob_down": 0.3578
     },
     {
       "date": "2024-05-22",
       "actual": 2363.5,
-      "predicted": 2357.204,
-      "prob_down": 0.7282
+      "predicted": 2468.317,
+      "prob_down": 0.3593
     },
     {
       "date": "2024-05-23",
       "actual": 2367.9,
-      "predicted": 2302.259,
-      "prob_down": 0.7286
+      "predicted": 2410.498,
+      "prob_down": 0.3608
     },
     {
       "date": "2024-05-24",
       "actual": 2379.7,
-      "predicted": 2299.564,
-      "prob_down": 0.7288
+      "predicted": 2407.394,
+      "prob_down": 0.3619
     },
     {
       "date": "2024-05-28",
       "actual": 2421.9,
-      "predicted": 2321.236,
-      "prob_down": 0.7289
+      "predicted": 2429.735,
+      "prob_down": 0.3631
     },
     {
       "date": "2024-05-29",
       "actual": 2420.7,
-      "predicted": 2306.22,
-      "prob_down": 0.7289
+      "predicted": 2413.642,
+      "prob_down": 0.3642
     },
     {
       "date": "2024-05-30",
       "actual": 2428.9,
-      "predicted": 2307.96,
-      "prob_down": 0.7288
+      "predicted": 2415.137,
+      "prob_down": 0.365
     },
     {
       "date": "2024-05-31",
       "actual": 2467.8,
-      "predicted": 2288.323,
-      "prob_down": 0.7287
+      "predicted": 2394.364,
+      "prob_down": 0.3656
     },
     {
       "date": "2024-06-03",
       "actual": 2459.9,
-      "predicted": 2334.047,
-      "prob_down": 0.7287
+      "predicted": 2442.015,
+      "prob_down": 0.3662
     },
     {
       "date": "2024-06-04",
       "actual": 2456.4,
-      "predicted": 2312.447,
-      "prob_down": 0.7288
+      "predicted": 2419.317,
+      "prob_down": 0.3667
     },
     {
       "date": "2024-06-05",
       "actual": 2399.1,
-      "predicted": 2340.071,
-      "prob_down": 0.729
+      "predicted": 2448.174,
+      "prob_down": 0.3671
     },
     {
       "date": "2024-06-06",
       "actual": 2394.7,
-      "predicted": 2355.146,
-      "prob_down": 0.7294
+      "predicted": 2463.914,
+      "prob_down": 0.3678
     },
     {
       "date": "2024-06-07",
       "actual": 2407.3,
-      "predicted": 2290.192,
-      "prob_down": 0.7295
+      "predicted": 2395.961,
+      "prob_down": 0.3684
     },
     {
       "date": "2024-06-10",
       "actual": 2415.7,
-      "predicted": 2292.178,
-      "prob_down": 0.7295
+      "predicted": 2397.987,
+      "prob_down": 0.3689
     },
     {
       "date": "2024-06-11",
       "actual": 2353.5,
-      "predicted": 2291.809,
-      "prob_down": 0.7295
+      "predicted": 2397.56,
+      "prob_down": 0.3692
     },
     {
       "date": "2024-06-12",
       "actual": 2381.0,
-      "predicted": 2319.577,
-      "prob_down": 0.7296
+      "predicted": 2426.591,
+      "prob_down": 0.3694
     },
     {
       "date": "2024-06-13",
       "actual": 2377.8,
-      "predicted": 2283.305,
-      "prob_down": 0.7297
+      "predicted": 2388.664,
+      "prob_down": 0.3698
     },
     {
       "date": "2024-06-14",
       "actual": 2405.0,
-      "predicted": 2313.913,
-      "prob_down": 0.7299
+      "predicted": 2420.656,
+      "prob_down": 0.3704
     },
     {
       "date": "2024-06-17",
       "actual": 2426.5,
-      "predicted": 2294.105,
-      "prob_down": 0.73
+      "predicted": 2399.871,
+      "prob_down": 0.371
     },
     {
       "date": "2024-06-18",
       "actual": 2480.8,
-      "predicted": 2311.712,
-      "prob_down": 0.7302
+      "predicted": 2418.221,
+      "prob_down": 0.3716
     },
     {
       "date": "2024-06-20",
       "actual": 2469.8,
-      "predicted": 2333.455,
-      "prob_down": 0.7304
+      "predicted": 2440.873,
+      "prob_down": 0.3723
     },
     {
       "date": "2024-06-21",
       "actual": 2444.4,
-      "predicted": 2296.214,
-      "prob_down": 0.7306
+      "predicted": 2401.833,
+      "prob_down": 0.3728
     },
     {
       "date": "2024-06-24",
       "actual": 2431.6,
-      "predicted": 2309.214,
-      "prob_down": 0.7307
+      "predicted": 2415.302,
+      "prob_down": 0.3735
     },
     {
       "date": "2024-06-25",
       "actual": 2432.4,
-      "predicted": 2295.818,
-      "prob_down": 0.7308
+      "predicted": 2401.2,
+      "prob_down": 0.374
     },
     {
       "date": "2024-06-26",
       "actual": 2463.3,
-      "predicted": 2278.519,
-      "prob_down": 0.7308
+      "predicted": 2383.032,
+      "prob_down": 0.3742
     },
     {
       "date": "2024-06-27",
       "actual": 2473.4,
-      "predicted": 2301.602,
-      "prob_down": 0.7308
+      "predicted": 2407.146,
+      "prob_down": 0.374
     },
     {
       "date": "2024-06-28",
       "actual": 2504.0,
-      "predicted": 2304.598,
-      "prob_down": 0.7307
+      "predicted": 2410.236,
+      "prob_down": 0.3739
     },
     {
       "date": "2024-07-01",
       "actual": 2507.8,
-      "predicted": 2303.977,
-      "prob_down": 0.7305
+      "predicted": 2409.551,
+      "prob_down": 0.3735
     },
     {
       "date": "2024-07-02",
       "actual": 2479.7,
-      "predicted": 2298.621,
-      "prob_down": 0.7303
+      "predicted": 2403.945,
+      "prob_down": 0.373
     },
     {
       "date": "2024-07-03",
       "actual": 2492.4,
-      "predicted": 2334.107,
-      "prob_down": 0.7303
+      "predicted": 2441.075,
+      "prob_down": 0.3725
     },
     {
       "date": "2024-07-05",
       "actual": 2537.8,
-      "predicted": 2361.944,
-      "prob_down": 0.7304
+      "predicted": 2470.233,
+      "prob_down": 0.3722
     },
     {
       "date": "2024-07-08",
       "actual": 2541.3,
-      "predicted": 2328.193,
-      "prob_down": 0.7306
+      "predicted": 2435.057,
+      "prob_down": 0.3718
     },
     {
       "date": "2024-07-09",
       "actual": 2550.6,
-      "predicted": 2332.471,
-      "prob_down": 0.7308
+      "predicted": 2439.624,
+      "prob_down": 0.3715
     },
     {
       "date": "2024-07-10",
       "actual": 2547.5,
-      "predicted": 2344.033,
-      "prob_down": 0.731
+      "predicted": 2451.849,
+      "prob_down": 0.371
     },
     {
       "date": "2024-07-11",
       "actual": 2516.7,
-      "predicted": 2385.483,
-      "prob_down": 0.7314
+      "predicted": 2495.383,
+      "prob_down": 0.3704
     },
     {
       "date": "2024-07-12",
       "actual": 2546.3,
-      "predicted": 2384.148,
-      "prob_down": 0.732
+      "predicted": 2494.174,
+      "prob_down": 0.3699
     },
     {
       "date": "2024-07-15",
       "actual": 2555.2,
-      "predicted": 2392.074,
-      "prob_down": 0.7325
+      "predicted": 2502.609,
+      "prob_down": 0.3697
     },
     {
       "date": "2024-07-16",
       "actual": 2552.9,
-      "predicted": 2430.206,
-      "prob_down": 0.7333
+      "predicted": 2542.64,
+      "prob_down": 0.3695
     },
     {
       "date": "2024-07-17",
       "actual": 2537.8,
-      "predicted": 2422.233,
-      "prob_down": 0.734
+      "predicted": 2534.408,
+      "prob_down": 0.3696
     },
     {
       "date": "2024-07-18",
       "actual": 2560.3,
-      "predicted": 2418.632,
-      "prob_down": 0.7348
+      "predicted": 2530.644,
+      "prob_down": 0.3701
     },
     {
       "date": "2024-07-19",
       "actual": 2527.6,
-      "predicted": 2362.129,
-      "prob_down": 0.7353
+      "predicted": 2471.469,
+      "prob_down": 0.3709
     },
     {
       "date": "2024-07-22",
       "actual": 2523.0,
-      "predicted": 2357.756,
-      "prob_down": 0.7356
+      "predicted": 2466.855,
+      "prob_down": 0.3713
     },
     {
       "date": "2024-07-23",
       "actual": 2526.0,
-      "predicted": 2370.134,
-      "prob_down": 0.736
+      "predicted": 2479.778,
+      "prob_down": 0.3716
     },
     {
       "date": "2024-07-24",
       "actual": 2543.1,
-      "predicted": 2378.407,
-      "prob_down": 0.7362
+      "predicted": 2488.304,
+      "prob_down": 0.3722
     },
     {
       "date": "2024-07-25",
       "actual": 2524.6,
-      "predicted": 2317.216,
-      "prob_down": 0.7363
+      "predicted": 2424.168,
+      "prob_down": 0.3727
     },
     {
       "date": "2024-07-26",
       "actual": 2532.7,
-      "predicted": 2344.341,
-      "prob_down": 0.7363
+      "predicted": 2452.499,
+      "prob_down": 0.3727
     },
     {
       "date": "2024-07-29",
       "actual": 2543.1,
-      "predicted": 2341.226,
-      "prob_down": 0.7364
+      "predicted": 2449.238,
+      "prob_down": 0.3727
     },
     {
       "date": "2024-07-30",
       "actual": 2542.4,
-      "predicted": 2368.032,
-      "prob_down": 0.7365
+      "predicted": 2477.247,
+      "prob_down": 0.3728
     },
     {
       "date": "2024-07-31",
       "actual": 2580.6,
-      "predicted": 2389.177,
-      "prob_down": 0.7367
+      "predicted": 2499.364,
+      "prob_down": 0.3729
     },
     {
       "date": "2024-08-01",
       "actual": 2610.7,
-      "predicted": 2442.558,
-      "prob_down": 0.7372
+      "predicted": 2555.183,
+      "prob_down": 0.3734
     },
     {
       "date": "2024-08-02",
       "actual": 2608.9,
-      "predicted": 2431.589,
-      "prob_down": 0.7379
+      "predicted": 2543.627,
+      "prob_down": 0.3743
     },
     {
       "date": "2024-08-05",
       "actual": 2592.4,
-      "predicted": 2406.553,
-      "prob_down": 0.7388
+      "predicted": 2517.027,
+      "prob_down": 0.3762
     },
     {
       "date": "2024-08-06",
       "actual": 2598.6,
-      "predicted": 2393.939,
-      "prob_down": 0.7394
+      "predicted": 2503.479,
+      "prob_down": 0.3776
     },
     {
       "date": "2024-08-07",
       "actual": 2614.6,
-      "predicted": 2394.729,
-      "prob_down": 0.74
+      "predicted": 2503.915,
+      "prob_down": 0.379
     },
     {
       "date": "2024-08-08",
       "actual": 2646.2,
-      "predicted": 2425.128,
-      "prob_down": 0.7406
+      "predicted": 2535.464,
+      "prob_down": 0.3803
     },
     {
       "date": "2024-08-09",
       "actual": 2652.5,
-      "predicted": 2434.969,
-      "prob_down": 0.7411
+      "predicted": 2545.662,
+      "prob_down": 0.3814
     },
     {
       "date": "2024-08-12",
       "actual": 2677.0,
-      "predicted": 2464.938,
-      "prob_down": 0.7417
+      "predicted": 2576.875,
+      "prob_down": 0.3827
     },
     {
       "date": "2024-08-13",
       "actual": 2684.7,
-      "predicted": 2468.455,
-      "prob_down": 0.7423
+      "predicted": 2580.528,
+      "prob_down": 0.384
     },
     {
       "date": "2024-08-14",
       "actual": 2694.9,
-      "predicted": 2440.537,
-      "prob_down": 0.7429
+      "predicted": 2551.381,
+      "prob_down": 0.3852
     },
     {
       "date": "2024-08-15",
       "actual": 2668.1,
-      "predicted": 2452.813,
-      "prob_down": 0.7434
+      "predicted": 2564.22,
+      "prob_down": 0.3864
     },
     {
       "date": "2024-08-16",
       "actual": 2659.4,
-      "predicted": 2497.245,
-      "prob_down": 0.744
+      "predicted": 2610.613,
+      "prob_down": 0.3877
     },
     {
       "date": "2024-08-19",
       "actual": 2690.3,
-      "predicted": 2500.422,
-      "prob_down": 0.7446
+      "predicted": 2613.846,
+      "prob_down": 0.3893
     },
     {
       "date": "2024-08-20",
       "actual": 2669.7,
-      "predicted": 2509.301,
-      "prob_down": 0.7453
+      "predicted": 2622.955,
+      "prob_down": 0.3911
     },
     {
       "date": "2024-08-21",
       "actual": 2679.2,
-      "predicted": 2505.988,
-      "prob_down": 0.746
+      "predicted": 2619.223,
+      "prob_down": 0.3933
     },
     {
       "date": "2024-08-22",
       "actual": 2667.8,
-      "predicted": 2475.497,
-      "prob_down": 0.7466
+      "predicted": 2586.987,
+      "prob_down": 0.3955
     },
     {
       "date": "2024-08-23",
       "actual": 2666.0,
-      "predicted": 2504.418,
-      "prob_down": 0.7472
+      "predicted": 2616.883,
+      "prob_down": 0.3976
     },
     {
       "date": "2024-08-26",
       "actual": 2635.4,
-      "predicted": 2512.985,
-      "prob_down": 0.7478
+      "predicted": 2625.451,
+      "prob_down": 0.3999
     },
     {
       "date": "2024-08-27",
       "actual": 2626.0,
-      "predicted": 2510.545,
-      "prob_down": 0.7484
+      "predicted": 2622.425,
+      "prob_down": 0.4026
     },
     {
       "date": "2024-08-28",
       "actual": 2639.3,
-      "predicted": 2495.568,
-      "prob_down": 0.7488
+      "predicted": 2606.224,
+      "prob_down": 0.4054
     },
     {
       "date": "2024-08-29",
       "actual": 2676.3,
-      "predicted": 2517.585,
-      "prob_down": 0.7493
+      "predicted": 2628.617,
+      "prob_down": 0.4083
     },
     {
       "date": "2024-08-30",
       "actual": 2665.6,
-      "predicted": 2485.361,
-      "prob_down": 0.7495
+      "predicted": 2594.356,
+      "prob_down": 0.4111
     },
     {
       "date": "2024-09-03",
       "actual": 2678.9,
-      "predicted": 2480.834,
-      "prob_down": 0.7498
+      "predicted": 2588.851,
+      "prob_down": 0.4143
     },
     {
       "date": "2024-09-04",
       "actual": 2691.3,
-      "predicted": 2483.801,
-      "prob_down": 0.7501
+      "predicted": 2591.136,
+      "prob_down": 0.4175
     },
     {
       "date": "2024-09-05",
       "actual": 2707.5,
-      "predicted": 2500.608,
-      "prob_down": 0.7503
+      "predicted": 2607.92,
+      "prob_down": 0.4207
     },
     {
       "date": "2024-09-06",
       "actual": 2730.0,
-      "predicted": 2482.431,
-      "prob_down": 0.7506
+      "predicted": 2587.905,
+      "prob_down": 0.424
     },
     {
       "date": "2024-09-09",
       "actual": 2738.9,
-      "predicted": 2490.399,
-      "prob_down": 0.7508
+      "predicted": 2595.095,
+      "prob_down": 0.427
     },
     {
       "date": "2024-09-10",
       "actual": 2759.8,
-      "predicted": 2500.604,
-      "prob_down": 0.7511
+      "predicted": 2604.578,
+      "prob_down": 0.4303
     },
     {
       "date": "2024-09-11",
       "actual": 2729.4,
-      "predicted": 2499.872,
-      "prob_down": 0.7513
+      "predicted": 2602.776,
+      "prob_down": 0.4352
     },
     {
       "date": "2024-09-12",
       "actual": 2748.9,
-      "predicted": 2537.36,
-      "prob_down": 0.7516
+      "predicted": 2640.696,
+      "prob_down": 0.4407
     },
     {
       "date": "2024-09-13",
       "actual": 2754.6,
-      "predicted": 2566.833,
-      "prob_down": 0.752
+      "predicted": 2670.163,
+      "prob_down": 0.4469
     },
     {
       "date": "2024-09-16",
       "actual": 2755.9,
-      "predicted": 2564.915,
-      "prob_down": 0.7524
+      "predicted": 2667.205,
+      "prob_down": 0.4542
     },
     {
       "date": "2024-09-17",
       "actual": 2781.1,
-      "predicted": 2548.559,
-      "prob_down": 0.7528
+      "predicted": 2649.076,
+      "prob_down": 0.4628
     },
     {
       "date": "2024-09-18",
       "actual": 2800.8,
-      "predicted": 2554.545,
-      "prob_down": 0.7531
+      "predicted": 2653.52,
+      "prob_down": 0.4723
     },
     {
       "date": "2024-09-19",
       "actual": 2749.3,
-      "predicted": 2570.163,
-      "prob_down": 0.7535
+      "predicted": 2667.013,
+      "prob_down": 0.4828
     },
     {
       "date": "2024-09-20",
       "actual": 2749.2,
-      "predicted": 2601.097,
-      "prob_down": 0.7538
+      "predicted": 2694.918,
+      "prob_down": 0.4957
     },
     {
       "date": "2024-09-23",
       "actual": 2746.2,
-      "predicted": 2607.158,
-      "prob_down": 0.7542
+      "predicted": 2696.952,
+      "prob_down": 0.5108
     },
     {
       "date": "2024-09-24",
       "actual": 2749.7,
-      "predicted": 2631.084,
-      "prob_down": 0.7546
+      "predicted": 2717.208,
+      "prob_down": 0.5266
     },
     {
       "date": "2024-09-25",
       "actual": 2676.3,
-      "predicted": 2638.505,
-      "prob_down": 0.7551
+      "predicted": 2721.756,
+      "prob_down": 0.5442
     },
     {
       "date": "2024-09-26",
       "actual": 2705.8,
-      "predicted": 2648.383,
-      "prob_down": 0.7555
+      "predicted": 2729.016,
+      "prob_down": 0.5638
     },
     {
       "date": "2024-09-27",
       "actual": 2694.8,
-      "predicted": 2621.918,
-      "prob_down": 0.7558
+      "predicted": 2698.588,
+      "prob_down": 0.5843
     },
     {
       "date": "2024-09-30",
       "actual": 2617.7,
-      "predicted": 2613.288,
-      "prob_down": 0.7561
+      "predicted": 2686.316,
+      "prob_down": 0.6051
     },
     {
       "date": "2024-10-01",
       "actual": 2606.3,
-      "predicted": 2643.597,
-      "prob_down": 0.7565
+      "predicted": 2713.811,
+      "prob_down": 0.6273
     },
     {
       "date": "2024-10-02",
       "actual": 2586.5,
-      "predicted": 2623.337,
-      "prob_down": 0.7567
+      "predicted": 2689.501,
+      "prob_down": 0.6483
     },
     {
       "date": "2024-10-03",
       "actual": 2572.9,
-      "predicted": 2632.712,
-      "prob_down": 0.7569
+      "predicted": 2695.704,
+      "prob_down": 0.6683
     },
     {
       "date": "2024-10-04",
       "actual": 2570.1,
-      "predicted": 2621.595,
-      "prob_down": 0.7569
+      "predicted": 2681.631,
+      "prob_down": 0.6843
     },
     {
       "date": "2024-10-07",
       "actual": 2614.6,
-      "predicted": 2619.969,
-      "prob_down": 0.7569
+      "predicted": 2677.347,
+      "prob_down": 0.6997
     },
     {
       "date": "2024-10-08",
       "actual": 2631.0,
-      "predicted": 2590.054,
-      "prob_down": 0.7567
+      "predicted": 2644.579,
+      "prob_down": 0.7123
     },
     {
       "date": "2024-10-09",
       "actual": 2651.7,
-      "predicted": 2580.984,
-      "prob_down": 0.7565
+      "predicted": 2633.381,
+      "prob_down": 0.7232
     },
     {
       "date": "2024-10-10",
       "actual": 2674.9,
-      "predicted": 2594.223,
-      "prob_down": 0.7562
+      "predicted": 2645.395,
+      "prob_down": 0.7312
     },
     {
       "date": "2024-10-11",
       "actual": 2712.2,
-      "predicted": 2630.723,
-      "prob_down": 0.756
+      "predicted": 2681.426,
+      "prob_down": 0.7374
     },
     {
       "date": "2024-10-14",
       "actual": 2618.5,
-      "predicted": 2620.307,
-      "prob_down": 0.7558
+      "predicted": 2669.851,
+      "prob_down": 0.7424
     },
     {
       "date": "2024-10-15",
       "actual": 2621.3,
-      "predicted": 2633.456,
-      "prob_down": 0.7557
+      "predicted": 2682.217,
+      "prob_down": 0.7478
     },
     {
       "date": "2024-10-16",
       "actual": 2639.9,
-      "predicted": 2645.691,
-      "prob_down": 0.7556
+      "predicted": 2693.784,
+      "prob_down": 0.7526
     },
     {
       "date": "2024-10-17",
       "actual": 2657.0,
-      "predicted": 2661.651,
-      "prob_down": 0.7555
+      "predicted": 2709.602,
+      "prob_down": 0.7547
     },
     {
       "date": "2024-10-18",
       "actual": 2658.5,
-      "predicted": 2683.758,
-      "prob_down": 0.7555
+      "predicted": 2731.708,
+      "prob_down": 0.7567
     },
     {
       "date": "2024-10-21",
       "actual": 2667.9,
-      "predicted": 2692.504,
-      "prob_down": 0.7555
+      "predicted": 2740.099,
+      "prob_down": 0.7594
     },
     {
       "date": "2024-10-22",
       "actual": 2676.2,
-      "predicted": 2713.032,
-      "prob_down": 0.7555
+      "predicted": 2760.523,
+      "prob_down": 0.7619
     },
     {
       "date": "2024-10-23",
       "actual": 2648.4,
-      "predicted": 2683.151,
-      "prob_down": 0.7555
+      "predicted": 2729.856,
+      "prob_down": 0.7634
     },
     {
       "date": "2024-10-24",
       "actual": 2659.6,
-      "predicted": 2702.319,
-      "prob_down": 0.7555
+      "predicted": 2748.966,
+      "prob_down": 0.7656
     },
     {
       "date": "2024-10-25",
       "actual": 2685.8,
-      "predicted": 2707.938,
-      "prob_down": 0.7555
+      "predicted": 2754.45,
+      "prob_down": 0.7669
     },
     {
       "date": "2024-10-28",
       "actual": 2718.4,
-      "predicted": 2709.232,
-      "prob_down": 0.7555
+      "predicted": 2755.77,
+      "prob_down": 0.7669
     },
     {
       "date": "2024-10-29",
       "actual": 2756.7,
-      "predicted": 2734.002,
-      "prob_down": 0.7555
+      "predicted": 2781.826,
+      "prob_down": 0.7625
     },
     {
       "date": "2024-10-30",
       "actual": 2709.4,
-      "predicted": 2753.348,
-      "prob_down": 0.7556
+      "predicted": 2801.775,
+      "prob_down": 0.7614
     },
     {
       "date": "2024-10-31",
       "actual": 2675.8,
-      "predicted": 2702.725,
-      "prob_down": 0.7557
+      "predicted": 2750.641,
+      "prob_down": 0.7598
     },
     {
       "date": "2024-11-01",
       "actual": 2670.0,
-      "predicted": 2702.675,
-      "prob_down": 0.7556
+      "predicted": 2750.677,
+      "prob_down": 0.7595
     },
     {
       "date": "2024-11-04",
       "actual": 2662.0,
-      "predicted": 2699.76,
-      "prob_down": 0.7556
+      "predicted": 2747.569,
+      "prob_down": 0.7605
     },
     {
       "date": "2024-11-05",
       "actual": 2653.3,
-      "predicted": 2703.199,
-      "prob_down": 0.7556
+      "predicted": 2750.952,
+      "prob_down": 0.7613
     },
     {
       "date": "2024-11-06",
       "actual": 2608.1,
-      "predicted": 2631.073,
-      "prob_down": 0.7553
+      "predicted": 2677.43,
+      "prob_down": 0.7615
     },
     {
       "date": "2024-11-07",
       "actual": 2645.1,
-      "predicted": 2660.073,
-      "prob_down": 0.755
+      "predicted": 2706.701,
+      "prob_down": 0.7623
     },
     {
       "date": "2024-11-08",
       "actual": 2628.2,
-      "predicted": 2649.243,
-      "prob_down": 0.7548
+      "predicted": 2695.478,
+      "prob_down": 0.7628
     },
     {
       "date": "2024-11-11",
       "actual": 2635.5,
-      "predicted": 2573.472,
-      "prob_down": 0.7543
+      "predicted": 2618.386,
+      "prob_down": 0.7619
     },
     {
       "date": "2024-11-12",
       "actual": 2653.9,
-      "predicted": 2562.369,
-      "prob_down": 0.7537
+      "predicted": 2607.155,
+      "prob_down": 0.7601
     },
     {
       "date": "2024-11-13",
       "actual": 2631.9,
-      "predicted": 2543.045,
-      "prob_down": 0.753
+      "predicted": 2587.767,
+      "prob_down": 0.7569
     },
     {
       "date": "2024-11-14",
       "actual": 2618.1,
-      "predicted": 2529.845,
-      "prob_down": 0.7523
+      "predicted": 2574.722,
+      "prob_down": 0.7528
     },
     {
       "date": "2024-11-15",
       "actual": 2641.0,
-      "predicted": 2527.3,
-      "prob_down": 0.7515
+      "predicted": 2572.709,
+      "prob_down": 0.7476
     },
     {
       "date": "2024-11-18",
       "actual": 2669.0,
-      "predicted": 2571.252,
-      "prob_down": 0.7508
+      "predicted": 2617.941,
+      "prob_down": 0.743
     },
     {
       "date": "2024-11-19",
       "actual": 2654.7,
-      "predicted": 2587.541,
-      "prob_down": 0.7502
+      "predicted": 2635.1,
+      "prob_down": 0.7382
     },
     {
       "date": "2024-11-20",
       "actual": 2647.4,
-      "predicted": 2608.046,
-      "prob_down": 0.7498
+      "predicted": 2656.548,
+      "prob_down": 0.7338
     },
     {
       "date": "2024-11-21",
       "actual": 2665.4,
-      "predicted": 2630.986,
-      "prob_down": 0.7494
+      "predicted": 2680.614,
+      "prob_down": 0.7288
     },
     {
       "date": "2024-11-22",
       "actual": 2672.4,
-      "predicted": 2667.738,
-      "prob_down": 0.7492
+      "predicted": 2718.707,
+      "prob_down": 0.7246
     },
     {
       "date": "2024-11-25",
       "actual": 2715.0,
-      "predicted": 2575.582,
-      "prob_down": 0.749
+      "predicted": 2625.435,
+      "prob_down": 0.7204
     },
     {
       "date": "2024-11-26",
       "actual": 2678.6,
-      "predicted": 2578.352,
-      "prob_down": 0.7488
+      "predicted": 2629.387,
+      "prob_down": 0.7131
     },
     {
       "date": "2024-11-27",
       "actual": 2682.3,
-      "predicted": 2596.622,
-      "prob_down": 0.7487
+      "predicted": 2649.205,
+      "prob_down": 0.7056
     },
     {
       "date": "2024-11-29",
       "actual": 2717.8,
-      "predicted": 2613.365,
-      "prob_down": 0.7487
+      "predicted": 2667.409,
+      "prob_down": 0.6987
     },
     {
       "date": "2024-12-02",
       "actual": 2750.9,
-      "predicted": 2614.758,
-      "prob_down": 0.7487
+      "predicted": 2670.249,
+      "prob_down": 0.6899
     },
     {
       "date": "2024-12-03",
       "actual": 2748.7,
-      "predicted": 2623.926,
-      "prob_down": 0.7488
+      "predicted": 2680.807,
+      "prob_down": 0.6825
     },
     {
       "date": "2024-12-04",
       "actual": 2759.2,
-      "predicted": 2632.004,
-      "prob_down": 0.749
+      "predicted": 2690.141,
+      "prob_down": 0.675
     },
     {
       "date": "2024-12-05",
       "actual": 2770.9,
-      "predicted": 2604.572,
-      "prob_down": 0.7491
+      "predicted": 2663.023,
+      "prob_down": 0.6685
     },
     {
       "date": "2024-12-06",
       "actual": 2765.0,
-      "predicted": 2615.494,
-      "prob_down": 0.7493
+      "predicted": 2675.115,
+      "prob_down": 0.6621
     },
     {
       "date": "2024-12-09",
       "actual": 2778.9,
-      "predicted": 2641.19,
-      "prob_down": 0.7495
+      "predicted": 2702.263,
+      "prob_down": 0.6564
     },
     {
       "date": "2024-12-10",
       "actual": 2738.4,
-      "predicted": 2673.18,
-      "prob_down": 0.7498
+      "predicted": 2735.867,
+      "prob_down": 0.6511
     },
     {
       "date": "2024-12-11",
       "actual": 2767.5,
-      "predicted": 2710.77,
-      "prob_down": 0.7501
+      "predicted": 2775.2,
+      "prob_down": 0.6462
     },
     {
       "date": "2024-12-12",
       "actual": 2769.8,
-      "predicted": 2664.208,
-      "prob_down": 0.7503
+      "predicted": 2728.577,
+      "prob_down": 0.6402
     },
     {
       "date": "2024-12-13",
       "actual": 2823.0,
-      "predicted": 2631.174,
-      "prob_down": 0.7504
+      "predicted": 2695.548,
+      "prob_down": 0.6352
     },
     {
       "date": "2024-12-16",
       "actual": 2812.5,
-      "predicted": 2625.514,
-      "prob_down": 0.7504
+      "predicted": 2690.661,
+      "prob_down": 0.6295
     },
     {
       "date": "2024-12-17",
       "actual": 2857.1,
-      "predicted": 2617.721,
-      "prob_down": 0.7503
+      "predicted": 2683.609,
+      "prob_down": 0.6236
     },
     {
       "date": "2024-12-18",
       "actual": 2875.8,
-      "predicted": 2609.416,
-      "prob_down": 0.7502
+      "predicted": 2676.057,
+      "prob_down": 0.6184
     },
     {
       "date": "2024-12-19",
       "actual": 2893.0,
-      "predicted": 2565.268,
-      "prob_down": 0.7498
+      "predicted": 2631.875,
+      "prob_down": 0.6119
     },
     {
       "date": "2024-12-20",
       "actual": 2876.7,
-      "predicted": 2601.897,
-      "prob_down": 0.7494
+      "predicted": 2670.558,
+      "prob_down": 0.6049
     },
     {
       "date": "2024-12-23",
       "actual": 2887.6,
-      "predicted": 2585.471,
-      "prob_down": 0.749
+      "predicted": 2654.974,
+      "prob_down": 0.5961
     },
     {
       "date": "2024-12-24",
       "actual": 2934.4,
-      "predicted": 2592.799,
-      "prob_down": 0.7485
+      "predicted": 2663.788,
+      "prob_down": 0.5868
     },
     {
       "date": "2024-12-26",
       "actual": 2932.6,
-      "predicted": 2611.001,
-      "prob_down": 0.748
+      "predicted": 2684.179,
+      "prob_down": 0.575
     },
     {
       "date": "2024-12-27",
       "actual": 2928.7,
-      "predicted": 2589.451,
-      "prob_down": 0.7476
+      "predicted": 2663.648,
+      "prob_down": 0.5635
     },
     {
       "date": "2024-12-30",
       "actual": 2945.4,
-      "predicted": 2575.989,
-      "prob_down": 0.7471
+      "predicted": 2651.596,
+      "prob_down": 0.5506
     },
     {
       "date": "2024-12-31",
       "actual": 2900.7,
-      "predicted": 2598.646,
-      "prob_down": 0.7467
+      "predicted": 2676.542,
+      "prob_down": 0.5389
     },
     {
       "date": "2025-01-02",
       "actual": 2949.0,
-      "predicted": 2626.324,
-      "prob_down": 0.7463
+      "predicted": 2707.11,
+      "prob_down": 0.5246
     },
     {
       "date": "2025-01-03",
       "actual": 2936.1,
-      "predicted": 2612.36,
-      "prob_down": 0.746
+      "predicted": 2694.527,
+      "prob_down": 0.5117
     },
     {
       "date": "2025-01-06",
       "actual": 2956.1,
-      "predicted": 2605.258,
-      "prob_down": 0.7457
+      "predicted": 2688.872,
+      "prob_down": 0.4997
     },
     {
       "date": "2025-01-07",
       "actual": 2953.2,
-      "predicted": 2623.054,
-      "prob_down": 0.7454
+      "predicted": 2708.919,
+      "prob_down": 0.4879
     },
     {
       "date": "2025-01-08",
       "actual": 2963.2,
-      "predicted": 2630.026,
-      "prob_down": 0.7451
+      "predicted": 2719.214,
+      "prob_down": 0.4779
     },
     {
       "date": "2025-01-10",
       "actual": 2918.8,
-      "predicted": 2672.06,
-      "prob_down": 0.745
+      "predicted": 2765.372,
+      "prob_down": 0.4703
     },
     {
       "date": "2025-01-13",
       "actual": 2930.6,
-      "predicted": 2636.36,
-      "prob_down": 0.7447
+      "predicted": 2730.7,
+      "prob_down": 0.4629
     },
     {
       "date": "2025-01-14",
       "actual": 2895.9,
-      "predicted": 2640.115,
-      "prob_down": 0.7444
+      "predicted": 2736.499,
+      "prob_down": 0.4564
     },
     {
       "date": "2025-01-15",
       "actual": 2848.5,
-      "predicted": 2675.09,
-      "prob_down": 0.7444
+      "predicted": 2774.534,
+      "prob_down": 0.4505
     },
     {
       "date": "2025-01-16",
       "actual": 2901.1,
-      "predicted": 2707.619,
-      "prob_down": 0.7445
+      "predicted": 2809.427,
+      "prob_down": 0.4463
     },
     {
       "date": "2025-01-17",
       "actual": 2920.6,
-      "predicted": 2705.362,
-      "prob_down": 0.7446
+      "predicted": 2808.255,
+      "prob_down": 0.4421
     },
     {
       "date": "2025-01-21",
       "actual": 2926.0,
-      "predicted": 2715.538,
-      "prob_down": 0.7449
+      "predicted": 2820.041,
+      "prob_down": 0.4389
     },
     {
       "date": "2025-01-22",
       "actual": 2926.6,
-      "predicted": 2726.866,
-      "prob_down": 0.7453
+      "predicted": 2833.003,
+      "prob_down": 0.4359
     },
     {
       "date": "2025-01-23",
       "actual": 2914.1,
-      "predicted": 2720.874,
-      "prob_down": 0.7457
+      "predicted": 2827.797,
+      "prob_down": 0.4337
     },
     {
       "date": "2025-01-24",
       "actual": 2899.4,
-      "predicted": 2734.346,
-      "prob_down": 0.7461
+      "predicted": 2842.739,
+      "prob_down": 0.4322
     },
     {
       "date": "2025-01-27",
       "actual": 2920.9,
-      "predicted": 2694.303,
-      "prob_down": 0.7466
+      "predicted": 2801.866,
+      "prob_down": 0.431
     },
     {
       "date": "2025-01-28",
       "actual": 2946.8,
-      "predicted": 2722.776,
-      "prob_down": 0.747
+      "predicted": 2832.14,
+      "prob_down": 0.4301
     },
     {
       "date": "2025-01-29",
       "actual": 2991.3,
-      "predicted": 2724.891,
-      "prob_down": 0.7475
+      "predicted": 2834.961,
+      "prob_down": 0.4293
     },
     {
       "date": "2025-01-30",
       "actual": 3001.1,
-      "predicted": 2777.059,
-      "prob_down": 0.748
+      "predicted": 2889.933,
+      "prob_down": 0.4284
     },
     {
       "date": "2025-01-31",
       "actual": 3006.1,
-      "predicted": 2766.546,
-      "prob_down": 0.7485
+      "predicted": 2879.536,
+      "prob_down": 0.4279
     },
     {
       "date": "2025-02-03",
       "actual": 3040.8,
-      "predicted": 2810.253,
-      "prob_down": 0.7491
+      "predicted": 2925.422,
+      "prob_down": 0.4278
     },
     {
       "date": "2025-02-04",
       "actual": 3041.2,
-      "predicted": 2828.436,
-      "prob_down": 0.7497
+      "predicted": 2944.61,
+      "prob_down": 0.4282
     },
     {
       "date": "2025-02-05",
       "actual": 3043.8,
-      "predicted": 2845.069,
-      "prob_down": 0.7504
+      "predicted": 2961.862,
+      "prob_down": 0.43
     },
     {
       "date": "2025-02-06",
       "actual": 3021.4,
-      "predicted": 2828.745,
-      "prob_down": 0.7511
+      "predicted": 2944.674,
+      "prob_down": 0.4321
     },
     {
       "date": "2025-02-07",
       "actual": 3015.6,
-      "predicted": 2839.198,
-      "prob_down": 0.7517
+      "predicted": 2954.852,
+      "prob_down": 0.4358
     },
     {
       "date": "2025-02-10",
       "actual": 3025.9,
-      "predicted": 2884.951,
-      "prob_down": 0.7524
+      "predicted": 3001.621,
+      "prob_down": 0.4409
     },
     {
       "date": "2025-02-11",
       "actual": 3022.5,
-      "predicted": 2882.938,
-      "prob_down": 0.753
+      "predicted": 2998.559,
+      "prob_down": 0.4464
     },
     {
       "date": "2025-02-12",
       "actual": 3061.0,
-      "predicted": 2878.891,
-      "prob_down": 0.7535
+      "predicted": 2993.336,
+      "prob_down": 0.4528
     },
     {
       "date": "2025-02-13",
       "actual": 3086.5,
-      "predicted": 2895.067,
-      "prob_down": 0.7541
+      "predicted": 3009.371,
+      "prob_down": 0.46
     },
     {
       "date": "2025-02-14",
       "actual": 3122.8,
-      "predicted": 2850.885,
-      "prob_down": 0.7545
+      "predicted": 2962.804,
+      "prob_down": 0.4665
     },
     {
       "date": "2025-02-18",
       "actual": 3146.0,
-      "predicted": 2898.151,
-      "prob_down": 0.755
+      "predicted": 3010.775,
+      "prob_down": 0.474
     },
     {
       "date": "2025-02-19",
       "actual": 3166.2,
-      "predicted": 2885.283,
-      "prob_down": 0.7555
+      "predicted": 2995.269,
+      "prob_down": 0.4817
     },
     {
       "date": "2025-02-20",
       "actual": 3121.7,
-      "predicted": 2904.737,
-      "prob_down": 0.756
+      "predicted": 3012.862,
+      "prob_down": 0.4899
     },
     {
       "date": "2025-02-21",
       "actual": 3035.4,
-      "predicted": 2901.708,
-      "prob_down": 0.7565
+      "predicted": 3006.872,
+      "prob_down": 0.4996
     },
     {
       "date": "2025-02-24",
       "actual": 2973.6,
-      "predicted": 2911.387,
-      "prob_down": 0.7571
+      "predicted": 3013.659,
+      "prob_down": 0.5114
     },
     {
       "date": "2025-02-25",
       "actual": 2990.2,
-      "predicted": 2867.641,
-      "prob_down": 0.7575
+      "predicted": 2964.413,
+      "prob_down": 0.5253
     },
     {
       "date": "2025-02-26",
       "actual": 3079.4,
-      "predicted": 2879.133,
-      "prob_down": 0.758
+      "predicted": 2972.712,
+      "prob_down": 0.5407
     },
     {
       "date": "2025-02-27",
       "actual": 3177.5,
-      "predicted": 2845.021,
-      "prob_down": 0.7584
+      "predicted": 2935.091,
+      "prob_down": 0.5567
     },
     {
       "date": "2025-02-28",
       "actual": 3244.6,
-      "predicted": 2798.496,
-      "prob_down": 0.7586
+      "predicted": 2884.633,
+      "prob_down": 0.5723
     },
     {
       "date": "2025-03-03",
       "actual": 3226.3,
-      "predicted": 2850.225,
-      "prob_down": 0.7589
+      "predicted": 2935.103,
+      "prob_down": 0.5899
     },
     {
       "date": "2025-03-04",
       "actual": 3240.4,
-      "predicted": 2869.416,
-      "prob_down": 0.7593
+      "predicted": 2951.537,
+      "prob_down": 0.6094
     },
     {
       "date": "2025-03-05",
       "actual": 3346.4,
-      "predicted": 2874.74,
-      "prob_down": 0.7595
+      "predicted": 2953.322,
+      "prob_down": 0.6301
     },
     {
       "date": "2025-03-06",
       "actual": 3328.4,
-      "predicted": 2875.331,
-      "prob_down": 0.7599
+      "predicted": 2949.917,
+      "prob_down": 0.6522
     },
     {
       "date": "2025-03-07",
       "actual": 3425.3,
-      "predicted": 2863.036,
-      "prob_down": 0.7601
+      "predicted": 2933.351,
+      "prob_down": 0.6742
     },
     {
       "date": "2025-03-10",
       "actual": 3419.4,
-      "predicted": 2848.609,
-      "prob_down": 0.7604
+      "predicted": 2915.081,
+      "prob_down": 0.694
     },
     {
       "date": "2025-03-11",
       "actual": 3294.1,
-      "predicted": 2869.751,
-      "prob_down": 0.7607
+      "predicted": 2933.228,
+      "prob_down": 0.7131
     },
     {
       "date": "2025-03-12",
       "actual": 3348.6,
-      "predicted": 2895.173,
-      "prob_down": 0.761
+      "predicted": 2955.645,
+      "prob_down": 0.7319
     },
     {
       "date": "2025-03-13",
       "actual": 3298.4,
-      "predicted": 2938.806,
-      "prob_down": 0.7613
+      "predicted": 2996.655,
+      "prob_down": 0.75
     },
     {
       "date": "2025-03-14",
       "actual": 3347.7,
-      "predicted": 2948.284,
-      "prob_down": 0.7616
+      "predicted": 3003.0,
+      "prob_down": 0.7665
     },
     {
       "date": "2025-03-17",
       "actual": 3333.6,
-      "predicted": 2952.987,
-      "prob_down": 0.762
+      "predicted": 3004.563,
+      "prob_down": 0.7808
     },
     {
       "date": "2025-03-18",
       "actual": 3319.1,
-      "predicted": 2986.825,
-      "prob_down": 0.7624
+      "predicted": 3036.567,
+      "prob_down": 0.7925
     },
     {
       "date": "2025-03-19",
       "actual": 3222.2,
-      "predicted": 2986.929,
-      "prob_down": 0.7628
+      "predicted": 3034.758,
+      "prob_down": 0.7983
     },
     {
       "date": "2025-03-20",
       "actual": 3243.3,
-      "predicted": 2989.192,
-      "prob_down": 0.7632
+      "predicted": 3034.523,
+      "prob_down": 0.8036
     },
     {
       "date": "2025-03-21",
       "actual": 3322.3,
-      "predicted": 2966.934,
-      "prob_down": 0.7636
+      "predicted": 3009.246,
+      "prob_down": 0.8091
     },
     {
       "date": "2025-03-24",
       "actual": 3422.8,
-      "predicted": 2961.026,
-      "prob_down": 0.7638
+      "predicted": 3000.91,
+      "prob_down": 0.8139
     },
     {
       "date": "2025-03-25",
       "actual": 3391.9,
-      "predicted": 2970.932,
-      "prob_down": 0.764
+      "predicted": 3008.805,
+      "prob_down": 0.8186
     },
     {
       "date": "2025-03-26",
       "actual": 3306.0,
-      "predicted": 2967.432,
-      "prob_down": 0.7642
+      "predicted": 3003.536,
+      "prob_down": 0.8224
     },
     {
       "date": "2025-03-27",
       "actual": 3344.0,
-      "predicted": 3005.083,
-      "prob_down": 0.7644
+      "predicted": 3040.14,
+      "prob_down": 0.8259
     },
     {
       "date": "2025-03-28",
       "actual": 3228.0,
-      "predicted": 3029.967,
-      "prob_down": 0.7647
+      "predicted": 3063.932,
+      "prob_down": 0.8292
     },
     {
       "date": "2025-03-31",
       "actual": 3247.8,
-      "predicted": 3065.451,
-      "prob_down": 0.7651
+      "predicted": 3098.448,
+      "prob_down": 0.8325
     },
     {
       "date": "2025-04-01",
       "actual": 3188.3,
-      "predicted": 3088.036,
-      "prob_down": 0.7656
+      "predicted": 3119.84,
+      "prob_down": 0.8359
     },
     {
       "date": "2025-04-02",
       "actual": 3226.6,
-      "predicted": 3107.646,
-      "prob_down": 0.766
+      "predicted": 3138.19,
+      "prob_down": 0.8394
     },
     {
       "date": "2025-04-03",
       "actual": 3187.2,
-      "predicted": 3063.796,
-      "prob_down": 0.7666
+      "predicted": 3092.279,
+      "prob_down": 0.8431
     },
     {
       "date": "2025-04-04",
       "actual": 3233.5,
-      "predicted": 2979.248,
-      "prob_down": 0.7671
+      "predicted": 3005.122,
+      "prob_down": 0.8465
     },
     {
       "date": "2025-04-07",
       "actual": 3284.6,
-      "predicted": 2918.992,
-      "prob_down": 0.7674
+      "predicted": 2942.381,
+      "prob_down": 0.8494
     },
     {
       "date": "2025-04-08",
       "actual": 3313.5,
-      "predicted": 2935.872,
-      "prob_down": 0.7676
+      "predicted": 2957.105,
+      "prob_down": 0.8521
     },
     {
       "date": "2025-04-09",
       "actual": 3295.0,
-      "predicted": 3023.823,
-      "prob_down": 0.7676
+      "predicted": 3043.654,
+      "prob_down": 0.8547
     },
     {
       "date": "2025-04-10",
       "actual": 3365.8,
-      "predicted": 3120.354,
-      "prob_down": 0.768
+      "predicted": 3138.343,
+      "prob_down": 0.8581
     },
     {
       "date": "2025-04-11",
       "actual": 3300.4,
-      "predicted": 3186.242,
-      "prob_down": 0.7683
+      "predicted": 3201.931,
+      "prob_down": 0.8621
     },
     {
       "date": "2025-04-14",
       "actual": 3294.9,
-      "predicted": 3167.997,
-      "prob_down": 0.7687
+      "predicted": 3181.447,
+      "prob_down": 0.8658
     },
     {
       "date": "2025-04-15",
       "actual": 3317.1,
-      "predicted": 3181.467,
-      "prob_down": 0.7692
+      "predicted": 3193.032,
+      "prob_down": 0.8694
     },
     {
       "date": "2025-04-16",
       "actual": 3288.9,
-      "predicted": 3285.049,
-      "prob_down": 0.7698
+      "predicted": 3294.805,
+      "prob_down": 0.8737
     },
     {
       "date": "2025-04-17",
       "actual": 3397.2,
-      "predicted": 3266.806,
-      "prob_down": 0.7704
+      "predicted": 3274.692,
+      "prob_down": 0.8775
     },
     {
       "date": "2025-04-21",
       "actual": 3377.1,
-      "predicted": 3361.335,
-      "prob_down": 0.7711
+      "predicted": 3367.249,
+      "prob_down": 0.8816
     },
     {
       "date": "2025-04-22",
       "actual": 3399.2,
-      "predicted": 3354.936,
-      "prob_down": 0.7718
+      "predicted": 3358.998,
+      "prob_down": 0.8849
     },
     {
       "date": "2025-04-23",
       "actual": 3375.1,
-      "predicted": 3231.484,
-      "prob_down": 0.7722
+      "predicted": 3234.298,
+      "prob_down": 0.8872
     },
     {
       "date": "2025-04-24",
       "actual": 3346.6,
-      "predicted": 3284.456,
-      "prob_down": 0.7727
+      "predicted": 3286.253,
+      "prob_down": 0.8892
     },
     {
       "date": "2025-04-25",
       "actual": 3354.9,
-      "predicted": 3234.742,
-      "prob_down": 0.7731
+      "predicted": 3235.976,
+      "prob_down": 0.8907
     },
     {
       "date": "2025-04-28",
       "actual": 3343.4,
-      "predicted": 3282.634,
-      "prob_down": 0.7735
+      "predicted": 3283.423,
+      "prob_down": 0.8921
     },
     {
       "date": "2025-04-29",
       "actual": 3343.7,
-      "predicted": 3268.366,
-      "prob_down": 0.7739
+      "predicted": 3269.027,
+      "prob_down": 0.8931
     },
     {
       "date": "2025-04-30",
       "actual": 3402.4,
-      "predicted": 3253.779,
-      "prob_down": 0.7743
+      "predicted": 3254.526,
+      "prob_down": 0.8938
     },
     {
       "date": "2025-05-01",
       "actual": 3452.8,
-      "predicted": 3158.571,
-      "prob_down": 0.7744
+      "predicted": 3159.587,
+      "prob_down": 0.894
     },
     {
       "date": "2025-05-02",
       "actual": 3417.3,
-      "predicted": 3179.135,
-      "prob_down": 0.7745
+      "predicted": 3180.33,
+      "prob_down": 0.8942
     },
     {
       "date": "2025-05-05",
       "actual": 3406.9,
-      "predicted": 3256.463,
-      "prob_down": 0.7746
+      "predicted": 3257.68,
+      "prob_down": 0.8945
     },
     {
       "date": "2025-05-06",
       "actual": 3408.1,
-      "predicted": 3354.786,
-      "prob_down": 0.7749
+      "predicted": 3355.861,
+      "prob_down": 0.8952
     },
     {
       "date": "2025-05-07",
       "actual": 3385.7,
-      "predicted": 3324.26,
-      "prob_down": 0.7751
+      "predicted": 3325.398,
+      "prob_down": 0.8955
     },
     {
       "date": "2025-05-08",
       "actual": 3395.0,
-      "predicted": 3239.928,
-      "prob_down": 0.7752
+      "predicted": 3241.337,
+      "prob_down": 0.8955
     },
     {
       "date": "2025-05-09",
       "actual": 3333.9,
-      "predicted": 3277.059,
-      "prob_down": 0.7753
+      "predicted": 3278.64,
+      "prob_down": 0.8956
     },
     {
       "date": "2025-05-12",
       "actual": 3343.1,
-      "predicted": 3163.347,
-      "prob_down": 0.7751
+      "predicted": 3165.403,
+      "prob_down": 0.8951
     },
     {
       "date": "2025-05-13",
       "actual": 3348.0,
-      "predicted": 3182.775,
-      "prob_down": 0.775
+      "predicted": 3185.198,
+      "prob_down": 0.8948
     },
     {
       "date": "2025-05-14",
       "actual": 3287.6,
-      "predicted": 3124.541,
-      "prob_down": 0.7747
+      "predicted": 3127.336,
+      "prob_down": 0.8943
     },
     {
       "date": "2025-05-15",
       "actual": 3307.7,
-      "predicted": 3162.151,
-      "prob_down": 0.7745
+      "predicted": 3165.263,
+      "prob_down": 0.894
     },
     {
       "date": "2025-05-16",
       "actual": 3349.8,
-      "predicted": 3123.612,
-      "prob_down": 0.7742
+      "predicted": 3127.078,
+      "prob_down": 0.8935
     },
     {
       "date": "2025-05-19",
       "actual": 3359.7,
-      "predicted": 3169.072,
-      "prob_down": 0.774
+      "predicted": 3172.774,
+      "prob_down": 0.8933
     },
     {
       "date": "2025-05-20",
       "actual": 3342.9,
-      "predicted": 3219.184,
-      "prob_down": 0.7738
+      "predicted": 3223.035,
+      "prob_down": 0.8933
     },
     {
       "date": "2025-05-21",
       "actual": 3342.8,
-      "predicted": 3247.533,
-      "prob_down": 0.7737
+      "predicted": 3251.312,
+      "prob_down": 0.8934
     },
     {
       "date": "2025-05-22",
       "actual": 3316.9,
-      "predicted": 3229.408,
-      "prob_down": 0.7737
+      "predicted": 3233.113,
+      "prob_down": 0.8934
     },
     {
       "date": "2025-05-23",
       "actual": 3321.0,
-      "predicted": 3298.774,
-      "prob_down": 0.7738
+      "predicted": 3302.249,
+      "prob_down": 0.8937
     },
     {
       "date": "2025-05-27",
       "actual": 3325.7,
-      "predicted": 3234.586,
-      "prob_down": 0.7738
+      "predicted": 3238.045,
+      "prob_down": 0.8937
     },
     {
       "date": "2025-05-28",
       "actual": 3364.0,
-      "predicted": 3229.136,
-      "prob_down": 0.7738
+      "predicted": 3232.697,
+      "prob_down": 0.8937
     },
     {
       "date": "2025-05-29",
       "actual": 3359.1,
-      "predicted": 3250.811,
-      "prob_down": 0.7739
+      "predicted": 3254.463,
+      "prob_down": 0.8938
     },
     {
       "date": "2025-05-30",
       "actual": 3336.7,
-      "predicted": 3223.076,
-      "prob_down": 0.774
+      "predicted": 3226.903,
+      "prob_down": 0.8937
     },
     {
       "date": "2025-06-02",
       "actual": 3359.1,
-      "predicted": 3329.072,
-      "prob_down": 0.7742
+      "predicted": 3333.006,
+      "prob_down": 0.894
     },
     {
       "date": "2025-06-03",
       "actual": 3345.3,
-      "predicted": 3309.192,
-      "prob_down": 0.7743
+      "predicted": 3313.304,
+      "prob_down": 0.8941
     },
     {
       "date": "2025-06-04",
       "actual": 3358.3,
-      "predicted": 3330.617,
-      "prob_down": 0.7746
+      "predicted": 3334.969,
+      "prob_down": 0.8942
     },
     {
       "date": "2025-06-05",
       "actual": 3406.4,
-      "predicted": 3306.79,
-      "prob_down": 0.7748
+      "predicted": 3311.38,
+      "prob_down": 0.8943
     },
     {
       "date": "2025-06-06",
       "actual": 3443.7,
-      "predicted": 3278.715,
-      "prob_down": 0.7749
+      "predicted": 3283.594,
+      "prob_down": 0.8942
     },
     {
       "date": "2025-06-09",
       "actual": 3397.6,
-      "predicted": 3286.723,
-      "prob_down": 0.775
+      "predicted": 3291.875,
+      "prob_down": 0.8942
     },
     {
       "date": "2025-06-10",
       "actual": 3373.5,
-      "predicted": 3275.353,
-      "prob_down": 0.7751
+      "predicted": 3280.766,
+      "prob_down": 0.8941
     },
     {
       "date": "2025-06-11",
       "actual": 3335.6,
-      "predicted": 3275.541,
-      "prob_down": 0.7752
+      "predicted": 3281.2,
+      "prob_down": 0.894
     },
     {
       "date": "2025-06-12",
       "actual": 3310.0,
-      "predicted": 3332.912,
-      "prob_down": 0.7754
+      "predicted": 3338.754,
+      "prob_down": 0.8942
     },
     {
       "date": "2025-06-13",
       "actual": 3324.0,
-      "predicted": 3382.16,
-      "prob_down": 0.7756
+      "predicted": 3388.021,
+      "prob_down": 0.8946
     },
     {
       "date": "2025-06-16",
       "actual": 3295.8,
-      "predicted": 3347.255,
-      "prob_down": 0.7758
+      "predicted": 3353.09,
+      "prob_down": 0.8947
     },
     {
       "date": "2025-06-17",
       "actual": 3293.2,
-      "predicted": 3337.0,
-      "prob_down": 0.776
+      "predicted": 3342.822,
+      "prob_down": 0.8949
     },
     {
       "date": "2025-06-18",
       "actual": 3399.8,
-      "predicted": 3338.109,
-      "prob_down": 0.7762
+      "predicted": 3343.945,
+      "prob_down": 0.895
     },
     {
       "date": "2025-06-20",
       "actual": 3426.4,
-      "predicted": 3316.126,
-      "prob_down": 0.7764
+      "predicted": 3321.944,
+      "prob_down": 0.8951
     },
     {
       "date": "2025-06-23",
       "actual": 3434.7,
-      "predicted": 3325.19,
-      "prob_down": 0.7765
+      "predicted": 3331.022,
+      "prob_down": 0.8951
     },
     {
       "date": "2025-06-24",
       "actual": 3433.4,
-      "predicted": 3265.265,
-      "prob_down": 0.7766
+      "predicted": 3271.221,
+      "prob_down": 0.895
     },
     {
       "date": "2025-06-25",
       "actual": 3453.7,
-      "predicted": 3274.195,
-      "prob_down": 0.7766
+      "predicted": 3280.423,
+      "prob_down": 0.8949
     },
     {
       "date": "2025-06-26",
       "actual": 3491.3,
-      "predicted": 3278.897,
-      "prob_down": 0.7767
+      "predicted": 3285.4,
+      "prob_down": 0.8948
     },
     {
       "date": "2025-06-27",
       "actual": 3404.7,
-      "predicted": 3219.686,
-      "prob_down": 0.7766
+      "predicted": 3226.469,
+      "prob_down": 0.8946
     },
     {
       "date": "2025-06-30",
       "actual": 3399.0,
-      "predicted": 3239.336,
-      "prob_down": 0.7766
+      "predicted": 3246.392,
+      "prob_down": 0.8944
     },
     {
       "date": "2025-07-01",
       "actual": 3408.3,
-      "predicted": 3280.519,
-      "prob_down": 0.7767
+      "predicted": 3287.835,
+      "prob_down": 0.8944
     },
     {
       "date": "2025-07-02",
       "actual": 3383.2,
-      "predicted": 3290.159,
-      "prob_down": 0.7767
+      "predicted": 3297.667,
+      "prob_down": 0.8944
     },
     {
       "date": "2025-07-03",
       "actual": 3382.6,
-      "predicted": 3273.681,
-      "prob_down": 0.7767
+      "predicted": 3281.366,
+      "prob_down": 0.8942
     },
     {
       "date": "2025-07-07",
       "actual": 3378.0,
-      "predicted": 3273.608,
-      "prob_down": 0.7767
+      "predicted": 3281.452,
+      "prob_down": 0.8941
     },
     {
       "date": "2025-07-08",
       "actual": 3358.7,
-      "predicted": 3248.285,
-      "prob_down": 0.7766
+      "predicted": 3256.235,
+      "prob_down": 0.8939
     },
     {
       "date": "2025-07-09",
       "actual": 3388.5,
-      "predicted": 3252.329,
-      "prob_down": 0.7766
+      "predicted": 3260.444,
+      "prob_down": 0.8937
     },
     {
       "date": "2025-07-10",
       "actual": 3381.6,
-      "predicted": 3256.961,
-      "prob_down": 0.7765
+      "predicted": 3265.258,
+      "prob_down": 0.8935
     },
     {
       "date": "2025-07-11",
       "actual": 3418.5,
-      "predicted": 3294.513,
-      "prob_down": 0.7765
+      "predicted": 3302.98,
+      "prob_down": 0.8935
     },
     {
       "date": "2025-07-14",
       "actual": 3417.5,
-      "predicted": 3289.764,
-      "prob_down": 0.7764
+      "predicted": 3298.291,
+      "prob_down": 0.8934
     },
     {
       "date": "2025-07-15",
       "actual": 3433.0,
-      "predicted": 3267.917,
-      "prob_down": 0.7764
+      "predicted": 3276.482,
+      "prob_down": 0.8932
     },
     {
       "date": "2025-07-16",
       "actual": 3448.6,
-      "predicted": 3289.939,
-      "prob_down": 0.7763
+      "predicted": 3298.551,
+      "prob_down": 0.8931
     },
     {
       "date": "2025-07-17",
       "actual": 3474.3,
-      "predicted": 3276.495,
-      "prob_down": 0.7762
+      "predicted": 3285.148,
+      "prob_down": 0.8929
     },
     {
       "date": "2025-07-18",
       "actual": 3516.1,
-      "predicted": 3289.274,
-      "prob_down": 0.7762
+      "predicted": 3298.009,
+      "prob_down": 0.8929
     },
     {
       "date": "2025-07-21",
       "actual": 3592.2,
-      "predicted": 3336.366,
-      "prob_down": 0.7763
+      "predicted": 3345.182,
+      "prob_down": 0.893
     },
     {
       "date": "2025-07-22",
       "actual": 3635.5,
-      "predicted": 3372.794,
-      "prob_down": 0.7764
+      "predicted": 3381.672,
+      "prob_down": 0.8932
     },
     {
       "date": "2025-07-23",
       "actual": 3606.7,
-      "predicted": 3327.511,
-      "prob_down": 0.7765
+      "predicted": 3336.416,
+      "prob_down": 0.8932
     },
     {
       "date": "2025-07-24",
       "actual": 3653.3,
-      "predicted": 3303.811,
-      "prob_down": 0.7765
+      "predicted": 3312.863,
+      "prob_down": 0.8931
     },
     {
       "date": "2025-07-25",
       "actual": 3677.4,
-      "predicted": 3266.629,
-      "prob_down": 0.7765
+      "predicted": 3275.87,
+      "prob_down": 0.8928
     },
     {
       "date": "2025-07-28",
       "actual": 3682.2,
-      "predicted": 3241.569,
-      "prob_down": 0.7764
+      "predicted": 3251.081,
+      "prob_down": 0.8925
     },
     {
       "date": "2025-07-29",
       "actual": 3682.0,
-      "predicted": 3255.327,
-      "prob_down": 0.7764
+      "predicted": 3265.116,
+      "prob_down": 0.8923
     },
     {
       "date": "2025-07-30",
       "actual": 3673.6,
-      "predicted": 3227.805,
-      "prob_down": 0.7763
+      "predicted": 3237.813,
+      "prob_down": 0.8919
     },
     {
       "date": "2025-07-31",
       "actual": 3686.4,
-      "predicted": 3225.41,
-      "prob_down": 0.7762
+      "predicted": 3235.605,
+      "prob_down": 0.8916
     },
     {
       "date": "2025-08-01",
       "actual": 3719.0,
-      "predicted": 3329.922,
-      "prob_down": 0.7763
+      "predicted": 3340.257,
+      "prob_down": 0.8919
     },
     {
       "date": "2025-08-04",
       "actual": 3725.1,
-      "predicted": 3355.968,
-      "prob_down": 0.7764
+      "predicted": 3366.266,
+      "prob_down": 0.8921
     },
     {
       "date": "2025-08-05",
       "actual": 3717.8,
-      "predicted": 3364.034,
-      "prob_down": 0.7765
+      "predicted": 3374.295,
+      "prob_down": 0.8923
     },
     {
       "date": "2025-08-06",
       "actual": 3678.3,
-      "predicted": 3362.643,
-      "prob_down": 0.7767
+      "predicted": 3372.877,
+      "prob_down": 0.8925
     },
     {
       "date": "2025-08-07",
       "actual": 3705.8,
-      "predicted": 3382.376,
-      "prob_down": 0.7769
+      "predicted": 3392.667,
+      "prob_down": 0.8928
     },
     {
       "date": "2025-08-08",
       "actual": 3775.1,
-      "predicted": 3419.001,
-      "prob_down": 0.7772
+      "predicted": 3429.401,
+      "prob_down": 0.893
     },
     {
       "date": "2025-08-11",
       "actual": 3815.7,
-      "predicted": 3334.03,
-      "prob_down": 0.7773
+      "predicted": 3344.398,
+      "prob_down": 0.893
     },
     {
       "date": "2025-08-12",
       "actual": 3768.1,
-      "predicted": 3328.324,
-      "prob_down": 0.7774
+      "predicted": 3338.84,
+      "prob_down": 0.8929
     },
     {
       "date": "2025-08-13",
       "actual": 3771.1,
-      "predicted": 3337.296,
-      "prob_down": 0.7775
+      "predicted": 3348.012,
+      "prob_down": 0.8929
     },
     {
       "date": "2025-08-14",
       "actual": 3809.0,
-      "predicted": 3312.632,
-      "prob_down": 0.7775
+      "predicted": 3323.516,
+      "prob_down": 0.8928
     },
     {
       "date": "2025-08-15",
       "actual": 3855.2,
-      "predicted": 3311.998,
-      "prob_down": 0.7775
+      "predicted": 3323.047,
+      "prob_down": 0.8927
     },
     {
       "date": "2025-08-18",
       "actual": 3873.2,
-      "predicted": 3307.477,
-      "prob_down": 0.7775
+      "predicted": 3318.692,
+      "prob_down": 0.8925
     },
     {
       "date": "2025-08-19",
       "actual": 3897.5,
-      "predicted": 3288.588,
-      "prob_down": 0.7775
+      "predicted": 3299.914,
+      "prob_down": 0.8923
     },
     {
       "date": "2025-08-20",
       "actual": 3868.1,
-      "predicted": 3317.786,
-      "prob_down": 0.7775
+      "predicted": 3329.291,
+      "prob_down": 0.8923
     },
     {
       "date": "2025-08-21",
       "actual": 3908.9,
-      "predicted": 3311.08,
-      "prob_down": 0.7775
+      "predicted": 3322.613,
+      "prob_down": 0.8922
     },
     {
       "date": "2025-08-22",
       "actual": 3976.3,
-      "predicted": 3347.19,
-      "prob_down": 0.7775
+      "predicted": 3358.818,
+      "prob_down": 0.8922
     },
     {
       "date": "2025-08-25",
       "actual": 4004.4,
-      "predicted": 3346.172,
-      "prob_down": 0.7775
+      "predicted": 3357.898,
+      "prob_down": 0.8922
     },
     {
       "date": "2025-08-26",
       "actual": 4070.5,
-      "predicted": 3361.293,
-      "prob_down": 0.7776
+      "predicted": 3373.132,
+      "prob_down": 0.8922
     },
     {
       "date": "2025-08-27",
       "actual": 3972.6,
-      "predicted": 3376.489,
-      "prob_down": 0.7777
+      "predicted": 3388.463,
+      "prob_down": 0.8923
     },
     {
       "date": "2025-08-28",
       "actual": 4000.4,
-      "predicted": 3401.526,
-      "prob_down": 0.7778
+      "predicted": 3413.647,
+      "prob_down": 0.8924
     },
     {
       "date": "2025-08-29",
       "actual": 4133.0,
-      "predicted": 3442.295,
-      "prob_down": 0.7781
+      "predicted": 3454.582,
+      "prob_down": 0.8927
     },
     {
       "date": "2025-09-02",
       "actual": 4163.4,
-      "predicted": 3516.645,
-      "prob_down": 0.7784
+      "predicted": 3529.08,
+      "prob_down": 0.8931
     },
     {
       "date": "2025-09-03",
       "actual": 4201.6,
-      "predicted": 3558.794,
-      "prob_down": 0.7787
+      "predicted": 3571.219,
+      "prob_down": 0.8936
     },
     {
       "date": "2025-09-04",
       "actual": 4304.6,
-      "predicted": 3530.312,
-      "prob_down": 0.7791
+      "predicted": 3542.674,
+      "prob_down": 0.8939
     },
     {
       "date": "2025-09-05",
       "actual": 4213.3,
-      "predicted": 3575.581,
-      "prob_down": 0.7795
+      "predicted": 3588.076,
+      "prob_down": 0.8944
     },
     {
       "date": "2025-09-08",
       "actual": 4359.4,
-      "predicted": 3598.767,
-      "prob_down": 0.7799
+      "predicted": 3611.367,
+      "prob_down": 0.8949
     },
     {
       "date": "2025-09-09",
       "actual": 4109.1,
-      "predicted": 3603.074,
-      "prob_down": 0.7804
+      "predicted": 3615.8,
+      "prob_down": 0.8953
     },
     {
       "date": "2025-09-10",
       "actual": 4065.4,
-      "predicted": 3602.507,
-      "prob_down": 0.7808
+      "predicted": 3615.381,
+      "prob_down": 0.8956
     },
     {
       "date": "2025-09-11",
       "actual": 4145.6,
-      "predicted": 3593.928,
-      "prob_down": 0.7812
+      "predicted": 3606.933,
+      "prob_down": 0.8959
     },
     {
       "date": "2025-09-12",
       "actual": 4137.8,
-      "predicted": 3606.129,
-      "prob_down": 0.7815
+      "predicted": 3619.333,
+      "prob_down": 0.8962
     },
     {
       "date": "2025-09-15",
       "actual": 4019.7,
-      "predicted": 3637.732,
-      "prob_down": 0.7819
+      "predicted": 3651.073,
+      "prob_down": 0.8965
     },
     {
       "date": "2025-09-16",
       "actual": 3983.1,
-      "predicted": 3643.409,
-      "prob_down": 0.7822
+      "predicted": 3656.766,
+      "prob_down": 0.8968
     },
     {
       "date": "2025-09-17",
       "actual": 4000.7,
-      "predicted": 3635.997,
-      "prob_down": 0.7825
+      "predicted": 3649.369,
+      "prob_down": 0.8971
     },
     {
       "date": "2025-09-18",
       "actual": 4015.9,
-      "predicted": 3597.177,
-      "prob_down": 0.7827
+      "predicted": 3610.474,
+      "prob_down": 0.8972
     },
     {
       "date": "2025-09-19",
       "actual": 3996.5,
-      "predicted": 3623.945,
-      "prob_down": 0.7829
+      "predicted": 3637.295,
+      "prob_down": 0.8974
     },
     {
       "date": "2025-09-22",
       "actual": 4014.0,
-      "predicted": 3691.588,
-      "prob_down": 0.7832
+      "predicted": 3704.965,
+      "prob_down": 0.8977
     },
     {
       "date": "2025-09-23",
       "actual": 3960.5,
-      "predicted": 3731.109,
-      "prob_down": 0.7834
+      "predicted": 3744.392,
+      "prob_down": 0.8981
     },
     {
       "date": "2025-09-24",
       "actual": 3992.9,
-      "predicted": 3684.395,
-      "prob_down": 0.7836
+      "predicted": 3697.466,
+      "prob_down": 0.8983
     },
     {
       "date": "2025-09-25",
       "actual": 3991.0,
-      "predicted": 3687.232,
-      "prob_down": 0.7838
+      "predicted": 3700.222,
+      "prob_down": 0.8984
     },
     {
       "date": "2025-09-26",
       "actual": 4009.8,
-      "predicted": 3724.176,
-      "prob_down": 0.784
+      "predicted": 3737.108,
+      "prob_down": 0.8987
     },
     {
       "date": "2025-09-29",
       "actual": 4122.0,
-      "predicted": 3769.198,
-      "prob_down": 0.7842
+      "predicted": 3782.038,
+      "prob_down": 0.899
     },
     {
       "date": "2025-09-30",
       "actual": 4116.3,
-      "predicted": 3786.619,
-      "prob_down": 0.7844
+      "predicted": 3799.307,
+      "prob_down": 0.8993
     },
     {
       "date": "2025-10-01",
       "actual": 4213.6,
-      "predicted": 3810.165,
-      "prob_down": 0.7847
+      "predicted": 3822.738,
+      "prob_down": 0.8996
     },
     {
       "date": "2025-10-02",
       "actual": 4194.5,
-      "predicted": 3781.212,
-      "prob_down": 0.7849
+      "predicted": 3793.631,
+      "prob_down": 0.8999
     },
     {
       "date": "2025-10-03",
       "actual": 4094.2,
-      "predicted": 3820.904,
-      "prob_down": 0.7851
+      "predicted": 3833.296,
+      "prob_down": 0.9001
     },
     {
       "date": "2025-10-06",
       "actual": 4074.5,
-      "predicted": 3886.589,
-      "prob_down": 0.7854
+      "predicted": 3898.982,
+      "prob_down": 0.9005
     },
     {
       "date": "2025-10-07",
       "actual": 4066.5,
-      "predicted": 3913.829,
-      "prob_down": 0.7857
+      "predicted": 3926.16,
+      "prob_down": 0.9008
     },
     {
       "date": "2025-10-08",
       "actual": 4082.8,
-      "predicted": 3978.168,
-      "prob_down": 0.786
+      "predicted": 3990.504,
+      "prob_down": 0.9012
     },
     {
       "date": "2025-10-09",
       "actual": 4060.0,
-      "predicted": 3882.235,
-      "prob_down": 0.7862
+      "predicted": 3894.439,
+      "prob_down": 0.9013
     },
     {
       "date": "2025-10-10",
       "actual": 4079.5,
-      "predicted": 3909.267,
-      "prob_down": 0.7865
+      "predicted": 3921.416,
+      "prob_down": 0.9016
     },
     {
       "date": "2025-10-13",
       "actual": 4094.2,
-      "predicted": 4038.673,
-      "prob_down": 0.7868
+      "predicted": 4050.827,
+      "prob_down": 0.9021
     },
     {
       "date": "2025-10-14",
       "actual": 4140.0,
-      "predicted": 4068.146,
-      "prob_down": 0.7872
+      "predicted": 4080.091,
+      "prob_down": 0.9025
     },
     {
       "date": "2025-10-15",
       "actual": 4165.2,
-      "predicted": 4105.212,
-      "prob_down": 0.7875
+      "predicted": 4116.95,
+      "prob_down": 0.903
     },
     {
       "date": "2025-10-16",
       "actual": 4254.9,
-      "predicted": 4205.614,
-      "prob_down": 0.788
+      "predicted": 4217.073,
+      "prob_down": 0.9036
     },
     {
       "date": "2025-10-17",
       "actual": 4274.8,
-      "predicted": 4116.041,
-      "prob_down": 0.7883
+      "predicted": 4127.225,
+      "prob_down": 0.9039
     },
     {
       "date": "2025-10-20",
       "actual": 4220.8,
-      "predicted": 4258.36,
-      "prob_down": 0.7888
+      "predicted": 4269.696,
+      "prob_down": 0.9043
     },
     {
       "date": "2025-10-21",
       "actual": 4232.5,
-      "predicted": 4013.426,
-      "prob_down": 0.7889
+      "predicted": 4024.721,
+      "prob_down": 0.9042
     },
     {
       "date": "2025-10-22",
       "actual": 4243.0,
-      "predicted": 3970.513,
-      "prob_down": 0.7891
+      "predicted": 3982.087,
+      "prob_down": 0.9041
     },
     {
       "date": "2025-10-23",
       "actual": 4243.0,
-      "predicted": 4048.67,
-      "prob_down": 0.7892
+      "predicted": 4060.619,
+      "prob_down": 0.9041
     },
     {
       "date": "2025-10-24",
       "actual": 4217.7,
-      "predicted": 4040.864,
-      "prob_down": 0.7893
+      "predicted": 4053.034,
+      "prob_down": 0.9041
     },
     {
       "date": "2025-10-27",
       "actual": 4236.2,
-      "predicted": 3925.39,
-      "prob_down": 0.7892
+      "predicted": 3937.652,
+      "prob_down": 0.9038
     },
     {
       "date": "2025-10-28",
       "actual": 4224.7,
-      "predicted": 3889.62,
-      "prob_down": 0.7892
+      "predicted": 3902.097,
+      "prob_down": 0.9036
     },
     {
       "date": "2025-10-29",
       "actual": 4313.0,
-      "predicted": 3906.885,
-      "prob_down": 0.7891
+      "predicted": 3919.583,
+      "prob_down": 0.9034
     },
     {
       "date": "2025-10-30",
       "actual": 4328.3,
-      "predicted": 3921.827,
-      "prob_down": 0.7891
+      "predicted": 3934.671,
+      "prob_down": 0.9033
     },
     {
       "date": "2025-10-31",
       "actual": 4335.2,
-      "predicted": 3903.018,
-      "prob_down": 0.7889
+      "predicted": 3915.849,
+      "prob_down": 0.9032
     },
     {
       "date": "2025-11-03",
       "actual": 4332.3,
-      "predicted": 3920.264,
-      "prob_down": 0.7889
+      "predicted": 3933.089,
+      "prob_down": 0.9031
     },
     {
       "date": "2025-11-04",
       "actual": 4373.9,
-      "predicted": 3868.194,
-      "prob_down": 0.7887
+      "predicted": 3880.87,
+      "prob_down": 0.9029
     },
     {
       "date": "2025-11-05",
       "actual": 4364.5,
-      "predicted": 3900.057,
-      "prob_down": 0.7886
+      "predicted": 3912.657,
+      "prob_down": 0.9028
     },
     {
       "date": "2025-11-06",
       "actual": 4387.3,
-      "predicted": 3898.379,
-      "prob_down": 0.7885
+      "predicted": 3910.789,
+      "prob_down": 0.9028
     },
     {
       "date": "2025-11-07",
       "actual": 4469.4,
-      "predicted": 3916.894,
-      "prob_down": 0.7885
+      "predicted": 3929.121,
+      "prob_down": 0.9029
     },
     {
       "date": "2025-11-10",
       "actual": 4505.7,
-      "predicted": 4026.586,
-      "prob_down": 0.7885
+      "predicted": 4038.736,
+      "prob_down": 0.9031
     },
     {
       "date": "2025-11-11",
       "actual": 4502.8,
-      "predicted": 4020.985,
-      "prob_down": 0.7885
+      "predicted": 4032.951,
+      "prob_down": 0.9032
     },
     {
       "date": "2025-11-12",
       "actual": 4552.7,
-      "predicted": 4115.932,
-      "prob_down": 0.7887
+      "predicted": 4127.91,
+      "prob_down": 0.9035
     },
     {
       "date": "2025-11-13",
       "actual": 4343.6,
-      "predicted": 4097.121,
-      "prob_down": 0.7888
+      "predicted": 4108.952,
+      "prob_down": 0.9037
     },
     {
       "date": "2025-11-14",
       "actual": 4386.3,
-      "predicted": 3999.038,
-      "prob_down": 0.7888
+      "predicted": 4010.678,
+      "prob_down": 0.9037
     },
     {
       "date": "2025-11-17",
       "actual": 4341.1,
-      "predicted": 3979.824,
-      "prob_down": 0.7889
+      "predicted": 3991.361,
+      "prob_down": 0.9037
     },
     {
       "date": "2025-11-18",
       "actual": 4329.6,
-      "predicted": 3972.131,
-      "prob_down": 0.7889
+      "predicted": 3983.449,
+      "prob_down": 0.9038
     },
     {
       "date": "2025-11-19",
       "actual": 4451.5,
-      "predicted": 3988.206,
-      "prob_down": 0.789
+      "predicted": 3999.319,
+      "prob_down": 0.9038
     },
     {
       "date": "2025-11-20",
       "actual": 4496.1,
-      "predicted": 3966.124,
-      "prob_down": 0.789
+      "predicted": 3976.921,
+      "prob_down": 0.9039
     },
     {
       "date": "2025-11-21",
       "actual": 4462.5,
-      "predicted": 3985.31,
-      "prob_down": 0.789
+      "predicted": 3995.879,
+      "prob_down": 0.904
     },
     {
       "date": "2025-11-24",
       "actual": 4460.7,
-      "predicted": 3999.712,
-      "prob_down": 0.789
+      "predicted": 4010.173,
+      "prob_down": 0.904
     },
     {
       "date": "2025-11-25",
       "actual": 4500.9,
-      "predicted": 4044.38,
-      "prob_down": 0.7891
+      "predicted": 4054.89,
+      "prob_down": 0.9041
     },
     {
       "date": "2025-11-26",
       "actual": 4614.7,
-      "predicted": 4068.816,
-      "prob_down": 0.7891
+      "predicted": 4079.494,
+      "prob_down": 0.9042
     },
     {
       "date": "2025-11-28",
       "actual": 4599.1,
-      "predicted": 4156.176,
-      "prob_down": 0.7893
+      "predicted": 4167.152,
+      "prob_down": 0.9044
     },
     {
       "date": "2025-12-01",
       "actual": 4635.7,
-      "predicted": 4175.3,
-      "prob_down": 0.7894
+      "predicted": 4186.514,
+      "prob_down": 0.9045
     },
     {
       "date": "2025-12-02",
       "actual": 4623.7,
-      "predicted": 4122.229,
-      "prob_down": 0.7895
+      "predicted": 4133.656,
+      "prob_down": 0.9045
     },
     {
       "date": "2025-12-03",
       "actual": 4595.4,
-      "predicted": 4133.337,
-      "prob_down": 0.7896
+      "predicted": 4145.075,
+      "prob_down": 0.9046
     },
     {
       "date": "2025-12-04",
       "actual": 4765.8,
-      "predicted": 4143.296,
-      "prob_down": 0.7897
+      "predicted": 4155.35,
+      "prob_down": 0.9046
     },
     {
       "date": "2025-12-05",
       "actual": 4837.5,
-      "predicted": 4143.027,
-      "prob_down": 0.7898
+      "predicted": 4155.357,
+      "prob_down": 0.9046
     },
     {
       "date": "2025-12-08",
       "actual": 4913.4,
-      "predicted": 4118.126,
-      "prob_down": 0.7899
+      "predicted": 4130.643,
+      "prob_down": 0.9046
     },
     {
       "date": "2025-12-09",
       "actual": 4979.7,
-      "predicted": 4136.053,
-      "prob_down": 0.7899
+      "predicted": 4148.749,
+      "prob_down": 0.9046
     },
     {
       "date": "2025-12-10",
       "actual": 5082.5,
-      "predicted": 4124.657,
-      "prob_down": 0.79
+      "predicted": 4137.469,
+      "prob_down": 0.9046
     },
     {
       "date": "2025-12-11",
       "actual": 5082.6,
-      "predicted": 4210.667,
-      "prob_down": 0.7901
+      "predicted": 4223.729,
+      "prob_down": 0.9047
     },
     {
       "date": "2025-12-12",
       "actual": 5303.6,
-      "predicted": 4225.37,
-      "prob_down": 0.7902
+      "predicted": 4238.562,
+      "prob_down": 0.9048
     },
     {
       "date": "2025-12-15",
       "actual": 5318.4,
-      "predicted": 4231.886,
-      "prob_down": 0.7904
+      "predicted": 4245.127,
+      "prob_down": 0.9049
     },
     {
       "date": "2025-12-16",
       "actual": 4745.1,
-      "predicted": 4228.829,
-      "prob_down": 0.7905
+      "predicted": 4242.134,
+      "prob_down": 0.905
     },
     {
       "date": "2025-12-17",
       "actual": 4652.6,
-      "predicted": 4269.245,
-      "prob_down": 0.7906
+      "predicted": 4282.662,
+      "prob_down": 0.9052
     },
     {
       "date": "2025-12-18",
       "actual": 4935.0,
-      "predicted": 4259.866,
-      "prob_down": 0.7907
+      "predicted": 4273.298,
+      "prob_down": 0.9053
     },
     {
       "date": "2025-12-19",
       "actual": 4950.8,
-      "predicted": 4281.912,
-      "prob_down": 0.7909
+      "predicted": 4295.476,
+      "prob_down": 0.9054
     },
     {
       "date": "2025-12-22",
       "actual": 4889.5,
-      "predicted": 4361.795,
-      "prob_down": 0.791
+      "predicted": 4375.575,
+      "prob_down": 0.9056
     },
     {
       "date": "2025-12-23",
       "actual": 4979.8,
-      "predicted": 4396.908,
-      "prob_down": 0.7912
+      "predicted": 4410.834,
+      "prob_down": 0.9058
     },
     {
       "date": "2025-12-24",
       "actual": 5079.4,
-      "predicted": 4393.718,
-      "prob_down": 0.7914
+      "predicted": 4407.821,
+      "prob_down": 0.9059
     },
     {
       "date": "2025-12-26",
       "actual": 5031.0,
-      "predicted": 4442.049,
-      "prob_down": 0.7916
+      "predicted": 4456.447,
+      "prob_down": 0.9061
     },
     {
       "date": "2025-12-29",
       "actual": 5098.5,
-      "predicted": 4237.696,
-      "prob_down": 0.7916
+      "predicted": 4252.067,
+      "prob_down": 0.9059
     },
     {
       "date": "2025-12-30",
       "actual": 4948.4,
-      "predicted": 4279.212,
-      "prob_down": 0.7917
+      "predicted": 4293.954,
+      "prob_down": 0.9058
     },
     {
       "date": "2025-12-31",
       "actual": 5046.3,
-      "predicted": 4235.023,
-      "prob_down": 0.7917
+      "predicted": 4249.891,
+      "prob_down": 0.9057
     },
     {
       "date": "2026-01-02",
       "actual": 4905.9,
-      "predicted": 4223.79,
-      "prob_down": 0.7916
+      "predicted": 4238.777,
+      "prob_down": 0.9056
     },
     {
       "date": "2026-01-05",
       "actual": 5009.5,
-      "predicted": 4342.732,
-      "prob_down": 0.7917
+      "predicted": 4357.932,
+      "prob_down": 0.9057
     },
     {
       "date": "2026-01-06",
       "actual": 4997.4,
-      "predicted": 4386.199,
-      "prob_down": 0.7918
+      "predicted": 4401.413,
+      "prob_down": 0.9059
     },
     {
       "date": "2026-01-07",
       "actual": 5080.9,
-      "predicted": 4353.341,
-      "prob_down": 0.7919
+      "predicted": 4368.472,
+      "prob_down": 0.9059
     },
     {
       "date": "2026-01-08",
       "actual": 5225.6,
-      "predicted": 4351.55,
-      "prob_down": 0.7919
+      "predicted": 4366.668,
+      "prob_down": 0.906
     },
     {
       "date": "2026-01-09",
       "actual": 5176.3,
-      "predicted": 4390.723,
-      "prob_down": 0.792
+      "predicted": 4405.913,
+      "prob_down": 0.906
     },
     {
       "date": "2026-01-12",
       "actual": 5226.2,
-      "predicted": 4501.667,
-      "prob_down": 0.7922
+      "predicted": 4516.97,
+      "prob_down": 0.9063
     },
     {
       "date": "2026-01-13",
       "actual": 5194.2,
-      "predicted": 4486.313,
-      "prob_down": 0.7923
+      "predicted": 4501.525,
+      "prob_down": 0.9064
     },
     {
       "date": "2026-01-14",
       "actual": 5247.9,
-      "predicted": 4521.881,
-      "prob_down": 0.7925
+      "predicted": 4537.108,
+      "prob_down": 0.9066
     },
     {
       "date": "2026-01-15",
       "actual": 5311.6,
-      "predicted": 4510.012,
-      "prob_down": 0.7926
+      "predicted": 4525.217,
+      "prob_down": 0.9067
     },
     {
       "date": "2026-01-16",
       "actual": 5123.7,
-      "predicted": 4482.291,
-      "prob_down": 0.7926
+      "predicted": 4497.468,
+      "prob_down": 0.9067
     },
     {
       "date": "2026-01-20",
       "actual": 5134.7,
-      "predicted": 4648.483,
-      "prob_down": 0.7929
+      "predicted": 4663.703,
+      "prob_down": 0.9071
     },
     {
       "date": "2026-01-21",
       "actual": 5078.7,
-      "predicted": 4718.206,
-      "prob_down": 0.7931
+      "predicted": 4733.313,
+      "prob_down": 0.9074
     },
     {
       "date": "2026-01-22",
       "actual": 5158.7,
-      "predicted": 4791.895,
-      "prob_down": 0.7933
+      "predicted": 4806.989,
+      "prob_down": 0.9078
     },
     {
       "date": "2026-01-23",
       "actual": 5103.7,
-      "predicted": 4856.116,
-      "prob_down": 0.7936
+      "predicted": 4871.228,
+      "prob_down": 0.9082
     },
     {
       "date": "2026-01-26",
       "actual": 5242.1,
-      "predicted": 4955.84,
-      "prob_down": 0.7939
+      "predicted": 4971.055,
+      "prob_down": 0.9086
     },
     {
       "date": "2026-01-27",
       "actual": 5179.1,
-      "predicted": 4955.326,
-      "prob_down": 0.7942
+      "predicted": 4970.572,
+      "prob_down": 0.9089
     },
     {
       "date": "2026-01-28",
       "actual": 5125.8,
-      "predicted": 5170.202,
-      "prob_down": 0.7946
+      "predicted": 5185.789,
+      "prob_down": 0.9095
     },
     {
       "date": "2026-01-29",
       "actual": 5061.7,
-      "predicted": 5183.891,
-      "prob_down": 0.795
+      "predicted": 5199.625,
+      "prob_down": 0.9098
     },
     {
       "date": "2026-01-30",
       "actual": 5002.2,
-      "predicted": 4624.447,
-      "prob_down": 0.7949
+      "predicted": 4639.862,
+      "prob_down": 0.9093
     },
     {
       "date": "2026-02-02",
       "actual": 5008.2,
-      "predicted": 4534.174,
-      "prob_down": 0.7948
+      "predicted": 4549.936,
+      "prob_down": 0.909
     },
     {
       "date": "2026-02-03",
       "actual": 4896.2,
-      "predicted": 4809.471,
-      "prob_down": 0.7949
+      "predicted": 4825.894,
+      "prob_down": 0.9091
     },
     {
       "date": "2026-02-04",
       "actual": 4605.7,
-      "predicted": 4824.819,
-      "prob_down": 0.795
+      "predicted": 4841.272,
+      "prob_down": 0.9092
     },
     {
       "date": "2026-02-05",
       "actual": 4574.9,
-      "predicted": 4765.085,
-      "prob_down": 0.7951
+      "predicted": 4781.367,
+      "prob_down": 0.9092
     },
     {
       "date": "2026-02-06",
       "actual": 4407.3,
-      "predicted": 4853.164,
-      "prob_down": 0.7952
+      "predicted": 4869.378,
+      "prob_down": 0.9094
     },
     {
       "date": "2026-02-09",
       "actual": 4402.0,
-      "predicted": 4950.12,
-      "prob_down": 0.7953
+      "predicted": 4966.371,
+      "prob_down": 0.9096
     },
     {
       "date": "2026-02-10",
       "actual": 4552.3,
-      "predicted": 4902.721,
-      "prob_down": 0.7954
+      "predicted": 4918.945,
+      "prob_down": 0.9096
     },
     {
       "date": "2026-02-11",
       "actual": 4376.3,
-      "predicted": 4968.303,
-      "prob_down": 0.7955
+      "predicted": 4984.705,
+      "prob_down": 0.9098
     },
     {
       "date": "2026-02-12",
       "actual": 4492.5,
-      "predicted": 4821.823,
-      "prob_down": 0.7955
+      "predicted": 4838.136,
+      "prob_down": 0.9098
     },
     {
       "date": "2026-02-13",
       "actual": 4526.0,
-      "predicted": 4917.13,
-      "prob_down": 0.7956
+      "predicted": 4933.685,
+      "prob_down": 0.9099
     },
     {
       "date": "2026-02-17",
       "actual": 4647.6,
-      "predicted": 4780.188,
-      "prob_down": 0.7956
+      "predicted": 4796.661,
+      "prob_down": 0.9098
     },
     {
       "date": "2026-02-18",
       "actual": 4813.1,
-      "predicted": 4881.177,
-      "prob_down": 0.7957
+      "predicted": 4897.901,
+      "prob_down": 0.9098
     },
     {
       "date": "2026-02-19",
       "actual": 4679.7,
-      "predicted": 4869.387,
-      "prob_down": 0.7957
+      "predicted": 4886.139,
+      "prob_down": 0.9099
     },
     {
       "date": "2026-02-20",
       "actual": 4684.7,
-      "predicted": 4950.744,
-      "prob_down": 0.7958
+      "predicted": 4967.633,
+      "prob_down": 0.91
     },
     {
       "date": "2026-02-23",
       "actual": 4684.7,
-      "predicted": 5091.687,
-      "prob_down": 0.796
+      "predicted": 5108.743,
+      "prob_down": 0.9102
     },
     {
       "date": "2026-02-24",
       "actual": 4777.2,
-      "predicted": 5043.451,
-      "prob_down": 0.796
+      "predicted": 5060.447,
+      "prob_down": 0.9103
     },
     {
       "date": "2026-02-25",
       "actual": 4818.0,
-      "predicted": 5091.868,
-      "prob_down": 0.7961
+      "predicted": 5109.032,
+      "prob_down": 0.9104
     },
     {
       "date": "2026-02-26",
       "actual": 4787.4,
-      "predicted": 5060.445,
-      "prob_down": 0.7962
+      "predicted": 5077.746,
+      "prob_down": 0.9105
     },
     {
       "date": "2026-02-27",
       "actual": 4767.4,
-      "predicted": 5112.562,
-      "prob_down": 0.7963
+      "predicted": 5130.096,
+      "prob_down": 0.9106
     },
     {
       "date": "2026-03-02",
       "actual": 4850.1,
-      "predicted": 5174.521,
-      "prob_down": 0.7965
+      "predicted": 5192.178,
+      "prob_down": 0.9108
     },
     {
       "date": "2026-03-03",
       "actual": 4823.6,
-      "predicted": 4991.407,
-      "prob_down": 0.7965
+      "predicted": 5008.8,
+      "prob_down": 0.9107
     },
     {
       "date": "2026-03-04",
       "actual": 4808.3,
-      "predicted": 5002.178,
-      "prob_down": 0.7964
+      "predicted": 5019.601,
+      "prob_down": 0.9106
     },
     {
       "date": "2026-03-05",
       "actual": 4879.6,
-      "predicted": 4947.794,
-      "prob_down": 0.7964
+      "predicted": 4965.053,
+      "prob_down": 0.9105
     },
     {
       "date": "2026-03-06",
       "actual": 4828.8,
-      "predicted": 5026.139,
-      "prob_down": 0.7965
+      "predicted": 5043.09,
+      "prob_down": 0.9107
     },
     {
       "date": "2026-03-09",
       "actual": 4719.6,
-      "predicted": 4972.765,
-      "prob_down": 0.7965
+      "predicted": 4989.313,
+      "prob_down": 0.9107
     },
     {
       "date": "2026-03-10",
       "actual": 4753.0,
-      "predicted": 5107.838,
-      "prob_down": 0.7965
+      "predicted": 5124.273,
+      "prob_down": 0.9108
     },
     {
       "date": "2026-03-11",
       "actual": 4724.0,
-      "predicted": 5046.542,
-      "prob_down": 0.7965
+      "predicted": 5062.676,
+      "prob_down": 0.9108
     },
     {
       "date": "2026-03-12",
       "actual": 4740.9,
-      "predicted": 4994.821,
-      "prob_down": 0.7965
+      "predicted": 5010.652,
+      "prob_down": 0.9108
     },
     {
       "date": "2026-03-13",
       "actual": 4693.7,
-      "predicted": 4932.612,
-      "prob_down": 0.7965
+      "predicted": 4948.154,
+      "prob_down": 0.9107
     },
     {
       "date": "2026-03-16",
       "actual": 4608.4,
-      "predicted": 4874.775,
-      "prob_down": 0.7964
+      "predicted": 4890.136,
+      "prob_down": 0.9105
     },
     {
       "date": "2026-03-17",
       "actual": 4561.5,
-      "predicted": 4880.746,
-      "prob_down": 0.7963
+      "predicted": 4896.122,
+      "prob_down": 0.9104
     },
     {
       "date": "2026-03-18",
       "actual": 4629.6,
-      "predicted": 4771.789,
-      "prob_down": 0.7962
+      "predicted": 4787.011,
+      "prob_down": 0.9102
     },
     {
       "date": "2026-03-19",
       "actual": 4644.5,
-      "predicted": 4488.85,
-      "prob_down": 0.7959
+      "predicted": 4503.699,
+      "prob_down": 0.9097
     },
     {
       "date": "2026-03-20",
       "actual": 4533.3,
-      "predicted": 4459.347,
-      "prob_down": 0.7957
+      "predicted": 4474.066,
+      "prob_down": 0.9094
     },
     {
       "date": "2026-03-23",
       "actual": 4568.5,
-      "predicted": 4296.496,
-      "prob_down": 0.7953
+      "predicted": 4310.708,
+      "prob_down": 0.9089
     },
     {
       "date": "2026-03-24",
       "actual": 4694.3,
-      "predicted": 4292.005,
-      "prob_down": 0.795
+      "predicted": 4305.907,
+      "prob_down": 0.9085
     },
     {
       "date": "2026-03-25",
       "actual": 4710.9,
-      "predicted": 4439.186,
-      "prob_down": 0.7948
+      "predicted": 4452.891,
+      "prob_down": 0.9085
     },
     {
       "date": "2026-03-26",
       "actual": 4730.7,
-      "predicted": 4268.091,
-      "prob_down": 0.7945
+      "predicted": 4281.162,
+      "prob_down": 0.9081
     },
     {
       "date": "2026-03-27",
       "actual": 4728.7,
-      "predicted": 4382.144,
-      "prob_down": 0.7943
+      "predicted": 4394.771,
+      "prob_down": 0.9081
     },
     {
       "date": "2026-03-30",
       "actual": 4686.7,
-      "predicted": 4415.396,
-      "prob_down": 0.7941
+      "predicted": 4427.425,
+      "prob_down": 0.9081
     },
     {
       "date": "2026-03-31",
       "actual": 4706.7,
-      "predicted": 4534.38,
-      "prob_down": 0.794
+      "predicted": 4545.959,
+      "prob_down": 0.9083
     },
     {
       "date": "2026-04-01",
       "actual": 4685.3,
-      "predicted": 4696.009,
-      "prob_down": 0.794
+      "predicted": 4707.262,
+      "prob_down": 0.9086
     },
     {
       "date": "2026-04-02",
       "actual": 4561.9,
-      "predicted": 4565.797,
-      "prob_down": 0.794
+      "predicted": 4576.831,
+      "prob_down": 0.9086
     },
     {
       "date": "2026-04-06",
       "actual": 4558.0,
-      "predicted": 4570.68,
-      "prob_down": 0.7939
+      "predicted": 4581.694,
+      "prob_down": 0.9086
     },
     {
       "date": "2026-04-07",
       "actual": 4511.2,
-      "predicted": 4570.69,
-      "prob_down": 0.7939
+      "predicted": 4581.661,
+      "prob_down": 0.9087
     },
     {
       "date": "2026-04-08",
       "actual": 4535.3,
-      "predicted": 4660.801,
-      "prob_down": 0.7939
+      "predicted": 4671.887,
+      "prob_down": 0.9088
     },
     {
       "date": "2026-04-09",
       "actual": 4542.5,
-      "predicted": 4700.311,
-      "prob_down": 0.794
+      "predicted": 4711.659,
+      "prob_down": 0.9089
     },
     {
       "date": "2026-04-10",
       "actual": 4523.2,
-      "predicted": 4670.102,
-      "prob_down": 0.794
+      "predicted": 4681.783,
+      "prob_down": 0.9089
     },
     {
       "date": "2026-04-13",
       "actual": 4502.3,
-      "predicted": 4650.262,
-      "prob_down": 0.7941
+      "predicted": 4662.284,
+      "prob_down": 0.9088
     },
     {
       "date": "2026-04-14",
       "actual": 4448.4,
-      "predicted": 4730.597,
-      "prob_down": 0.7942
+      "predicted": 4743.036,
+      "prob_down": 0.9089
     },
     {
       "date": "2026-04-15",
       "actual": 4499.3,
-      "predicted": 4704.389,
-      "prob_down": 0.7942
+      "predicted": 4717.139,
+      "prob_down": 0.9089
     },
     {
       "date": "2026-04-16",
       "actual": 4593.0,
-      "predicted": 4689.165,
-      "prob_down": 0.7943
+      "predicted": 4702.259,
+      "prob_down": 0.9089
     },
     {
       "date": "2026-04-17",
       "actual": 4506.3,
-      "predicted": 4758.416,
-      "prob_down": 0.7944
+      "predicted": 4771.885,
+      "prob_down": 0.909
     },
     {
       "date": "2026-04-20",
       "actual": 4519.9,
-      "predicted": 4708.595,
-      "prob_down": 0.7944
+      "predicted": 4722.29,
+      "prob_down": 0.909
     },
     {
       "date": "2026-04-21",
       "actual": 4466.9,
-      "predicted": 4601.936,
-      "prob_down": 0.7944
+      "predicted": 4615.791,
+      "prob_down": 0.9088
     },
     {
       "date": "2026-04-22",
       "actual": 4505.0,
-      "predicted": 4634.466,
-      "prob_down": 0.7944
+      "predicted": 4648.543,
+      "prob_down": 0.9087
     },
     {
       "date": "2026-04-23",
       "actual": 4365.3,
-      "predicted": 4606.184,
-      "prob_down": 0.7944
+      "predicted": 4620.354,
+      "prob_down": 0.9086
     },
     {
       "date": "2026-04-24",
       "actual": 4363.4,
-      "predicted": 4622.684,
-      "prob_down": 0.7944
+      "predicted": 4636.919,
+      "prob_down": 0.9085
     },
     {
       "date": "2026-04-27",
       "actual": 4286.4,
-      "predicted": 4576.667,
-      "prob_down": 0.7943
+      "predicted": 4590.905,
+      "prob_down": 0.9084
     },
     {
       "date": "2026-04-28",
       "actual": 4133.3,
-      "predicted": 4493.533,
-      "prob_down": 0.7942
+      "predicted": 4507.77,
+      "prob_down": 0.9082
     },
     {
       "date": "2026-04-29",
       "actual": 4114.0,
-      "predicted": 4447.978,
-      "prob_down": 0.7941
+      "predicted": 4462.179,
+      "prob_down": 0.908
     },
     {
       "date": "2026-04-30",
       "actual": 4238.8,
-      "predicted": 4514.539,
-      "prob_down": 0.794
+      "predicted": 4528.774,
+      "prob_down": 0.9079
     },
     {
       "date": "2026-05-01",
       "actual": 4351.6,
-      "predicted": 4529.167,
-      "prob_down": 0.7939
+      "predicted": 4543.363,
+      "prob_down": 0.9079
     },
     {
       "date": "2026-05-04",
       "actual": 4354.4,
-      "predicted": 4420.859,
-      "prob_down": 0.7938
+      "predicted": 4434.838,
+      "prob_down": 0.9076
     },
     {
       "date": "2026-05-05",
       "actual": 4381.4,
-      "predicted": 4455.381,
-      "prob_down": 0.7937
+      "predicted": 4469.326,
+      "prob_down": 0.9076
     },
     {
       "date": "2026-05-06",
       "actual": 4245.9,
-      "predicted": 4578.211,
-      "prob_down": 0.7937
+      "predicted": 4592.137,
+      "prob_down": 0.9077
     },
     {
       "date": "2026-05-07",
       "actual": 4202.7,
-      "predicted": 4594.423,
-      "prob_down": 0.7937
+      "predicted": 4608.257,
+      "prob_down": 0.9078
     },
     {
       "date": "2026-05-08",
       "actual": 4149.4,
-      "predicted": 4613.715,
-      "prob_down": 0.7937
+      "predicted": 4627.447,
+      "prob_down": 0.9079
     },
     {
       "date": "2026-05-11",
       "actual": 4008.8,
-      "predicted": 4611.758,
-      "prob_down": 0.7937
+      "predicted": 4625.369,
+      "prob_down": 0.9079
     },
     {
       "date": "2026-05-12",
       "actual": 4047.6,
-      "predicted": 4570.794,
-      "prob_down": 0.7937
+      "predicted": 4584.311,
+      "prob_down": 0.9079
     },
     {
       "date": "2026-05-13",
       "actual": 4096.3,
-      "predicted": 4590.343,
-      "prob_down": 0.7937
+      "predicted": 4603.83,
+      "prob_down": 0.9079
     },
     {
       "date": "2026-05-14",
       "actual": 4038.9,
-      "predicted": 4569.513,
-      "prob_down": 0.7937
+      "predicted": 4582.95,
+      "prob_down": 0.9078
     },
     {
       "date": "2026-05-15",
       "actual": 4038.5,
-      "predicted": 4449.278,
-      "prob_down": 0.7936
+      "predicted": 4462.56,
+      "prob_down": 0.9076
     },
     {
       "date": "2026-05-18",
       "actual": 4082.4,
-      "predicted": 4445.678,
-      "prob_down": 0.7935
+      "predicted": 4458.894,
+      "prob_down": 0.9075
     },
     {
       "date": "2026-05-19",
       "actual": 4125.7,
-      "predicted": 4400.264,
-      "prob_down": 0.7933
+      "predicted": 4413.338,
+      "prob_down": 0.9072
     },
     {
       "date": "2026-05-20",
       "actual": 4167.5,
-      "predicted": 4424.009,
-      "prob_down": 0.7932
+      "predicted": 4436.965,
+      "prob_down": 0.9072
     },
     {
       "date": "2026-05-21",
       "actual": 4157.4,
-      "predicted": 4431.214,
-      "prob_down": 0.7931
+      "predicted": 4444.074,
+      "prob_down": 0.9071
     },
     {
       "date": "2026-05-22",
       "actual": 4082.4,
-      "predicted": 4412.552,
-      "prob_down": 0.793
+      "predicted": 4425.301,
+      "prob_down": 0.907
     },
     {
       "date": "2026-05-26",
       "actual": 4140.8,
-      "predicted": 4392.317,
-      "prob_down": 0.7929
+      "predicted": 4404.964,
+      "prob_down": 0.9069
     },
     {
       "date": "2026-05-27",
       "actual": 4113.7,
-      "predicted": 4339.856,
-      "prob_down": 0.7928
+      "predicted": 4352.462,
+      "prob_down": 0.9067
     },
     {
       "date": "2026-05-28",
       "actual": 4005.7,
-      "predicted": 4389.642,
-      "prob_down": 0.7927
+      "predicted": 4402.33,
+      "prob_down": 0.9067
     },
     {
       "date": "2026-05-29",
       "actual": 4069.7,
-      "predicted": 4481.118,
-      "prob_down": 0.7927
+      "predicted": 4493.909,
+      "prob_down": 0.9068
     },
     {
       "date": "2026-06-01",
       "actual": 4051.8,
-      "predicted": 4396.547,
-      "prob_down": 0.7926
+      "predicted": 4409.25,
+      "prob_down": 0.9066
     },
     {
       "date": "2026-06-02",
       "actual": 3992.1,
-      "predicted": 4409.875,
-      "prob_down": 0.7926
+      "predicted": 4422.639,
+      "prob_down": 0.9066
     },
     {
       "date": "2026-06-03",
       "actual": 4018.8,
-      "predicted": 4358.223,
-      "prob_down": 0.7925
+      "predicted": 4371.006,
+      "prob_down": 0.9065
     },
     {
       "date": "2026-06-04",
       "actual": 4015.9,
-      "predicted": 4395.479,
-      "prob_down": 0.7924
+      "predicted": 4408.348,
+      "prob_down": 0.9064
     },
     {
       "date": "2026-06-05",
       "actual": 4076.4,
-      "predicted": 4259.402,
-      "prob_down": 0.7923
+      "predicted": 4272.008,
+      "prob_down": 0.9062
     },
     {
       "date": "2026-06-08",
       "actual": 4151.9,
-      "predicted": 4257.852,
-      "prob_down": 0.7922
+      "predicted": 4270.312,
+      "prob_down": 0.9061
     },
     {
       "date": "2026-06-09",
       "actual": 4050.2,
-      "predicted": 4183.033,
-      "prob_down": 0.792
+      "predicted": 4195.211,
+      "prob_down": 0.9058
     },
     {
       "date": "2026-06-10",
       "actual": 4070.8,
-      "predicted": 4034.046,
-      "prob_down": 0.7917
+      "predicted": 4045.825,
+      "prob_down": 0.9055
     },
     {
       "date": "2026-06-11",
       "actual": 4077.0,
-      "predicted": 4015.676,
-      "prob_down": 0.7914
+      "predicted": 4027.236,
+      "prob_down": 0.9051
     },
     {
       "date": "2026-06-12",
       "actual": 4038.7,
-      "predicted": 4137.916,
-      "prob_down": 0.7912
+      "predicted": 4149.425,
+      "prob_down": 0.9051
     },
     {
       "date": "2026-06-15",
       "actual": 4036.3,
-      "predicted": 4248.31,
-      "prob_down": 0.7911
+      "predicted": 4259.671,
+      "prob_down": 0.9052
     },
     {
       "date": "2026-06-16",
       "actual": 4100.1,
-      "predicted": 4251.145,
-      "prob_down": 0.791
+      "predicted": 4262.368,
+      "prob_down": 0.9052
     },
     {
       "date": "2026-06-17",
       "actual": 4107.0,
-      "predicted": 4277.612,
-      "prob_down": 0.791
+      "predicted": 4288.747,
+      "prob_down": 0.9053
     },
     {
       "date": "2026-06-18",
       "actual": 4090.5,
-      "predicted": 4145.387,
-      "prob_down": 0.7908
+      "predicted": 4156.415,
+      "prob_down": 0.9051
     },
     {
       "date": "2026-06-22",
       "actual": 4152.6,
-      "predicted": 4103.394,
-      "prob_down": 0.7907
+      "predicted": 4114.441,
+      "prob_down": 0.9048
     },
     {
       "date": "2026-06-23",
       "actual": 4305.2,
-      "predicted": 4051.625,
-      "prob_down": 0.7905
+      "predicted": 4062.627,
+      "prob_down": 0.9046
     },
     {
       "date": "2026-06-24",
       "actual": 4299.6,
-      "predicted": 3914.635,
-      "prob_down": 0.7902
+      "predicted": 3925.522,
+      "prob_down": 0.9041
     },
     {
       "date": "2026-06-25",
       "actual": 4399.7,
-      "predicted": 3952.918,
-      "prob_down": 0.7899
+      "predicted": 3963.824,
+      "prob_down": 0.9039
     },
     {
       "date": "2026-06-26",
       "actual": 4419.7,
-      "predicted": 4000.829,
-      "prob_down": 0.7898
+      "predicted": 4011.682,
+      "prob_down": 0.9038
     },
     {
       "date": "2026-06-29",
       "actual": 4441.1,
-      "predicted": 3945.064,
-      "prob_down": 0.7895
+      "predicted": 3955.722,
+      "prob_down": 0.9036
     },
     {
       "date": "2026-06-30",
       "actual": 4467.5,
-      "predicted": 3944.975,
-      "prob_down": 0.7892
+      "predicted": 3955.559,
+      "prob_down": 0.9034
     },
     {
       "date": "2026-07-01",
       "actual": 4420.4,
-      "predicted": 3988.138,
-      "prob_down": 0.7891
+      "predicted": 3998.695,
+      "prob_down": 0.9032
     },
     {
       "date": "2026-07-02",
       "actual": 4437.3,
-      "predicted": 4030.628,
-      "prob_down": 0.7889
+      "predicted": 4041.109,
+      "prob_down": 0.9032
     },
     {
       "date": "2026-07-06",
       "actual": 4473.7,
-      "predicted": 4071.566,
-      "prob_down": 0.7888
+      "predicted": 4081.983,
+      "prob_down": 0.9032
     },
     {
       "date": "2026-07-07",
       "actual": 4420.6,
-      "predicted": 4061.769,
-      "prob_down": 0.7887
+      "predicted": 4072.112,
+      "prob_down": 0.9032
     },
     {
       "date": "2026-07-08",
       "actual": 4545.3,
-      "predicted": 3988.579,
-      "prob_down": 0.7886
+      "predicted": 3998.801,
+      "prob_down": 0.9031
     },
     {
       "date": "2026-07-09",
       "actual": 4571.4,
-      "predicted": 4045.728,
-      "prob_down": 0.7885
+      "predicted": 4055.962,
+      "prob_down": 0.9031
     },
     {
       "date": "2026-07-10",
       "actual": 4680.6,
-      "predicted": 4019.286,
-      "prob_down": 0.7884
+      "predicted": 4029.497,
+      "prob_down": 0.903
     },
     {
       "date": "2026-07-13",
       "actual": 4697.8,
-      "predicted": 3913.891,
-      "prob_down": 0.7882
+      "predicted": 3924.012,
+      "prob_down": 0.9027
     },
     {
       "date": "2026-07-14",
       "actual": 4694.5,
-      "predicted": 3976.591,
-      "prob_down": 0.7881
+      "predicted": 3986.738,
+      "prob_down": 0.9027
     },
     {
       "date": "2026-07-15",
       "actual": 4653.3,
-      "predicted": 3959.183,
-      "prob_down": 0.788
+      "predicted": 3969.288,
+      "prob_down": 0.9026
     },
     {
       "date": "2026-07-16",
       "actual": 4664.0,
-      "predicted": 3900.966,
-      "prob_down": 0.7878
+      "predicted": 3911.021,
+      "prob_down": 0.9024
     },
     {
       "date": "2026-07-17",
       "actual": 4529.9,
-      "predicted": 3927.24,
-      "prob_down": 0.7877
+      "predicted": 3937.254,
+      "prob_down": 0.9023
     },
     {
       "date": "2026-07-20",
       "actual": 4481.5,
-      "predicted": 3924.6,
-      "prob_down": 0.7876
+      "predicted": 3934.478,
+      "prob_down": 0.9022
     },
     {
       "date": "2026-07-21",
       "actual": 4396.4,
-      "predicted": 3983.897,
-      "prob_down": 0.7875
+      "predicted": 3993.672,
+      "prob_down": 0.9023
     },
     {
       "date": "2026-07-22",
       "actual": 4414.6,
-      "predicted": 4057.776,
-      "prob_down": 0.7875
+      "predicted": 4067.437,
+      "prob_down": 0.9024
     },
     {
       "date": "2026-07-23",
       "actual": 4539.9,
-      "predicted": 3958.466,
-      "prob_down": 0.7874
+      "predicted": 3967.889,
+      "prob_down": 0.9023
     },
     {
       "date": "2026-07-24",
       "actual": 4476.6,
-      "predicted": 3978.73,
-      "prob_down": 0.7874
+      "predicted": 3988.015,
+      "prob_down": 0.9023
     },
     {
       "date": "2026-07-27",
       "actual": 4439.0,
-      "predicted": 3984.887,
-      "prob_down": 0.7873
+      "predicted": 3994.025,
+      "prob_down": 0.9023
     },
     {
       "date": "2026-07-28",
       "actual": 4460.7,
-      "predicted": 3947.52,
-      "prob_down": 0.7872
+      "predicted": 3956.529,
+      "prob_down": 0.9023
     },
     {
       "date": "2026-07-29",
       "actual": 4407.3,
-      "predicted": 3945.291,
-      "prob_down": 0.7872
+      "predicted": 3954.135,
+      "prob_down": 0.9023
     },
     {
       "date": "2026-07-30",
       "actual": 4408.9,
-      "predicted": 4007.682,
-      "prob_down": 0.7872
+      "predicted": 4016.385,
+      "prob_down": 0.9024
     },
     {
       "date": "2026-07-31",
       "actual": 4351.9,
-      "predicted": 4014.376,
-      "prob_down": 0.7872
+      "predicted": 4022.981,
+      "prob_down": 0.9025
     },
     {
       "date": "2026-08-03",
       "actual": 4332.8,
-      "predicted": 3998.177,
-      "prob_down": 0.7872
+      "predicted": 4006.753,
+      "prob_down": 0.9025
     },
     {
       "date": "2026-08-04",
       "actual": 4387.5,
-      "predicted": 4058.794,
-      "prob_down": 0.7872
+      "predicted": 4067.395,
+      "prob_down": 0.9026
     },
     {
       "date": "2026-08-05",
       "actual": 4399.7,
-      "predicted": 4207.732,
-      "prob_down": 0.7875
+      "predicted": 4216.434,
+      "prob_down": 0.903
     },
     {
       "date": "2026-08-06",
       "actual": 4424.9,
-      "predicted": 4201.926,
-      "prob_down": 0.7877
+      "predicted": 4210.732,
+      "prob_down": 0.9032
     },
     {
       "date": "2026-08-07",
       "actual": 4383.9,
-      "predicted": 4299.366,
-      "prob_down": 0.788
+      "predicted": 4308.33,
+      "prob_down": 0.9036
     },
     {
       "date": "2026-08-10",
       "actual": 4376.4,
-      "predicted": 4318.485,
-      "prob_down": 0.7883
+      "predicted": 4327.59,
+      "prob_down": 0.9039
     },
     {
       "date": "2026-08-11",
       "actual": 4318.4,
-      "predicted": 4338.946,
-      "prob_down": 0.7886
+      "predicted": 4348.242,
+      "prob_down": 0.9041
     },
     {
       "date": "2026-08-12",
       "actual": 4298.0,
-      "predicted": 4364.273,
-      "prob_down": 0.7889
+      "predicted": 4373.816,
+      "prob_down": 0.9043
     },
     {
       "date": "2026-08-13",
       "actual": 4321.2,
-      "predicted": 4317.812,
-      "prob_down": 0.7891
+      "predicted": 4327.598,
+      "prob_down": 0.9045
     },
     {
       "date": "2026-08-14",
       "actual": 4168.4,
-      "predicted": 4333.925,
-      "prob_down": 0.7893
+      "predicted": 4344.011,
+      "prob_down": 0.9046
     },
     {
       "date": "2026-08-17",
       "actual": 4179.7,
-      "predicted": 4369.134,
-      "prob_down": 0.7896
+      "predicted": 4379.456,
+      "prob_down": 0.9048
     },
     {
       "date": "2026-08-18",
       "actual": 4186.7,
-      "predicted": 4316.962,
-      "prob_down": 0.7898
+      "predicted": 4327.433,
+      "prob_down": 0.9048
     },
     {
       "date": "2026-08-19",
       "actual": 4202.3,
-      "predicted": 4438.414,
-      "prob_down": 0.79
+      "predicted": 4449.089,
+      "prob_down": 0.9051
     },
     {
       "date": "2026-08-20",
       "actual": 4162.3,
-      "predicted": 4463.532,
-      "prob_down": 0.7903
+      "predicted": 4474.3,
+      "prob_down": 0.9054
     },
     {
       "date": "2026-08-21",
       "actual": 4156.8,
-      "predicted": 4569.782,
-      "prob_down": 0.7906
+      "predicted": 4580.627,
+      "prob_down": 0.9057
     },
     {
       "date": "2026-08-24",
       "actual": 4187.1,
-      "predicted": 4586.141,
-      "prob_down": 0.7909
+      "predicted": 4597.021,
+      "prob_down": 0.906
     },
     {
       "date": "2026-08-25",
       "actual": 4140.7,
-      "predicted": 4582.465,
-      "prob_down": 0.7912
+      "predicted": 4593.435,
+      "prob_down": 0.9063
     },
     {
       "date": "2026-08-26",
       "actual": 4157.0,
-      "predicted": 4541.831,
-      "prob_down": 0.7914
+      "predicted": 4552.958,
+      "prob_down": 0.9064
     },
     {
       "date": "2026-08-27",
       "actual": 4216.3,
-      "predicted": 4551.927,
-      "prob_down": 0.7916
+      "predicted": 4563.254,
+      "prob_down": 0.9065
     },
     {
       "date": "2026-08-28",
       "actual": 4190.6,
-      "predicted": 4420.776,
-      "prob_down": 0.7917
+      "predicted": 4432.269,
+      "prob_down": 0.9063
     },
     {
       "date": "2026-08-31",
       "actual": 4177.3,
-      "predicted": 4373.424,
-      "prob_down": 0.7917
+      "predicted": 4385.1,
+      "prob_down": 0.9062
     },
     {
       "date": "2026-09-01",
       "actual": 4107.9,
-      "predicted": 4290.395,
-      "prob_down": 0.7917
+      "predicted": 4302.133,
+      "prob_down": 0.906
     },
     {
       "date": "2026-09-02",
       "actual": 4170.1,
-      "predicted": 4308.259,
-      "prob_down": 0.7916
+      "predicted": 4320.079,
+      "prob_down": 0.9058
     },
     {
       "date": "2026-09-03",
       "actual": 4181.1,
-      "predicted": 4430.62,
-      "prob_down": 0.7916
+      "predicted": 4442.492,
+      "prob_down": 0.9059
     },
     {
       "date": "2026-09-04",
       "actual": 4160.1,
-      "predicted": 4368.83,
-      "prob_down": 0.7916
+      "predicted": 4380.611,
+      "prob_down": 0.9059
     },
     {
       "date": "2026-09-08",
       "actual": 4142.6,
-      "predicted": 4332.179,
-      "prob_down": 0.7915
+      "predicted": 4343.874,
+      "prob_down": 0.9058
     },
     {
       "date": "2026-09-09",
       "actual": 4150.0,
-      "predicted": 4353.45,
-      "prob_down": 0.7915
+      "predicted": 4365.058,
+      "prob_down": 0.9058
     },
     {
       "date": "2026-09-10",
       "actual": 4060.4,
-      "predicted": 4301.502,
-      "prob_down": 0.7914
+      "predicted": 4312.858,
+      "prob_down": 0.9057
     },
     {
       "date": "2026-09-11",
       "actual": 4007.9,
-      "predicted": 4303.25,
-      "prob_down": 0.7913
+      "predicted": 4314.406,
+      "prob_down": 0.9056
     },
     {
       "date": "2026-09-14",
       "actual": 4038.4,
-      "predicted": 4247.831,
-      "prob_down": 0.7912
+      "predicted": 4258.748,
+      "prob_down": 0.9055
     },
     {
       "date": "2026-09-15",
       "actual": 4074.6,
-      "predicted": 4229.454,
-      "prob_down": 0.791
+      "predicted": 4240.147,
+      "prob_down": 0.9053
     },
     {
       "date": "2026-09-16",
       "actual": 4051.6,
-      "predicted": 4283.153,
-      "prob_down": 0.7909
+      "predicted": 4293.646,
+      "prob_down": 0.9053
     },
     {
       "date": "2026-09-17",
       "actual": 4031.4,
-      "predicted": 4295.253,
-      "prob_down": 0.7908
+      "predicted": 4305.536,
+      "prob_down": 0.9053
     },
     {
       "date": "2026-09-18",
       "actual": 3898.9,
-      "predicted": 4320.001,
-      "prob_down": 0.7907
+      "predicted": 4330.139,
+      "prob_down": 0.9053
     },
     {
       "date": "2026-09-21",
       "actual": 3969.6,
-      "predicted": 4280.099,
-      "prob_down": 0.7906
+      "predicted": 4290.08,
+      "prob_down": 0.9052
     },
     {
       "date": "2026-09-22",
       "actual": 3940.4,
-      "predicted": 4272.88,
-      "prob_down": 0.7905
+      "predicted": 4282.853,
+      "prob_down": 0.9051
     },
     {
       "date": "2026-09-23",
       "actual": 4073.0,
-      "predicted": 4216.426,
-      "prob_down": 0.7904
+      "predicted": 4226.353,
+      "prob_down": 0.9049
     },
     {
       "date": "2026-09-24",
       "actual": 4113.5,
-      "predicted": 4196.773,
-      "prob_down": 0.7902
+      "predicted": 4206.59,
+      "prob_down": 0.9047
     },
     {
       "date": "2026-09-25",
       "actual": 4074.9,
-      "predicted": 4219.677,
-      "prob_down": 0.7901
+      "predicted": 4229.356,
+      "prob_down": 0.9046
     },
     {
       "date": "2026-09-28",
       "actual": 4114.5,
-      "predicted": 4070.739,
-      "prob_down": 0.7898
+      "predicted": 4080.193,
+      "prob_down": 0.9042
     },
     {
       "date": "2026-09-29",
       "actual": 4030.2,
-      "predicted": 4082.157,
-      "prob_down": 0.7895
+      "predicted": 4091.465,
+      "prob_down": 0.9039
     },
     {
       "date": "2026-09-30",
       "actual": 4000.5,
-      "predicted": 4089.381,
-      "prob_down": 0.7892
+      "predicted": 4098.455,
+      "prob_down": 0.9037
     },
     {
       "date": "2026-10-01",
       "actual": 3885.3,
-      "predicted": 4104.992,
-      "prob_down": 0.789
+      "predicted": 4113.827,
+      "prob_down": 0.9036
     },
     {
       "date": "2026-10-02",
       "actual": 3886.3,
-      "predicted": 4066.252,
-      "prob_down": 0.7887
+      "predicted": 4074.824,
+      "prob_down": 0.9034
     },
     {
       "date": "2026-10-05",
       "actual": 3853.0,
-      "predicted": 4061.238,
-      "prob_down": 0.7885
+      "predicted": 4069.583,
+      "prob_down": 0.9032
     },
     {
       "date": "2026-10-06",
       "actual": 3864.2,
-      "predicted": 4091.142,
-      "prob_down": 0.7882
+      "predicted": 4099.283,
+      "prob_down": 0.9031
     },
     {
       "date": "2026-10-07",
       "actual": 3741.9,
-      "predicted": 4046.057,
-      "prob_down": 0.788
+      "predicted": 4054.059,
+      "prob_down": 0.9029
     },
     {
       "date": "2026-10-08",
-      "actual": 3678.8,
-      "predicted": 4062.215,
-      "prob_down": 0.7878
+      "actual": 3685.5,
+      "predicted": 4070.132,
+      "prob_down": 0.9028
+    },
+    {
+      "date": "2026-10-09",
+      "actual": 3529.0,
+      "predicted": 4128.171,
+      "prob_down": 0.9028
     }
   ],
   "future": {
-    "current_date": "2026-11-19",
-    "current_price": 3678.8,
+    "current_date": "2026-11-20",
+    "current_price": 3529.0,
     "horizon_days": 30,
-    "future_date": "2026-12-31",
-    "predicted_price": 3683.155,
-    "predicted_return": 0.00118,
-    "prob_down": 0.5887
+    "future_date": "2027-01-01",
+    "predicted_price": 3571.578,
+    "predicted_return": 0.01207,
+    "prob_down": 0.5308
   },
   "recommendation": {
-    "as_of": "2026-11-19",
+    "as_of": "2026-11-20",
     "horizon_days": 30,
-    "prob_down": 0.5887,
-    "recommended_hedge_ratio": 0.1774,
-    "exposure_ratio": 0.8226,
+    "prob_down": 0.5308,
+    "recommended_hedge_ratio": 0.0616,
+    "exposure_ratio": 0.9384,
     "signal": "light_hedge",
     "signal_label": "偏空，建議輕度避險",
     "threshold": 0.5
@@ -28313,15 +28317,15 @@
     {
       "key": "GOLD",
       "name": "黃金 ($/oz)",
-      "latest": 3678.8,
-      "change_1y": -0.0953,
+      "latest": 3529.0,
+      "change_1y": -0.1356,
       "corr_with_gold": 1.0
     },
     {
       "key": "DGS10",
       "name": "10年期殖利率 (DGS10)",
-      "latest": 5.1,
-      "change_1y": 0.2379,
+      "latest": 5.07,
+      "change_1y": 0.2276,
       "corr_with_gold": -0.147
     },
     {
@@ -28334,23 +28338,23 @@
     {
       "key": "DXY",
       "name": "美元指數 (DXY)",
-      "latest": 103.882,
-      "change_1y": 0.0435,
-      "corr_with_gold": -0.38
+      "latest": 103.762,
+      "change_1y": 0.0352,
+      "corr_with_gold": -0.379
     },
     {
       "key": "SP500",
       "name": "S&P 500",
-      "latest": 7204.36,
-      "change_1y": 0.0887,
-      "corr_with_gold": 0.042
+      "latest": 7014.05,
+      "change_1y": 0.056,
+      "corr_with_gold": 0.043
     },
     {
       "key": "VIX",
       "name": "恐慌指數 (VIX)",
-      "latest": 26.97,
-      "change_1y": 0.0923,
-      "corr_with_gold": -0.019
+      "latest": 31.67,
+      "change_1y": 0.3385,
+      "corr_with_gold": -0.021
     }
   ]
 }
